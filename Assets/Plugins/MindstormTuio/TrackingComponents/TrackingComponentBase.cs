@@ -30,22 +30,36 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
-public class TuioTrackingComponent : MonoBehaviour
+public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 {
-	private static TuioTracking tracking = null;
 	public static Dictionary<int, Tuio.Touch> Touches =  new Dictionary<int, Tuio.Touch>();
 	
 	public double ScreenWidth;
     public double ScreenHeight;
+	
+	protected TrackingComponentBase()
+	{
+	}
     
-	void Update()
+	public Dictionary<int, Tuio.Touch> AllTouches
+	{
+		get
+		{
+			return Touches;
+		}
+	}
+	
+	protected void Update()
 	{
 		BuildTouchDictionary();
 		
-		transform.BroadcastMessage("HandleTouches", SendMessageOptions.DontRequireReceiver);
+		foreach (Tuio.Touch t in Touches.Values)
+		{		
+			transform.BroadcastMessage("HandleTouches", t, SendMessageOptions.DontRequireReceiver);
+		}
 	}
 	
-	void BuildTouchDictionary()
+	protected void BuildTouchDictionary()
 	{
 		deleteNonCurrentTouches();
 		
@@ -59,7 +73,7 @@ public class TuioTrackingComponent : MonoBehaviour
 	/// <summary>
 	/// Deletes all old non-current touches from the last frame 
 	/// </summary>
-	void deleteNonCurrentTouches()
+	protected void deleteNonCurrentTouches()
 	{
 		int[] deadTouches = (from Tuio.Touch t in Touches.Values
 				where !t.IsCurrent
@@ -70,7 +84,7 @@ public class TuioTrackingComponent : MonoBehaviour
 	/// <summary>
 	/// Update all remaining touches as temp (setting new points will reset this) 
 	/// </summary>
-	void updateAllTouchesAsTemp()
+	protected void updateAllTouchesAsTemp()
 	{
 		foreach (Tuio.Touch t in Touches.Values) t.SetTemp();
 	}
@@ -78,37 +92,12 @@ public class TuioTrackingComponent : MonoBehaviour
 	/// <summary>
 	/// Updates all touches with the latest TUIO received data 
 	/// </summary>
-	void updateTouches()
-	{
-		Tuio2DCursor[] cursors = new Tuio2DCursor[tracking.current.Count];
-		tracking.current.Values.CopyTo(cursors, 0);
-		
-		// Update touches in current collection
-		foreach (Tuio2DCursor cursor in cursors)
-		{
-			
-			// Get the touch relating to the key
-			Tuio.Touch t = null;
-			if (Touches.ContainsKey(cursor.SessionID))
-			{
-				// It's not a new one
-				t = Touches[cursor.SessionID];
-				// Update it's position
-				t.SetNewTouchPoint(getTouchPoint(cursor));
-			}
-			else
-			{
-				// It's a new one
-				t = buildTouch(cursor);
-				Touches.Add(cursor.SessionID, t);
-			}
-		}
-	}
+	public abstract void updateTouches();
 	
 	/// <summary>
 	/// Update non-current touches as ended 
 	/// </summary>
-	void updateEndedTouches()
+	protected void updateEndedTouches()
 	{
 		var nonCurrent = from Tuio.Touch t in Touches.Values
 				where !t.IsCurrent
@@ -116,42 +105,7 @@ public class TuioTrackingComponent : MonoBehaviour
 		foreach (Tuio.Touch t in nonCurrent) t.Status = TouchStatus.Ended;
 	}
 	
-	Tuio.Touch buildTouch(Tuio2DCursor cursor)
-    {
-        TouchProperties prop;
-        prop.Acceleration = cursor.Acceleration;
-        prop.VelocityX = cursor.VelocityX;
-        prop.VelocityY = cursor.VelocityY;
-
-        Vector2 p = getTouchPoint(cursor);
-
-
-        Tuio.Touch t = new Tuio.Touch(cursor.SessionID, p);
-        t.Properties = prop;
-
-        return t;
-    }
-
-    Vector2 getTouchPoint(Tuio2DCursor data)
-    {
-        float x1 = getScreenPoint((float)data.PositionX,
-            ScreenWidth, false);
-        float y1 = getScreenPoint((float)data.PositionY,
-            ScreenHeight, true);
-
-        Vector2 t = new Vector2(x1, y1);
-        return t;
-    }
-	
-	float getScreenPoint(float xOrY, double screenDimension, bool flip)
-    {
-		// Flip it the get in screen space
-		if (flip) xOrY = 0.5f + (0.5f - xOrY);
-        xOrY *= (float)screenDimension;
-        return xOrY;
-    }
-	
-	void Awake()
+	protected void Awake()
 	{
 		ScreenWidth = Camera.main.pixelWidth;
 		ScreenHeight = Camera.main.pixelHeight;
@@ -159,18 +113,8 @@ public class TuioTrackingComponent : MonoBehaviour
 		// Don't destory me when changing scenes
 		DontDestroyOnLoad(transform.gameObject);
 		
-		TuioConfiguration config = new TuioConfiguration();
-		
-		if (tracking == null) tracking = new TuioTracking();
-		
-		tracking.ConfigureFramework(config);
-		
-		tracking.Start();
+		initialize();
 	}
 	
-	// Ensure that the instance is destroyed when the game is stopped in the editor.
-    void OnApplicationQuit() 
-    {
-		tracking.Stop();
-    }
+	public abstract void initialize();
 }

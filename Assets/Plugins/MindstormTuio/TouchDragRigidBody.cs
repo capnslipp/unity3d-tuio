@@ -31,6 +31,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Tuio;
 
+/// <summary>
+/// Enables you to touch and drag around any rigid body with collider attached.
+/// Uses an OverlapSphere to handle easily hitting objects within close range of touch.
+/// Dragable objects must be tagged dragable and must be on layer 8 to avoid constantly picking the object up with the touch.
+/// </summary>
 public class TouchDragRigidBody : MonoBehaviour
 {
 	public float spring = 50.0f;
@@ -42,10 +47,17 @@ public class TouchDragRigidBody : MonoBehaviour
 	public bool attachToCenterOfMass = false;
 	public GameObject dragger;
 	
-	public string dragTag;
+	public string dragTag = "dragable";
 	
 	Dictionary<int, SpringJoint> springs = new Dictionary<int, SpringJoint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
+	
+	ITrackingComponent tracker = null;
+	
+	void Awake()
+	{
+		tracker = (ITrackingComponent)gameObject.GetComponent(typeof(ITrackingComponent));
+	}
 	
 	int GetLayerMask()
 	{
@@ -55,50 +67,43 @@ public class TouchDragRigidBody : MonoBehaviour
 		return layerMask;
 	}
 	
-	void HandleTouches()
+	void HandleTouches(Tuio.Touch t)
 	{
 		// Clean the old draggers out (avoids stuck points)
 		cleanOldDraggers();
 		
-		// Get all new touches
-		var beganTouches = from Tuio.Touch t in TuioTrackingComponent.Touches.Values
-			where t.Status == TouchStatus.Began
-			select t;
+		if (t.Status != TouchStatus.Began) return;
+							
+		// Raycast the touch, see what we hit
+		RaycastHit hit = new RaycastHit();
+		Camera cam = FindCamera();
+		if (!Physics.Raycast(cam.ScreenPointToRay(new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f)), out hit, 100, GetLayerMask()))
+			return;
 		
-		// Raycast and attached springs to the hit objects
-		foreach (Tuio.Touch t in beganTouches)
-		{			
-			// Raycast the touch, see what we hit
-			RaycastHit hit = new RaycastHit();
-			Camera cam = FindCamera();
-			if (!Physics.Raycast(cam.ScreenPointToRay(new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f)), out hit, 100, GetLayerMask()))
-				continue;
-			
-			// Add the dragger where we hit
-			GameObject go = addDragger(hit.point, t);
-			
-			// Start the dragger for this spring
-			StartCoroutine(DragObject(hit.distance, t));
-			
-			// Use a sphere to increase ability to grab ball
-			Collider[] colliders = Physics.OverlapSphere(hit.point, attachRadius);
-			Collider col = (from c in colliders
-				where c.gameObject.tag == dragTag
-				select c).FirstOrDefault();
-			
-			// Hit nothing? go to next touch
-			if (col == null) continue;
-						
-			// Add a new spring to our hit object
-			addSpring(col.rigidbody, go, hit.point, t);
-		}
+		// Add the dragger where we hit
+		GameObject go = addDragger(hit.point, t);
+		
+		// Start the dragger for this spring
+		StartCoroutine(DragObject(hit.distance, t));
+		
+		// Use a sphere to increase ability to grab ball
+		Collider[] colliders = Physics.OverlapSphere(hit.point, attachRadius);
+		Collider col = (from c in colliders
+			where c.gameObject.tag == dragTag
+			select c).FirstOrDefault();
+		
+		// Hit nothing? go to next touch
+		if (col == null) return;
+					
+		// Add a new spring to our hit object
+		addSpring(col.rigidbody, go, hit.point, t);
 	}
 	
 	void cleanOldDraggers()
 	{
 		// Delete any old draggers and springs
 		var oldTouches = from d in draggers
-			where !TuioTrackingComponent.Touches.ContainsKey(d.Key)
+			where !tracker.AllTouches.ContainsKey(d.Key)
 			select d.Key;
 		
 		foreach (int oldId in oldTouches)

@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 
-Project("{C6FB76A4-8800-4019-C98E-32C5138A110C}") = "TuioExampleProject", "Assembly-CSharp-firstpass.csproj", "{D101FA55-BFB8-D05D-6B07-FE74FD0B0E12}"
+Project("{C6FB76A4-8800-4019-C98E-32C5138A110C}") = "TuioExampleProject", "Assembly-CSharp-firstpass-vs.csproj", "{D101FA55-BFB8-D05D-6B07-FE74FD0B0E12}"
 EndProject
-Project("{C6FB76A4-8800-4019-C98E-32C5138A110C}") = "TuioExampleProject", "Assembly-CSharp.csproj", "{A970FCFF-F565-D133-956D-78E8EE5245AF}"
+Project("{C6FB76A4-8800-4019-C98E-32C5138A110C}") = "TuioExampleProject", "Assembly-CSharp-vs.csproj", "{A970FCFF-F565-D133-956D-78E8EE5245AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
