@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+
+Project("{8641F7D4-144D-E4F3-857C-918C064DD6A6}") = "Unity3d-TUIO", "Assembly-CSharp-firstpass-vs.csproj", "{A9339F6A-7A8F-9549-3757-97D332DD6424}"
+EndProject
+Project("{8641F7D4-144D-E4F3-857C-918C064DD6A6}") = "Unity3d-TUIO", "Assembly-CSharp-vs.csproj", "{8DE44F1A-E241-D94C-B8CD-90DA685A1D3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9339F6A-7A8F-9549-3757-97D332DD6424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9339F6A-7A8F-9549-3757-97D332DD6424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9339F6A-7A8F-9549-3757-97D332DD6424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9339F6A-7A8F-9549-3757-97D332DD6424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DE44F1A-E241-D94C-B8CD-90DA685A1D3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DE44F1A-E241-D94C-B8CD-90DA685A1D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DE44F1A-E241-D94C-B8CD-90DA685A1D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DE44F1A-E241-D94C-B8CD-90DA685A1D3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	
+EndGlobal

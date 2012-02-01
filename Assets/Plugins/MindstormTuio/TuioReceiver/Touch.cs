@@ -47,17 +47,24 @@ namespace Tuio
         /// </summary>
         public TouchProperties Properties;
 
-        /// <summary>
-        /// Constructor for the touch object.
-        /// </summary>
-        /// <param name="Id">Id of the touch.</param>
-        /// <param name="point">Point of the touch location.</param>
         public Touch(int Id, Vector2 point)
         {
             TouchId = Id;
             TouchPoint = point;
+			RawPoint = point;
 			IsCurrent = true;
 			sw = Stopwatch.StartNew();
+			TimeAdded = Time.time;
+        }
+		
+		public Touch(int Id, Vector2 point, Vector2 rawPoint)
+        {
+            TouchId = Id;
+            TouchPoint = point;
+			RawPoint = rawPoint;
+			IsCurrent = true;
+			sw = Stopwatch.StartNew();
+			TimeAdded = Time.time;
         }
 		
 		public Vector2 DeltaDistance
@@ -88,7 +95,19 @@ namespace Tuio
             set;
         }
 		
+		public Vector2 RawPoint
+        {
+            get;
+            set;
+        }
+		
 		public bool IsCurrent
+		{
+			get;
+			set;
+		}
+		
+		public float TimeAdded
 		{
 			get;
 			set;
@@ -131,6 +150,27 @@ namespace Tuio
 				SetMoving();
 				deltaDistance = p - TouchPoint;
 				TouchPoint = p;
+				RawPoint = p;
+			}
+			else SetHeld();
+        }
+		
+		public void SetNewTouchPoint(Vector2 p, Vector2 rawPoint)
+        {
+			// We're being updated so must be current
+			IsCurrent = true;
+			
+			deltaTime = sw.ElapsedTicks;
+			sw.Reset();
+			sw.Start();
+			
+			// If we've not moved then we're Held
+			if (p != TouchPoint) 
+			{
+				SetMoving();
+				deltaDistance = p - TouchPoint;
+				TouchPoint = p;
+				RawPoint = rawPoint;
 			}
 			else SetHeld();
         }

@@ -28,12 +28,17 @@ using UnityEngine;
 using System.Collections;
 
 public class ExampleClickHandler : MonoBehaviour {
-
-	public void Click(object collider)
+	
+	public GameObject Wall;
+	
+	public void Click(object h)
 	{
-		Collider hitCollider = collider as Collider;
-		GameObject hitGameObject = hitCollider.gameObject;
+		RaycastHit hit = (RaycastHit)h;
+		GameObject hitGameObject = hit.collider.gameObject;
 		
 		Debug.Log("HIT ON '" + hitGameObject.name + "' RECEIVED IN '" + gameObject.name + "'");
+		
+		WallBuilder wb = Wall.GetComponent<WallBuilder>();
+		wb.Build();
 	}
 }

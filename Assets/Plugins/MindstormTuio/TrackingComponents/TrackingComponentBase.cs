@@ -41,6 +41,10 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	{
 	}
     
+	public List<Tuio.Touch> getNewTouches () {
+		return Touches.Values.Where(t => t.Status == TouchStatus.Began).ToList();	
+	}
+	
 	public Dictionary<int, Tuio.Touch> AllTouches
 	{
 		get
@@ -57,6 +61,7 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 		{		
 			transform.BroadcastMessage("HandleTouches", t, SendMessageOptions.DontRequireReceiver);
 		}
+		transform.BroadcastMessage("FinishTouches", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	protected void BuildTouchDictionary()

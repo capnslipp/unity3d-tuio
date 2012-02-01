@@ -52,7 +52,7 @@ public class TuioTrackingComponent : TrackingComponentBase, ITrackingComponent
 				// It's not a new one
 				t = Touches[cursor.SessionID];
 				// Update it's position
-				t.SetNewTouchPoint(getTouchPoint(cursor));
+				t.SetNewTouchPoint(getScreenPoint(cursor), getRawPoint(cursor));
 			}
 			else
 			{
@@ -70,20 +70,28 @@ public class TuioTrackingComponent : TrackingComponentBase, ITrackingComponent
         prop.VelocityX = cursor.VelocityX;
         prop.VelocityY = cursor.VelocityY;
 
-        Vector2 p = getTouchPoint(cursor);
+        Vector2 p = getScreenPoint(cursor);
+		Vector2 raw = getRawPoint(cursor);
 
-
-        Tuio.Touch t = new Tuio.Touch(cursor.SessionID, p);
+        Tuio.Touch t = new Tuio.Touch(cursor.SessionID, p, raw);
         t.Properties = prop;
 
         return t;
     }
 
-    Vector2 getTouchPoint(Tuio2DCursor data)
+    Vector2 getRawPoint(Tuio2DCursor data)
     {
-        float x1 = getScreenPoint((float)data.PositionX,
+		Vector2 position = new Vector2(data.PositionX, data.PositionY);
+        return position;
+    }
+	
+	Vector2 getScreenPoint(Tuio2DCursor data)
+    {
+		Vector2 position = new Vector2(data.PositionX, data.PositionY);
+		
+		float x1 = getScreenPoint(position.x,
             ScreenWidth, false);
-        float y1 = getScreenPoint((float)data.PositionY,
+        float y1 = getScreenPoint(position.y,
             ScreenHeight, true);
 
         Vector2 t = new Vector2(x1, y1);

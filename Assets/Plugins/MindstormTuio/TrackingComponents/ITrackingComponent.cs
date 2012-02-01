@@ -29,12 +29,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Tuio;
 
-interface ITrackingComponent {
+public interface ITrackingComponent {
 	
 	Dictionary<int, Tuio.Touch> AllTouches
 	{
 		get;
 	}
+	
+	List<Tuio.Touch> getNewTouches();
 
 	void initialize();
 	

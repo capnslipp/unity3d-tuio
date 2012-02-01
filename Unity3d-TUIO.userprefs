@@ -1,0 +1,34 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WallBuilder.cs">
+    <Files>
+      <File FileName="Assets\ExampleClickHandler.cs" Line="45" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\DefaultTouchHandler.cs" Line="25" Column="3" />
+      <File FileName="Assets\WallBuilder.cs" Line="17" Column="22" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" Line="56" Column="21" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchDisplay\ShowTouchPoints.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragSpring.cs" Line="17" Column="28" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchClick.cs" Line="25" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\IGestureHandler.cs" Line="25" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchDisplay\ShowGUITouchPoints.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\TouchLinker.cs" Line="25" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\ITrackingComponent.cs" Line="25" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TrackingComponentBase.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\TouchProperties.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\TouchStatus.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\Tuio2dCursor.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\TuioConfiguration.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\TuioParser.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\TuioTracking.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\OSC\OSCMessage.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\OSC\OSCPacket.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
