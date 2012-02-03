@@ -42,13 +42,18 @@ public class WallBuilder : MonoBehaviour {
 	
 	IEnumerator buildWall()
 	{
-		for (int y = 0; y < Height; y++) 
+		for (float y = 0; y < Height; y++) 
 		{
-	        for (int x = 0; x < Width; x++) 
+			float lineLength = y % 2 == 0 ? Width - 1 : Width;
+			float halfWidth = (float)lineLength / 2f;
+			
+	        for (float x = 0 - halfWidth; x < halfWidth; x++) 
 			{
-				for (int z = 0; z < Depth; z++) 
+				float halfDepth = (float)Depth / 2f;
+				
+				for (float z = 0 - halfDepth; z < halfDepth; z++) 
 				{
-					Vector3 pos = new Vector3(x, y, z);
+					Vector3 pos = new Vector3(x * BrickPrefab.transform.localScale.x, y * BrickPrefab.transform.localScale.y, z * BrickPrefab.transform.localScale.z);
 					pos = transform.position + pos;
 		            GameObject brick = (GameObject)Instantiate(BrickPrefab, pos, Quaternion.identity);
 					brick.rigidbody.Sleep();

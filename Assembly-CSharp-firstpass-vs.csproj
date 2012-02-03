@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>9.0.21022</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{A9339F6A-7A8F-9549-3757-97D332DD6424}</ProjectGuid>
+	<ProjectGuid>{D1111ECF-E5FB-BBCF-440C-09CBA9415D9C}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -44,7 +44,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragSpring.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\IGestureHandler.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" />

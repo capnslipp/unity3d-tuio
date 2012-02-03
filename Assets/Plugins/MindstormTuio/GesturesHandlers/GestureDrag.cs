@@ -31,12 +31,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Tuio;
 
-public class GestureDragSpring : MonoBehaviour, IGestureHandler
+public class GestureDrag : MonoBehaviour, IGestureHandler
 {
-	public float spring = 50.0f;
-	public float damper = 0f;
-	public float distance = 0f;
-	public float raiseBody = 0f;
+	public float fixedDraggerHeight = 0f;
 	public bool attachToCenterOfMass = false;
 	public bool attachToParent = false;
 	
@@ -47,7 +44,7 @@ public class GestureDragSpring : MonoBehaviour, IGestureHandler
 	
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
-	Dictionary<int, SpringJoint> springs = new Dictionary<int, SpringJoint>();
+	Dictionary<int, Joint> joints = new Dictionary<int, Joint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
 	
 	Camera _targetCamera;
@@ -68,12 +65,12 @@ public class GestureDragSpring : MonoBehaviour, IGestureHandler
 	{
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
-		addSpring(bod, go, hit.point, t);
+		addJoint(bod, go, hit.point, t);
 	}
 	
 	public void RemoveTouch(Tuio.Touch t)
 	{
-		removeSpring(t.TouchId);
+		removeJoint(t.TouchId);
 		removeDragger(t);
 	}
 	
@@ -98,55 +95,49 @@ public class GestureDragSpring : MonoBehaviour, IGestureHandler
 		Destroy(go);
 	}
 	
-	void removeSpring(int touchId)
+	void removeJoint(int touchId)
 	{
-		if (!springs.ContainsKey(touchId)) return;
+		if (!joints.ContainsKey(touchId)) return;
 		
-		SpringJoint spring = springs[touchId];
+		Joint j = joints[touchId];
+		j.connectedBody = null;
 		
-		spring.connectedBody = null;
-		
-		Destroy(spring);
-		springs.Remove(touchId);
+		Destroy(j);
+		joints.Remove(touchId);
 	}
 	
-	void initSpring(SpringJoint joint, Rigidbody attachTo)
+	void initJoint(Joint joint, Rigidbody attachTo)
 	{
-		joint.spring = spring;
-		joint.damper = damper;
-		joint.maxDistance = distance;
 		joint.connectedBody = attachTo;
 	}
 	
 	void updateDragger(Vector3 hitPoint, Tuio.Touch t, bool visible)
 	{
 		GameObject go = draggers[t.TouchId];
-		float y = raiseBody == 0 ? hitPoint.y : raiseBody;
+		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
 		go.transform.position = new Vector3(hitPoint.x, y, hitPoint.z);
 		
-		go.renderer.enabled = visible && showDraggers;
+		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 	}
 	
 	GameObject addDragger(Vector3 hitPoint, Tuio.Touch t, bool visible)
 	{
 		GameObject go = (GameObject)Instantiate(dragger);
-		Rigidbody body = go.AddComponent("Rigidbody") as Rigidbody;
-		body.isKinematic = true;
-		float y = raiseBody == 0 ? hitPoint.y : raiseBody;
+		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
 		go.transform.position = new Vector3(hitPoint.x, y, hitPoint.z);
-		go.renderer.enabled = visible && showDraggers;
+		
+		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 		
 		draggers.Add(t.TouchId, go);
 		return go;
 	}
 	
-	SpringJoint addSpring(Rigidbody attachTo, GameObject go, Vector3 hitPoint, Tuio.Touch t)
+	Joint addJoint(Rigidbody attachTo, GameObject go, Vector3 hitPoint, Tuio.Touch t)
 	{
-		SpringJoint springJoint = (SpringJoint)go.AddComponent("SpringJoint");
+		Joint j = (Joint)go.GetComponent<Joint>();
 		
-		// Initial position of the spring is the centre of the body we pickup
+		// Initial position of the joint is the centre of the body we pickup or the hook
 		// It will move it in the next frame with the Drag
-		//springJoint.transform.position = attachTo.transform.position;
 		if (hook != null)
 		{
 			go.transform.position = hook.transform.position;
@@ -160,16 +151,16 @@ public class GestureDragSpring : MonoBehaviour, IGestureHandler
 		if (attachToCenterOfMass)
 		{
 			Vector3 anchor = go.transform.InverseTransformPoint(attachTo.worldCenterOfMass);
-			springJoint.anchor = anchor;
+			j.anchor = anchor;
 		}
 		else
 		{
-			springJoint.anchor = Vector3.zero;
+			j.anchor = Vector3.zero;
 		}
 		
-		initSpring(springJoint, attachTo);		
-		springs.Add(t.TouchId, springJoint);
-		return springJoint;
+		initJoint(j, attachTo);		
+		joints.Add(t.TouchId, j);
+		return j;
 	}
 	
 	public void FinishNotification()
