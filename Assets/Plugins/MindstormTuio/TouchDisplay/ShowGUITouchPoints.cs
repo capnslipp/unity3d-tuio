@@ -82,6 +82,7 @@ public class ShowGUITouchPoints : MonoBehaviour
 	
 	void removeTouchIcon(Tuio.Touch t)
 	{
+		if (!touchIcons.ContainsKey(t.TouchId)) return;
 		GUITexture go = touchIcons[t.TouchId];
 		touchIcons.Remove(t.TouchId);
 		Destroy(go.gameObject);
@@ -89,6 +90,7 @@ public class ShowGUITouchPoints : MonoBehaviour
 	
 	void updateTouchIcon(Tuio.Touch t)
 	{
+		if (!touchIcons.ContainsKey(t.TouchId)) return;
 		GUITexture go = touchIcons[t.TouchId];
 		setTouchIconPos(go, t.TouchPoint);
 	}

@@ -97,6 +97,16 @@ namespace Tuio
 	            this.current.Clear();
 	        }
 	    }
+		
+		public Tuio2DCursor[] GetTouchArray()
+	    {
+	        // For tuio this is only useful to remove stuck points after a TUIO server restart
+	        lock (m_lock)
+	        {
+	            Tuio2DCursor[] ts = this.current.Values.ToArray();
+				return ts;
+	        }
+	    }
 	
 	    void receive()
 	    {
@@ -104,9 +114,10 @@ namespace Tuio
 	        {
 	            receiveData();
 	        }
-	        catch
+	        catch (Exception e)
 	        {
-	            // Ignore errors for now
+	            Debug.Log(e.ToString());
+				
 	        }
 	        finally
 	        {
@@ -126,9 +137,10 @@ namespace Tuio
 	
 	            if (bundle != null)
 	            {
-	                //Not currently checked, we probably should!
+					//Not currently checked, we probably should!
 	                //int fseq = TuioParser.GetSequenceNumber(bundle);
-	                
+					if (!TuioParser.ContainsCursors(bundle)) continue;
+					
 	                List<int> alivecursors = TuioParser.GetAliveCursors(bundle);
 	                Dictionary<int, Tuio2DCursor> newcursors = TuioParser.GetCursors(bundle);
 	                
@@ -140,6 +152,8 @@ namespace Tuio
 	
 	                //Process new items
 	                addNewCursors(newcursors);
+					
+					Debug.Log(current.Count.ToString());
 	            }
 	        }
 	    }
@@ -202,17 +216,26 @@ namespace Tuio
 		
 	    protected void TouchUpdated(Tuio2DCursor cur)
 	    {
-	        this.current[cur.SessionID] = cur;
+			lock(m_lock)
+			{
+	        	this.current[cur.SessionID] = cur;
+			}
 	    }
 	
 	    protected void TouchAdded(Tuio2DCursor cur)
 	    {
-	        this.current.Add(cur.SessionID, cur);
+			lock(m_lock)
+			{
+	        	this.current.Add(cur.SessionID, cur);
+			}
 	    }
 	
 	    protected void TouchRemoved(int touchId)
 	    {
-	        this.current.Remove(touchId);
+			lock(m_lock)
+			{
+	        	this.current.Remove(touchId);
+			}
 	    }
 	}
 }

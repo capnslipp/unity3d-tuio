@@ -60,6 +60,19 @@ namespace Tuio
 	        }
 	        return result;
 	    }
+		
+		public static bool ContainsCursors(OSCBundle bundle)
+		{
+			foreach (object o in bundle.Values)
+	        {
+	            OSCMessage msg = (OSCMessage)o;
+	            if (msg.Address == "/tuio/2Dcur")
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 	
 	    public static List<int> GetAliveCursors(OSCBundle pack)
 	    {

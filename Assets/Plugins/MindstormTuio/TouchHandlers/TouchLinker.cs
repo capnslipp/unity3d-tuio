@@ -112,6 +112,8 @@ public class TouchLinker {
 	
 	public void RemoveTouch(Tuio.Touch t)
 	{
+		if (!touchLinks.ContainsKey(t.TouchId)) return;
+		
 		MonoBehaviour[] gestureHandlers = touchLinks[t.TouchId];
 		linksToRemove.Add(t.TouchId);
 		
@@ -125,6 +127,8 @@ public class TouchLinker {
 	
 	public void UpdateTouch(Tuio.Touch t)
 	{
+		if (!touchLinks.ContainsKey(t.TouchId)) return;
+		
 		MonoBehaviour[] gestureHandlers = touchLinks[t.TouchId];
 		
 		// Notify all enabled handlers

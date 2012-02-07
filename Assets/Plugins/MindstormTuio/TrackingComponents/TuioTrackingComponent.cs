@@ -39,12 +39,17 @@ public class TuioTrackingComponent : TrackingComponentBase, ITrackingComponent
 	/// </summary>
 	public override void updateTouches()
 	{
-		Tuio2DCursor[] cursors = new Tuio2DCursor[tracking.current.Count];
-		tracking.current.Values.CopyTo(cursors, 0);
+		Tuio2DCursor[] cursors = tracking.GetTouchArray();
 		
 		// Update touches in current collection
 		foreach (Tuio2DCursor cursor in cursors)
 		{
+			if (cursor == null)
+			{
+				print("CURSOR NULL");
+				continue;
+			}
+			
 			// Get the touch relating to the key
 			Tuio.Touch t = null;
 			if (Touches.ContainsKey(cursor.SessionID))
