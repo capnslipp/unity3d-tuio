@@ -47,7 +47,6 @@
      <Compile Include="Assets\ExampleScripts\ExampleClickHandler.cs" />
      <Compile Include="Assets\ExampleScripts\StartSleeping.cs" />
      <Compile Include="Assets\ExampleScripts\WallBuilder.cs" />
-     <None Include="Assets\Standard Assets\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
      <None Include="Assets\Plugins\MindstormTuio\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
   </ItemGroup>
   <ItemGroup>

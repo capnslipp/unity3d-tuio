@@ -27,6 +27,7 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public interface IGestureHandler
 {

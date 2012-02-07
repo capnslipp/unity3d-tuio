@@ -2,11 +2,12 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" Line="1" Column="1" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" Line="67" Column="37" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" Line="228" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" Line="36" Column="33" />
       <File FileName="Assets\ExampleScripts\StartSleeping.cs" Line="25" Column="3" />
       <File FileName="Assets\ExampleScripts\ExampleClickHandler.cs" Line="25" Column="3" />
-      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\TouchLinker.cs" Line="144" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\TouchLinker.cs" Line="51" Column="17" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\IGestureHandler.cs" Line="37" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

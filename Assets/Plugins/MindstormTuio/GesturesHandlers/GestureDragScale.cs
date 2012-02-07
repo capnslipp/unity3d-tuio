@@ -44,16 +44,14 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Dictionary<int, Joint> joints = new Dictionary<int, Joint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
+	Dictionary<int, Tuio.Touch> touches = new Dictionary<int, Tuio.Touch>();
 	
 	bool touchesChanged = false;
-	bool damping = false;
 	
-	Vector3 oldMin = Vector3.zero;
-	Vector3 oldMax = Vector3.zero;
-	Vector3 curMin = Vector3.zero;
-	Vector3 curMax = Vector3.zero;
-	Vector3 oldCentre = Vector3.zero;
-	Vector3 newCentre = Vector3.zero;
+	Bounds b;
+	Bounds oldB;
+	
+	Vector3 vel = Vector3.zero;
 	
 	Camera _targetCamera;
 	
@@ -64,26 +62,10 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	void Start()
 	{
 		_targetCamera = FindCamera();
-		scaler = new GameObject("SCALER");
+		scaler = GameObject.CreatePrimitive(PrimitiveType.Sphere); //new GameObject("SCALER");
+		scaler.collider.enabled = false;
 		
-		initScale();
-	}
-	
-	void initScale()
-	{
 		targetScale = scaler.transform.localScale;
-	}
-	
-	public void UpdateBoudingBox() 
-	{	
-		changeBoundingBox();
-		
-		if (!damping)
-		{
-			damping = true;
-			
-			StartCoroutine(DampScale());
-		}
 	}
 	
 	void changeBoundingBox()
@@ -99,99 +81,85 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		}
 	}
 	
-	IEnumerator DampScale()
+	void FixedUpdate()
 	{
-		Vector3 vel = Vector3.zero;
-		
-		scaler.transform.position = newCentre;
-		transform.parent = scaler.transform;
-		
-		while (this.enabled && scaler.transform.localScale != targetScale)
+		if (scaler.transform.localScale != targetScale)
 		{
+			scaler.transform.position = calcScaleCentre();
+			transform.parent = scaler.transform;
+				
 			Vector3 curScale = Vector3.SmoothDamp(scaler.transform.localScale, targetScale, ref vel, 0.2f);
-			if(Vector3.Distance(curScale, targetScale) < 0.01f) curScale = targetScale;
+			if (Vector3.Distance(curScale, targetScale) < 0.01f) curScale = targetScale;
 			scaler.transform.localScale = curScale;
-			yield return null;
+			
+			transform.parent = null;
 		}
-		
-		transform.parent = null;
-		damping = false;
 	}
 	
 	float calcBoundsChange()
 	{
-		float oldDist = Vector3.Distance(oldMin,oldMax);
-		float newDist = Vector3.Distance(curMin,curMax);
+		float oldSize = oldB.size.sqrMagnitude;
+		float newSize = b.size.sqrMagnitude;
 		
-		oldCentre = (oldMin + oldMax) / 2f;
-		newCentre = (curMin + curMax) / 2f;
-		
-		float velRatio = oldDist == 0f ? 1f : newDist/oldDist;
-		
+		float velRatio = oldSize == 0f ? 1f : newSize/oldSize;
 		return velRatio;
+	}
+	
+	Vector3 calcScaleCentre()
+	{
+		var nonMovingIds = from Tuio.Touch t in touches.Values
+			where t.Status == TouchStatus.Stationary
+			select t.TouchId;
+		
+		var nonMoving = from entry in draggers
+			where nonMovingIds.Contains(entry.Key)
+			select entry.Value;
+		
+		bool bfirst = true;
+		Bounds nonB = new Bounds(Vector3.zero, Vector3.zero);
+		foreach (GameObject dr in nonMoving)
+		{
+			if (bfirst)
+			{
+				nonB = new Bounds(dr.transform.position, Vector3.zero);
+				bfirst = false;
+			}
+			else
+			{
+				//nonB.Encapsulate(dr.transform.position);
+			}
+		}
+		
+		Vector3 centre = nonMoving.Count() == 0 ? b.center : nonB.center;
+		
+		return centre;
 	}
 	
 	bool recalcBounds()
 	{
 		bool boundsHasChanged = true;
 		
-		oldMin = curMin;
-		oldMax = curMax;
+		oldB = b;
 		
 		bool bfirst = true;
 		foreach (GameObject dr in draggers.Values)
 		{
-			Vector3 p = new Vector3(dr.transform.position.x,
-			                        dr.transform.position.y,
-			                        dr.transform.position.z);
-			
 			if (bfirst)
 			{
-				curMin = p;
-				curMax = p;
+				b = new Bounds(dr.transform.position, Vector3.zero);
 				bfirst = false;
 			}
 			else
 			{
-				if (p.x > curMax.x)
-				{
-					curMax.x = p.x;
-				}
-				
-				if (p.y > curMax.y)
-				{
-					curMax.y = p.y;
-				}
-				
-				if (p.z > curMax.z)
-				{
-					curMax.z = p.z;
-				}
-				
-				if (p.x < curMin.x)
-				{
-					curMin.x = p.x;
-				}
-				
-				if (p.y < curMin.y)
-				{
-					curMin.y = p.y;
-				}
-				
-				if (p.z < curMin.z)
-				{
-					curMin.z = p.z;
-				}
+				b.Encapsulate(dr.transform.position);
 			}
 		}
 		
 		if (touchesChanged || draggers.Count == 0)
 		{
-			oldMin = curMin;
-			oldMax = curMax;
+			oldB = b;
 			boundsHasChanged = false;
 		}
-		
 		return boundsHasChanged;
 	}
 	
@@ -204,6 +172,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	public void AddTouch(Tuio.Touch t, RaycastHit hit)
 	{
+		touches.Add(t.TouchId, t);
+		
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
 		addJoint(bod, go, hit.point, t);
@@ -213,6 +183,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	public void RemoveTouch(Tuio.Touch t)
 	{
+		touches.Remove(t.TouchId);
+		
 		removeJoint(t.TouchId);
 		removeDragger(t);
 		
@@ -292,7 +264,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	public void FinishNotification()
 	{
-		UpdateBoudingBox();
+		changeBoundingBox();
 		touchesChanged = false;
 	}
 		
