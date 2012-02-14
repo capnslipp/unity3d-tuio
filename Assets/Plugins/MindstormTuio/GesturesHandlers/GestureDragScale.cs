@@ -81,7 +81,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		}
 	}
 	
-	void FixedUpdate()
+	void LateUpdate()
 	{
 		if (scaler.transform.localScale != targetScale)
 		{
@@ -98,8 +98,11 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	float calcBoundsChange()
 	{
-		float oldSize = oldB.size.sqrMagnitude;
-		float newSize = b.size.sqrMagnitude;
+		float oldSize = Vector3.Distance(oldB.min, oldB.max);
+		float newSize = Vector3.Distance(b.min, b.max);
+		
+		//Debug.DrawLine(oldB.min, oldB.max, Color.green);
+		//Debug.DrawLine(b.min, b.max, Color.magenta);
 		
 		float velRatio = oldSize == 0f ? 1f : newSize/oldSize;
 		return velRatio;
@@ -126,7 +129,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 			}
 			else
 			{
-				//nonB.Encapsulate(dr.transform.position);
+				nonB.Encapsulate(dr.transform.position);
 			}
 		}
 		

@@ -152,8 +152,6 @@ namespace Tuio
 	
 	                //Process new items
 	                addNewCursors(newcursors);
-					
-					Debug.Log(current.Count.ToString());
 	            }
 	        }
 	    }
