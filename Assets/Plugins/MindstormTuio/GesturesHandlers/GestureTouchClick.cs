@@ -29,84 +29,53 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GestureTouchClick : MonoBehaviour, IGestureHandler {
-
+public class GestureTouchClick : GestureTouch
+{
 	public float maxHeldTime = 1f;
-	public GameObject[] NotifyObjects;
+	public bool CheckTolerancesOnRemoveTouch = false;
 	
-	Tuio.Touch curTouch = null;
-	Vector2 originalPos = Vector2.zero;
-	Collider origCollider = null;
-	Camera _targetCamera = null;
+	public bool TriggerOnTouchDown = false;
 	
-	float _screenWidth = 0f;
-	float _screenHeight = 0f;
-	
-	public void Start()
+	public override void AddTouch (Tuio.Touch t, RaycastHit hit)
 	{
-		_screenWidth = Camera.main.pixelWidth;
-		_screenHeight = Camera.main.pixelHeight;
+		base.AddTouch(t, hit);
 		
-		_targetCamera = FindCamera();
+		if (TriggerOnTouchDown) DoClick(hit);
 	}
 	
-	public void AddTouch(Tuio.Touch t, RaycastHit hit)
+	public override void RemoveTouch(Tuio.Touch t)
 	{
-		// This will always keep the most recent touch
-		curTouch = t;
-		originalPos = new Vector2(
-				t.TouchPoint.x / (float)_screenWidth,
-			    t.TouchPoint.y / (float)_screenHeight);
-		origCollider = hit.collider;
-	}
-	
-	public void RemoveTouch(Tuio.Touch t)
-	{
-		// Not most recent touch?
-		if (curTouch.TouchId != t.TouchId) return;
+		if (TriggerOnTouchDown) return;
 		
-		// Check it's not expired
-		if (Time.time - t.TimeAdded > maxHeldTime) return;
+		base.RemoveTouch(t);
+
+		if(CheckTolerancesOnRemoveTouch)
+		{
+			// Not most recent touch?
+			if (m_curTouch.TouchId != t.TouchId) return;
 		
-		// Over the movement threshold?
-		Vector2 curTouchPos = new Vector2(
-				t.TouchPoint.x / (float)_screenWidth,
-			    t.TouchPoint.y / (float)_screenHeight);
-		if (Vector2.Distance(curTouchPos, originalPos) > 0.003f) return;
+			// Check it's not expired
+			if (Time.time - t.TimeAdded > maxHeldTime) return;
 		
+			// Over the movement threshold?
+			Vector2 curTouchPos = new Vector2(
+					t.TouchPoint.x / (float)m_screenWidth,
+				    t.TouchPoint.y / (float)m_screenHeight);
+		
+			if (Vector2.Distance(curTouchPos, m_originalPos) > 0.003f) return;
+		}		
 		// Check if the touch still hits the same collider
 		RaycastHit h = new RaycastHit();
-		bool hit = origCollider.Raycast(getRay(t), out h, Mathf.Infinity);
-		if (!hit) return;
 		
-		// Do the click
-		gameObject.SendMessage("Click", h, SendMessageOptions.DontRequireReceiver);
-		foreach (GameObject g in NotifyObjects)
+		if(HitsOrigCollider(t, out h))
 		{
-			g.SendMessage("Click", h, SendMessageOptions.DontRequireReceiver);
+			DoClick(h);
 		}
+		ClearCurTouch();
 	}
 	
-	public void UpdateTouch(Tuio.Touch t)
+	public virtual void DoClick(RaycastHit h)
 	{
-	}
-	
-	public void FinishNotification()
-	{
-	}
-		
-	Ray getRay(Tuio.Touch t)
-	{
-		Vector3 touchPoint = new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f);
-		Ray targetRay = _targetCamera.ScreenPointToRay(touchPoint);
-		return targetRay;
-	}
-	
-	Camera FindCamera ()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
+		BroadcastTouchMessage("Click", h);
 	}
 }

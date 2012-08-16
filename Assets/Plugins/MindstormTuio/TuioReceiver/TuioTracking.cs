@@ -114,10 +114,8 @@ namespace Tuio
 	        {
 	            receiveData();
 	        }
-	        catch (Exception e)
-	        {
-	            Debug.Log(e.ToString());
-				
+	        catch
+	        {				
 	        }
 	        finally
 	        {

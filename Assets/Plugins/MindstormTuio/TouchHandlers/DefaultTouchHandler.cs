@@ -34,7 +34,7 @@ public class DefaultTouchHandler : MonoBehaviour
 {
 	TouchLinker linker = new TouchLinker();
 	
-	int[] hitOnlyLayers = new int[1] { 0 };
+	public int[] hitOnlyLayers = new int[1] { 0 };
 	
 	Camera _targetCamera;
 	
