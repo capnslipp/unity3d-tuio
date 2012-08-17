@@ -27,9 +27,9 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using UnityEngine;
 using System.Collections;
 
-public class ExampleClickHandler : MonoBehaviour {
+public class FireCannonClickHandler	 : MonoBehaviour {
 	
-	public GameObject Wall;
+	public GameObject Cannon;
 	
 	public void Click(object h)
 	{
@@ -38,7 +38,7 @@ public class ExampleClickHandler : MonoBehaviour {
 		
 		Debug.Log("HIT ON '" + hitGameObject.name + "' RECEIVED IN '" + gameObject.name + "'");
 		
-		WallBuilder wb = Wall.GetComponent<WallBuilder>();
-		wb.Build();
+		LaunchRigidBody l = Cannon.GetComponent<LaunchRigidBody>();
+		l.enabled = true;
 	}
 }

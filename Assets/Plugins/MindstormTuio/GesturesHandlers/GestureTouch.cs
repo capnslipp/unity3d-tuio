@@ -69,7 +69,6 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	
 	public virtual void RemoveTouch(Tuio.Touch t)
 	{
-
 	}
 	
 	protected bool HitsOrigCollider(Tuio.Touch inTouch, out RaycastHit outHit)
@@ -91,7 +90,7 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	{
 	}
 	
-	public void FinishNotification()
+	public virtual void FinishNotification()
 	{
 	}
 		
