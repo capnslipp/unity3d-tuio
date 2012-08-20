@@ -27,9 +27,16 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(PowerController))]
 public class FireCannonClickHandler	 : MonoBehaviour {
 	
 	public GameObject Cannon;
+	public PowerController power;
+	
+	void Start()
+	{
+		power = GetComponent<PowerController>();
+	}
 	
 	public void Click(object h)
 	{
@@ -39,6 +46,7 @@ public class FireCannonClickHandler	 : MonoBehaviour {
 		Debug.Log("HIT ON '" + hitGameObject.name + "' RECEIVED IN '" + gameObject.name + "'");
 		
 		LaunchRigidBody l = Cannon.GetComponent<LaunchRigidBody>();
+		l.LaunchForce *= power.CurrentPower;
 		l.enabled = true;
 	}
 }

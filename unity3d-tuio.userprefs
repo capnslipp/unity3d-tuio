@@ -1,13 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ExampleScripts\Timer\TimerAnimationPos.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ExampleScripts\ClickHandlers\FireCannonClickHandler.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchHeld.cs" Line="89" Column="49" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchHeld.cs" Line="80" Column="17" />
       <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchClick.cs" Line="76" Column="19" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouch.cs" Line="72" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouch.cs" Line="79" Column="17" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" Line="60" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureChargeRelease.cs" Line="38" Column="34" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\CountdownTimer.cs" Line="23" Column="41" />
       <File FileName="Assets\ExampleScripts\Cannon\LaunchRigidBody.cs" Line="9" Column="16" />
-      <File FileName="Assets\ExampleScripts\FireCannonClickHandler.cs" Line="42" Column="20" />
       <File FileName="Assets\ExampleScripts\Timer\TimerAnimationPos.cs" Line="14" Column="57" />
+      <File FileName="Assets\ExampleScripts\Walls\WallBuilder.cs" Line="37" Column="23" />
+      <File FileName="Assets\ExampleScripts\Walls\Glue.cs" Line="1" Column="1" />
+      <File FileName="Assets\ExampleScripts\Cannon\PowerController.cs" Line="18" Column="13" />
+      <File FileName="Assets\ExampleScripts\ClickHandlers\FireCannonClickHandler.cs" Line="49" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\CentreGestureScale.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\CountdownTimer.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureChargeRelease.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureNTouchClick.cs" />

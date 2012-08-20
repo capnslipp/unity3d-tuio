@@ -15,6 +15,14 @@ public class CountdownTimer : MonoBehaviour
 		Countdown,
 		Relaxing,
 	};
+	
+	public float ElapsedTime
+	{
+		get
+		{
+			return CountdownTime - RemainingTime;
+		}
+	}
 
 	public CountDownStateEnum CountDownState = CountDownStateEnum.Paused;
 	

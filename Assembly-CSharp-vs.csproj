@@ -49,10 +49,11 @@
      <Compile Include="Assets\ExampleScripts\Bombs\ImpactTrigger.cs" />
      <Compile Include="Assets\ExampleScripts\Bombs\TimedTrigger.cs" />
      <Compile Include="Assets\ExampleScripts\Cannon\LaunchRigidBody.cs" />
-     <Compile Include="Assets\ExampleScripts\FireCannonClickHandler.cs" />
-     <Compile Include="Assets\ExampleScripts\StartSleeping.cs" />
+     <Compile Include="Assets\ExampleScripts\Cannon\PowerController.cs" />
+     <Compile Include="Assets\ExampleScripts\ClickHandlers\FireCannonClickHandler.cs" />
+     <Compile Include="Assets\ExampleScripts\ClickHandlers\WallBuildClickHandler.cs" />
+     <Compile Include="Assets\ExampleScripts\Physics\StartSleeping.cs" />
      <Compile Include="Assets\ExampleScripts\Timer\TimerAnimationPos.cs" />
-     <Compile Include="Assets\ExampleScripts\WallBuildClickHandler.cs" />
      <Compile Include="Assets\ExampleScripts\Walls\Glue.cs" />
      <Compile Include="Assets\ExampleScripts\Walls\WallBuilder.cs" />
      <None Include="Assets\Plugins\MindstormTuio\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
