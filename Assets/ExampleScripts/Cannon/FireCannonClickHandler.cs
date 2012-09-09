@@ -27,17 +27,17 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(PowerController))]
+[RequireComponent(typeof(CountdownTimer))]
 public class FireCannonClickHandler	 : MonoBehaviour {
 	
-	public GameObject Cannon;
-	public PowerController power;
+	public CannonController Cannon;
+	CountdownTimer t;
 	
 	void Start()
 	{
-		power = GetComponent<PowerController>();
+		t = GetComponent<CountdownTimer>();
 	}
-	
+		
 	public void Click(object h)
 	{
 		RaycastHit hit = (RaycastHit)h;
@@ -45,8 +45,6 @@ public class FireCannonClickHandler	 : MonoBehaviour {
 		
 		Debug.Log("HIT ON '" + hitGameObject.name + "' RECEIVED IN '" + gameObject.name + "'");
 		
-		LaunchRigidBody l = Cannon.GetComponent<LaunchRigidBody>();
-		l.LaunchForce *= power.CurrentPower;
-		l.enabled = true;
+		Cannon.Fire(t.Percentage);
 	}
 }
