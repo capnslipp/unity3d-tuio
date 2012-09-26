@@ -1,19 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormTuio\TouchHandlers\NativeTouchHandler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormTuio\TrackingComponents\TrackingComponentBase.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchHeld.cs" Line="80" Column="17" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchClick.cs" Line="76" Column="19" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouch.cs" Line="79" Column="17" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" Line="60" Column="1" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" Line="1" Column="1" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureChargeRelease.cs" Line="38" Column="34" />
-      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\CountdownTimer.cs" Line="23" Column="41" />
-      <File FileName="Assets\ExampleScripts\Cannon\LaunchRigidBody.cs" Line="9" Column="16" />
-      <File FileName="Assets\ExampleScripts\Timer\TimerAnimationPos.cs" Line="14" Column="57" />
-      <File FileName="Assets\ExampleScripts\Walls\WallBuilder.cs" Line="37" Column="23" />
-      <File FileName="Assets\ExampleScripts\Cannon\PowerController.cs" Line="17" Column="13" />
-      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\NativeTouchHandler.cs" Line="35" Column="41" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" Line="43" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\IGestureHandler.cs" Line="32" Column="33" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\CentreGestureScale.cs" Line="33" Column="33" />
+      <File FileName="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouch.cs" Line="32" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TrackingComponentBase.cs" Line="33" Column="23" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\DefaultTouchHandler.cs" Line="40" Column="23" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchHandlers\ITouchHandler.cs" Line="8" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

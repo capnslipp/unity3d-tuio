@@ -29,11 +29,13 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Touch = Tuio.Native.Touch;
+
 public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 
 	public GameObject[] NotifyObjects;
 	
-	protected Tuio.Touch m_curTouch = null;
+	protected Touch m_curTouch;
 	protected Vector2 m_originalPos = Vector2.zero;
 	
 	Collider m_origCollider = null;
@@ -47,31 +49,31 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 		m_screenHeight = Camera.main.pixelHeight;
 	}
 	
-	protected void AssignCurTouch(Tuio.Touch inTouch)
+	protected void AssignCurTouch(Touch inTouch)
 	{
 		m_curTouch = inTouch;	
 	}
 	
 	protected void ClearCurTouch()
 	{
-		m_curTouch = null;
+		m_curTouch = new Touch();
 	}
 	
-	public virtual void AddTouch(Tuio.Touch t, RaycastHit hit)
+	public virtual void AddTouch(Touch t, RaycastHit hit)
 	{
 		// This will always keep the most recent touch
 		AssignCurTouch(t);
 		m_originalPos = new Vector2(
-				t.TouchPoint.x / (float)m_screenWidth,
-			    t.TouchPoint.y / (float)m_screenHeight);
+				t.position.x / (float)m_screenWidth,
+			    t.position.y / (float)m_screenHeight);
 		m_origCollider = hit.collider;
 	}
 	
-	public virtual void RemoveTouch(Tuio.Touch t)
+	public virtual void RemoveTouch(Touch t)
 	{
 	}
 	
-	protected bool HitsOrigCollider(Tuio.Touch inTouch, out RaycastHit outHit)
+	protected bool HitsOrigCollider(Touch inTouch, out RaycastHit outHit)
 	{
 		return m_origCollider.Raycast(getRay(inTouch), out outHit, Mathf.Infinity);		
 	}
@@ -86,7 +88,7 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 		}
 	}
 	
-	public virtual void UpdateTouch(Tuio.Touch t)
+	public virtual void UpdateTouch(Touch t)
 	{
 	}
 	
@@ -94,9 +96,9 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	{
 	}
 		
-	Ray getRay(Tuio.Touch t)
+	Ray getRay(Touch t)
 	{
-		Vector3 touchPoint = new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f);
+		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
 		Ray targetRay = FindCamera().ScreenPointToRay(touchPoint);
 		return targetRay;
 	}

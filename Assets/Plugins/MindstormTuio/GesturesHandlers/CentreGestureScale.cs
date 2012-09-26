@@ -29,7 +29,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Tuio;
+
+using Touch = Tuio.Native.Touch;
 
 public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 {
@@ -44,7 +45,7 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Dictionary<int, Joint> joints = new Dictionary<int, Joint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
-	Dictionary<int, Tuio.Touch> touches = new Dictionary<int, Tuio.Touch>();
+	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
 	
 	bool touchesChanged = false;
 	
@@ -118,9 +119,9 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Vector3 calcScaleCentre()
 	{
-		var nonMovingIds = from Tuio.Touch t in touches.Values
-			where t.Status == TouchStatus.Stationary
-			select t.TouchId;
+		var nonMovingIds = from Touch t in touches.Values
+			where t.phase == TouchPhase.Stationary
+			select t.fingerId;
 		
 		var nonMoving = from entry in draggers
 			where nonMovingIds.Contains(entry.Key)
@@ -174,16 +175,16 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 		return boundsHasChanged;
 	}
 	
-	Ray getRay(Tuio.Touch t)
+	Ray getRay(Touch t)
 	{
-		Vector3 touchPoint = new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f);
+		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
 		Ray targetRay = _targetCamera.ScreenPointToRay(touchPoint);
 		return targetRay;
 	}
 	
-	public void AddTouch(Tuio.Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit)
 	{
-		touches.Add(t.TouchId, t);
+		touches.Add(t.fingerId, t);
 		
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
@@ -192,19 +193,19 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 		touchesChanged = true;
 	}
 	
-	public void RemoveTouch(Tuio.Touch t)
+	public void RemoveTouch(Touch t)
 	{
-		touches.Remove(t.TouchId);
+		touches.Remove(t.fingerId);
 		
-		removeJoint(t.TouchId);
+		removeJoint(t.fingerId);
 		removeDragger(t);
 		
 		touchesChanged = true;
 	}
 	
-	public void UpdateTouch(Tuio.Touch t)
+	public void UpdateTouch(Touch t)
 	{
-		if (t.Status != TouchStatus.Moved) return;
+		if (t.phase != TouchPhase.Moved) return;
 		
 		RaycastHit h = new RaycastHit();
 		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, GetLayerMask(hitOnlyLayers)));	
@@ -216,10 +217,10 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 		updateDragger(hitPoint, t, hasHit);
 	}
 	
-	void removeDragger(Tuio.Touch t)
+	void removeDragger(Touch t)
 	{
-		GameObject go = draggers[t.TouchId];
-		draggers.Remove(t.TouchId);
+		GameObject go = draggers[t.fingerId];
+		draggers.Remove(t.fingerId);
 		Destroy(go);
 	}
 	
@@ -239,16 +240,16 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 		joint.connectedBody = attachTo;
 	}
 	
-	void updateDragger(Vector3 hitPoint, Tuio.Touch t, bool visible)
+	void updateDragger(Vector3 hitPoint, Touch t, bool visible)
 	{
-		GameObject go = draggers[t.TouchId];
+		GameObject go = draggers[t.fingerId];
 		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
 		go.transform.position = new Vector3(hitPoint.x, y, hitPoint.z);
 		
 		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 	}
 	
-	GameObject addDragger(Vector3 hitPoint, Tuio.Touch t, bool visible)
+	GameObject addDragger(Vector3 hitPoint, Touch t, bool visible)
 	{
 		GameObject go = (GameObject)Instantiate(dragger);
 		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
@@ -256,11 +257,11 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 		
 		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 		
-		draggers.Add(t.TouchId, go);
+		draggers.Add(t.fingerId, go);
 		return go;
 	}
 	
-	Joint addJoint(Rigidbody attachTo, GameObject go, Vector3 hitPoint, Tuio.Touch t)
+	Joint addJoint(Rigidbody attachTo, GameObject go, Vector3 hitPoint, Touch t)
 	{
 		Joint j = (Joint)go.GetComponent<Joint>();
 		
@@ -269,7 +270,7 @@ public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 		go.transform.position = hitPoint;
 		
 		initJoint(j, attachTo);		
-		joints.Add(t.TouchId, j);
+		joints.Add(t.fingerId, j);
 		return j;
 	}
 	

@@ -29,6 +29,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Touch = Tuio.Native.Touch;
+
 [RequireComponent(typeof(CountdownTimer))]
 public class GestureChargeRelease : GestureTouch
 {
@@ -47,22 +49,21 @@ public class GestureChargeRelease : GestureTouch
 		heldTimer = GetComponent<CountdownTimer>();
 	}
 	
-	public override void AddTouch(Tuio.Touch t, RaycastHit hit)
+	public override void AddTouch(Touch t, RaycastHit hit)
 	{
 		base.AddTouch(t, hit);
 		
-		if(m_curTouch == t)
+		if(m_curTouch.fingerId == t.fingerId)
 		{
-			
 			heldTimer.StartCountdown(MaxHoldTime);
 		}
 	}
 	
-	public override void RemoveTouch(Tuio.Touch t)
+	public override void RemoveTouch(Touch t)
 	{
 		base.RemoveTouch(t);
 		
-		if((m_curTouch == null) || (m_curTouch.TouchId != t.TouchId)) return;
+		if(m_curTouch.fingerId != t.fingerId) return;
 		
 		if (heldTimer.ElapsedTime < MinHoldTime) 
 		{

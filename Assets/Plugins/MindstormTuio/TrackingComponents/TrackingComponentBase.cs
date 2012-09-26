@@ -34,6 +34,8 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 {
 	public static Dictionary<int, Tuio.Touch> Touches =  new Dictionary<int, Tuio.Touch>();
 	
+	ITouchHandler[] handlers;
+	
 	public double ScreenWidth;
     public double ScreenHeight;
 	
@@ -41,7 +43,8 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	{
 	}
     
-	public List<Tuio.Touch> getNewTouches () {
+	public List<Tuio.Touch> getNewTouches () 
+	{
 		return Touches.Values.Where(t => t.Status == TouchStatus.Began).ToList();	
 	}
 	
@@ -57,11 +60,13 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	{
 		BuildTouchDictionary();
 		
-		foreach (Tuio.Touch t in Touches.Values)
-		{		
-			transform.BroadcastMessage("HandleTouches", t, SendMessageOptions.DontRequireReceiver);
+		Tuio.Native.Touch[] toSend = Touches.Values.Select(t => t.ToNativeTouch()).ToArray();
+		
+		foreach (ITouchHandler hand in handlers)
+		{
+			hand.HandleTouches(toSend);
+			hand.FinishTouches();
 		}
-		transform.BroadcastMessage("FinishTouches", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	protected void BuildTouchDictionary()
@@ -117,6 +122,8 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 		
 		// Don't destory me when changing scenes
 		DontDestroyOnLoad(transform.gameObject);
+		
+		handlers = GetComponents(typeof(ITouchHandler)).Select(c => c as ITouchHandler).ToArray();
 		
 		initialize();
 	}

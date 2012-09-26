@@ -57,14 +57,14 @@
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCMessage.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCPacket.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\TouchComponents\NativeTouch.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchDisplay\ShowGUITouchPoints.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchDisplay\ShowTouchPoints.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\DefaultTouchHandler.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\NativeTouchHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\ITouchHandler.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\TouchLinker.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\ITrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\NativeTrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TrackingComponentBase.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" />

@@ -28,9 +28,10 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Tuio;
 
-public class ShowTouchPoints : MonoBehaviour 
+using Touch = Tuio.Native.Touch;
+
+public class ShowTouchPoints : MonoBehaviour, ITouchHandler
 {
 	Dictionary<int, GameObject> touchIcons = new Dictionary<int, GameObject>();
 	public GameObject TouchIcon;
@@ -44,33 +45,40 @@ public class ShowTouchPoints : MonoBehaviour
 		_targetCamera = FindCamera();
 	}
 	
-	void HandleTouches(Tuio.Touch t)
+	void ITouchHandler.HandleTouches(Touch[] touches)
 	{
-		switch (t.Status)
+		foreach (Touch t in touches)
 		{
-		case TouchStatus.Began:
-			addTouch(t);
-			break;
-		case TouchStatus.Ended:
-			removeTouch(t);
-			break;
-		case TouchStatus.Moved:
-			updateTouch(t);
-			break;
-		case TouchStatus.Stationary:
-		default:
-			break;
+			switch (t.phase)
+			{
+			case TouchPhase.Began:
+				addTouch(t);
+				break;
+			case TouchPhase.Ended:
+				removeTouch(t);
+				break;
+			case TouchPhase.Moved:
+				updateTouch(t);
+				break;
+			case TouchPhase.Stationary:
+			default:
+				break;
+			}
 		}
 	}
 	
-	Ray getRay(Tuio.Touch t)
+	void ITouchHandler.FinishTouches()
 	{
-		Vector3 touchPoint = new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f);
+	}
+	
+	Ray getRay(Touch t)
+	{
+		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
 		Ray targetRay = _targetCamera.ScreenPointToRay(touchPoint);
 		return targetRay;
 	}
 	
-	void addTouch(Tuio.Touch t)
+	void addTouch(Touch t)
 	{
 		RaycastHit h = new RaycastHit();
 		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, GetLayerMask(hitOnlyLayers)));
@@ -78,12 +86,12 @@ public class ShowTouchPoints : MonoBehaviour
 		addTouchIcon(h.point, t, hasHit);
 	}
 	
-	void removeTouch(Tuio.Touch t)
+	void removeTouch(Touch t)
 	{
 		removeTouchIcon(t);
 	}
 	
-	void updateTouch(Tuio.Touch t)
+	void updateTouch(Touch t)
 	{
 		RaycastHit h = new RaycastHit();
 		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, GetLayerMask(hitOnlyLayers)));
@@ -91,26 +99,26 @@ public class ShowTouchPoints : MonoBehaviour
 		updateTouchIcon(h.point, t, hasHit);
 	}
 	
-	GameObject addTouchIcon(Vector3 hitPoint, Tuio.Touch t, bool visible)
+	GameObject addTouchIcon(Vector3 hitPoint, Touch t, bool visible)
 	{
 		GameObject go = (GameObject)Instantiate(TouchIcon);
 		go.transform.position = new Vector3(hitPoint.x, hitPoint.y, hitPoint.z);
 		//go.renderer.enabled = visible;
 		
-		touchIcons.Add(t.TouchId, go);
+		touchIcons.Add(t.fingerId, go);
 		return go;
 	}
 	
-	void removeTouchIcon(Tuio.Touch t)
+	void removeTouchIcon(Touch t)
 	{
-		GameObject go = touchIcons[t.TouchId];
-		touchIcons.Remove(t.TouchId);
+		GameObject go = touchIcons[t.fingerId];
+		touchIcons.Remove(t.fingerId);
 		Destroy(go);
 	}
 	
-	void updateTouchIcon(Vector3 hitPoint, Tuio.Touch t, bool visible)
+	void updateTouchIcon(Vector3 hitPoint, Touch t, bool visible)
 	{
-		GameObject go = touchIcons[t.TouchId];
+		GameObject go = touchIcons[t.fingerId];
 		go.transform.position = hitPoint;
 		go.renderer.enabled = visible;
 	}

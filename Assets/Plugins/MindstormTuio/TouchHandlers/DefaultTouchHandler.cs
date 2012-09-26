@@ -28,9 +28,10 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Tuio;
 
-public class DefaultTouchHandler : MonoBehaviour 
+using Touch = Tuio.Native.Touch;
+
+public class DefaultTouchHandler : MonoBehaviour, ITouchHandler
 {
 	TouchLinker linker = new TouchLinker();
 	
@@ -44,35 +45,38 @@ public class DefaultTouchHandler : MonoBehaviour
 		linker.RaycastLayerMask = (LayerMask)GetLayerMask(hitOnlyLayers);
 	}
 	
-	void HandleTouches(Tuio.Touch t)
+	void ITouchHandler.HandleTouches(Touch[] touches)
 	{
-		switch (t.Status)
+		foreach (Touch t in touches)
 		{
-		case TouchStatus.Began:
-			linker.AddTouch(t, getRay(t, new RaycastHit()));
-			break;
-		case TouchStatus.Ended:
-			linker.RemoveTouch(t);
-			break;
-		case TouchStatus.Moved:
-			linker.UpdateTouch(t);
-			break;
-		case TouchStatus.Stationary:
-			linker.UpdateTouch(t);
-			break;
-		default:
-			break;
+			switch (t.phase)
+			{
+			case TouchPhase.Began:
+				linker.AddTouch(t, getRay(t, new RaycastHit()));
+				break;
+			case TouchPhase.Ended:
+				linker.RemoveTouch(t);
+				break;
+			case TouchPhase.Moved:
+				linker.UpdateTouch(t);
+				break;
+			case TouchPhase.Stationary:
+				linker.UpdateTouch(t);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	
-	void FinishTouches()
+	void ITouchHandler.FinishTouches()
 	{
 		linker.FinishNotification();
 	}
 		
-	Ray getRay(Tuio.Touch t, RaycastHit hit)
+	Ray getRay(Touch t, RaycastHit hit)
 	{
-		Vector3 touchPoint = new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f);
+		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
 		Ray targetRay = _targetCamera.ScreenPointToRay(touchPoint);
 		return targetRay;
 	}
@@ -85,7 +89,7 @@ public class DefaultTouchHandler : MonoBehaviour
 			return Camera.main;
 	}
 	
-	int GetLayerMask(int[] hitOnlyLayers)
+	public int GetLayerMask(int[] hitOnlyLayers)
 	{
 		if (hitOnlyLayers.Length == 0) 
 			throw new System.ArgumentException("No layers in hitOnlyLayers array.  GetLayerMask requires at least one layer");

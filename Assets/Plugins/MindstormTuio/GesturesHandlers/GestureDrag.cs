@@ -29,7 +29,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Tuio;
+
+using Touch = Tuio.Native.Touch;
 
 public class GestureDrag : MonoBehaviour, IGestureHandler
 {
@@ -54,29 +55,29 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		_targetCamera = FindCamera();
 	}
 	
-	Ray getRay(Tuio.Touch t)
+	Ray getRay(Touch t)
 	{
-		Vector3 touchPoint = new Vector3(t.TouchPoint.x, t.TouchPoint.y, 0f);
+		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
 		Ray targetRay = _targetCamera.ScreenPointToRay(touchPoint);
 		return targetRay;
 	}
 	
-	public void AddTouch(Tuio.Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit)
 	{
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
 		addJoint(bod, go, hit.point, t);
 	}
 	
-	public void RemoveTouch(Tuio.Touch t)
+	public void RemoveTouch(Touch t)
 	{
-		removeJoint(t.TouchId);
+		removeJoint(t.fingerId);
 		removeDragger(t);
 	}
 	
-	public void UpdateTouch(Tuio.Touch t)
+	public void UpdateTouch(Touch t)
 	{
-		if (t.Status != TouchStatus.Moved) return;
+		if (t.phase != TouchPhase.Moved) return;
 		
 		RaycastHit h = new RaycastHit();
 		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, GetLayerMask(hitOnlyLayers)));	
@@ -88,10 +89,10 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		updateDragger(hitPoint, t, hasHit);
 	}
 	
-	void removeDragger(Tuio.Touch t)
+	void removeDragger(Touch t)
 	{
-		GameObject go = draggers[t.TouchId];
-		draggers.Remove(t.TouchId);
+		GameObject go = draggers[t.fingerId];
+		draggers.Remove(t.fingerId);
 		Destroy(go);
 	}
 	
@@ -111,16 +112,16 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		joint.connectedBody = attachTo;
 	}
 	
-	void updateDragger(Vector3 hitPoint, Tuio.Touch t, bool visible)
+	void updateDragger(Vector3 hitPoint, Touch t, bool visible)
 	{
-		GameObject go = draggers[t.TouchId];
+		GameObject go = draggers[t.fingerId];
 		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
 		go.transform.position = new Vector3(hitPoint.x, y, hitPoint.z);
 		
 		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 	}
 	
-	GameObject addDragger(Vector3 hitPoint, Tuio.Touch t, bool visible)
+	GameObject addDragger(Vector3 hitPoint, Touch t, bool visible)
 	{
 		GameObject go = (GameObject)Instantiate(dragger);
 		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
@@ -128,11 +129,11 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		
 		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 		
-		draggers.Add(t.TouchId, go);
+		draggers.Add(t.fingerId, go);
 		return go;
 	}
 	
-	Joint addJoint(Rigidbody attachTo, GameObject go, Vector3 hitPoint, Tuio.Touch t)
+	Joint addJoint(Rigidbody attachTo, GameObject go, Vector3 hitPoint, Touch t)
 	{
 		Joint j = (Joint)go.GetComponent<Joint>();
 		
@@ -159,7 +160,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		}
 		
 		initJoint(j, attachTo);		
-		joints.Add(t.TouchId, j);
+		joints.Add(t.fingerId, j);
 		return j;
 	}
 	

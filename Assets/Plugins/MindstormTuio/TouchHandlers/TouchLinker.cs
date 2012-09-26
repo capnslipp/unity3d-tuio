@@ -29,6 +29,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Touch = Tuio.Native.Touch;
+
 public class TouchLinker {
 	
 	Dictionary<int, MonoBehaviour[]> touchLinks = new Dictionary<int, MonoBehaviour[]>();
@@ -48,7 +50,7 @@ public class TouchLinker {
 		set;
 	}	
 	
-	List<GestureHit> innerCast(Tuio.Touch t, Ray targetRay)
+	List<GestureHit> innerCast(Ray targetRay)
 	{
 		List<GestureHit> hitBehaviours = new List<GestureHit>();
 		
@@ -64,7 +66,7 @@ public class TouchLinker {
 		return hitBehaviours;
 	}
 	
-	List<GestureHit> innerCastAll(Tuio.Touch t, Ray targetRay)
+	List<GestureHit> innerCastAll(Ray targetRay)
 	{
 		List<GestureHit> hitBehaviours = new List<GestureHit>();
 		
@@ -80,25 +82,25 @@ public class TouchLinker {
 		return hitBehaviours;
 	}
 	
-	public void AddTouch(Tuio.Touch t, Ray toCast)
+	public void AddTouch(Touch t, Ray toCast)
 	{	
 		// Add it to the touchlinks
-		touchLinks.Add(t.TouchId, new MonoBehaviour[0]);
+		touchLinks.Add(t.fingerId, new MonoBehaviour[0]);
 		
 		// Raycast the touch, see what we hit
 		List<GestureHit> lh = null;
 		if (DoRayCastAll)
 		{
-			lh = innerCastAll(t, toCast);
+			lh = innerCastAll(toCast);
 		}
 		else
 		{
-			lh = innerCast(t, toCast);
+			lh = innerCast(toCast);
 		}
 		
 		// Update the touch link with the found handlers
 		MonoBehaviour[] allHanders = lh.SelectMany(m => m.HitHandlers).ToArray();
-		touchLinks[t.TouchId] = allHanders;
+		touchLinks[t.fingerId] = allHanders;
 
 		// Notify all handlers
 		foreach (GestureHit gh in lh)
@@ -110,12 +112,12 @@ public class TouchLinker {
         }
 	}
 	
-	public void RemoveTouch(Tuio.Touch t)
+	public void RemoveTouch(Touch t)
 	{
-		if (!touchLinks.ContainsKey(t.TouchId)) return;
+		if (!touchLinks.ContainsKey(t.fingerId)) return;
 		
-		MonoBehaviour[] gestureHandlers = touchLinks[t.TouchId];
-		linksToRemove.Add(t.TouchId);
+		MonoBehaviour[] gestureHandlers = touchLinks[t.fingerId];
+		linksToRemove.Add(t.fingerId);
 		
 		// Notify all enabled handlers
 		foreach (MonoBehaviour h in gestureHandlers)
@@ -125,11 +127,11 @@ public class TouchLinker {
         }
 	}
 	
-	public void UpdateTouch(Tuio.Touch t)
+	public void UpdateTouch(Touch t)
 	{
-		if (!touchLinks.ContainsKey(t.TouchId)) return;
+		if (!touchLinks.ContainsKey(t.fingerId)) return;
 		
-		MonoBehaviour[] gestureHandlers = touchLinks[t.TouchId];
+		MonoBehaviour[] gestureHandlers = touchLinks[t.fingerId];
 		
 		// Notify all enabled handlers
 		foreach (MonoBehaviour h in gestureHandlers)

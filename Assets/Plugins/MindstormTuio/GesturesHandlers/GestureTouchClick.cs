@@ -29,6 +29,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Touch = Tuio.Native.Touch;
+
 public class GestureTouchClick : GestureTouch
 {
 	public float maxHeldTime = 1f;
@@ -37,31 +39,35 @@ public class GestureTouchClick : GestureTouch
 	public bool TriggerOnTouchDown = false;
 	public float MaximumPosChange = 10f;
 	
-	public override void AddTouch (Tuio.Touch t, RaycastHit hit)
+	public float TimeAdded = 0f;
+	
+	public override void AddTouch (Touch t, RaycastHit hit)
 	{
 		base.AddTouch(t, hit);
+		
+		TimeAdded = Time.time;
 		
 		if (TriggerOnTouchDown) DoClick(hit);
 	}
 	
-	public override void RemoveTouch(Tuio.Touch t)
+	public override void RemoveTouch(Touch t)
 	{
 		base.RemoveTouch(t);
 		
 		// Not most recent touch?
-		if (m_curTouch.TouchId != t.TouchId) return;
+		if (m_curTouch.fingerId != t.fingerId) return;
 		
 		if (TriggerOnTouchDown) return;
 		
 		if(CheckTolerances)
 		{
 			// Check it's not expired
-			if (Time.time - t.TimeAdded > maxHeldTime) return;
+			if (Time.time - TimeAdded > maxHeldTime) return;
 		
 			// Over the movement threshold?
 			Vector2 curTouchPos = new Vector2(
-					t.TouchPoint.x / (float)m_screenWidth,
-				    t.TouchPoint.y / (float)m_screenHeight);
+					t.position.x / (float)m_screenWidth,
+				    t.position.y / (float)m_screenHeight);
 		
 			if (Vector2.Distance(curTouchPos, m_originalPos) > MaximumPosChange) return;
 		}		

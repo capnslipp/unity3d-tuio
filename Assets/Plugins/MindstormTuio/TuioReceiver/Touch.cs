@@ -67,6 +67,40 @@ namespace Tuio
 			TimeAdded = Time.time;
         }
 		
+		public Native.Touch ToNativeTouch()
+		{
+			TouchPhase p;
+			switch (Status)
+			{
+			case TouchStatus.Began:
+				p = TouchPhase.Began;
+				break;
+			case TouchStatus.Moved:
+				p = TouchPhase.Moved;
+				break;
+			case TouchStatus.Ended:
+				p = TouchPhase.Ended;
+				break;
+			case TouchStatus.Stationary:
+				p = TouchPhase.Stationary;
+				break;
+			default:
+				p = TouchPhase.Canceled;
+				break;
+			}
+			
+			Native.Touch t = new Native.Touch (	
+				TouchId,
+				TouchPoint,
+				DeltaDistance,
+				DeltaTime,
+				1,
+				p
+			);
+			
+			return t;
+		}
+		
 		public Vector2 DeltaDistance
 		{
 			get

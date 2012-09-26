@@ -28,71 +28,79 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Tuio;
 
-public class ShowGUITouchPoints : MonoBehaviour 
+using Touch = Tuio.Native.Touch;
+
+public class ShowGUIpositions : MonoBehaviour, ITouchHandler
 {
 	Dictionary<int, GUITexture> touchIcons = new Dictionary<int, GUITexture>();
 	public GameObject GUITouchIcon;
 	
-	void HandleTouches(Tuio.Touch t)
+	void ITouchHandler.HandleTouches(Touch[] touches)
 	{
-		switch (t.Status)
+		foreach (Touch t in touches)
 		{
-		case TouchStatus.Began:
-			addTouch(t);
-			break;
-		case TouchStatus.Ended:
-			removeTouch(t);
-			break;
-		case TouchStatus.Moved:
-			updateTouch(t);
-			break;
-		case TouchStatus.Stationary:
-		default:
-			break;
+			switch (t.phase)
+			{
+			case TouchPhase.Began:
+				addTouch(t);
+				break;
+			case TouchPhase.Ended:
+				removeTouch(t);
+				break;
+			case TouchPhase.Moved:
+				updateTouch(t);
+				break;
+			case TouchPhase.Stationary:
+			default:
+				break;
+			}
 		}
 	}
 	
-	void addTouch(Tuio.Touch t)
+	void ITouchHandler.FinishTouches()
+	{
+	}
+	
+	void addTouch(Touch t)
 	{
 		addTouchIcon(t);
 	}
 	
-	void removeTouch(Tuio.Touch t)
+	void removeTouch(Touch t)
 	{
 		removeTouchIcon(t);
 	}
 	
-	void updateTouch(Tuio.Touch t)
+	void updateTouch(Touch t)
 	{
 		updateTouchIcon(t);
 	}
 	
-	GUITexture addTouchIcon(Tuio.Touch t)
+	GUITexture addTouchIcon(Touch t)
 	{
 		GameObject touchIcon = (GameObject)Instantiate(GUITouchIcon);
 		GUITexture texture = touchIcon.GetComponent<GUITexture>();
 		
-		setTouchIconPos(texture, t.TouchPoint);
+		setTouchIconPos(texture, t.position);
 		
-		touchIcons.Add(t.TouchId, texture);
+		touchIcons.Add(t.fingerId, texture);
 		return texture;
 	}
 	
-	void removeTouchIcon(Tuio.Touch t)
+	void removeTouchIcon(Touch t)
 	{
-		if (!touchIcons.ContainsKey(t.TouchId)) return;
-		GUITexture go = touchIcons[t.TouchId];
-		touchIcons.Remove(t.TouchId);
+		if (!touchIcons.ContainsKey(t.fingerId)) return;
+		GUITexture go = touchIcons[t.fingerId];
+		touchIcons.Remove(t.fingerId);
 		Destroy(go.gameObject);
 	}
 	
-	void updateTouchIcon(Tuio.Touch t)
+	void updateTouchIcon(Touch t)
 	{
-		if (!touchIcons.ContainsKey(t.TouchId)) return;
-		GUITexture go = touchIcons[t.TouchId];
-		setTouchIconPos(go, t.TouchPoint);
+		if (!touchIcons.ContainsKey(t.fingerId)) return;
+		GUITexture go = touchIcons[t.fingerId];
+		setTouchIconPos(go, t.position);
 	}
 	
 	void setTouchIconPos(GUITexture touchIcon, Vector2 position)

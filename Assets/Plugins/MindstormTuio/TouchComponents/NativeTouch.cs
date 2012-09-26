@@ -24,18 +24,70 @@ If you have any questions regarding this library, or would like to purchase
 a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
-using System;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-using Touch = Tuio.Native.Touch;
-
-public interface IGestureHandler
+namespace Tuio.Native
 {
-	void AddTouch(Touch t, RaycastHit hit);
-	void RemoveTouch(Touch t);
-	void UpdateTouch(Touch t);
-	void FinishNotification();
+	public struct Touch
+	{
+		private int m_FingerId;
+		private Vector2 m_Position;
+		private Vector2 m_PositionDelta;
+		private float m_TimeDelta;
+		private int m_TapCount;
+		private TouchPhase m_Phase;
+		public int fingerId
+		{
+			get
+			{
+				return this.m_FingerId;
+			}
+		}
+		public Vector2 position
+		{
+			get
+			{
+				return this.m_Position;
+			}
+		}
+		public Vector2 deltaPosition
+		{
+			get
+			{
+				return this.m_PositionDelta;
+			}
+		}
+		public float deltaTime
+		{
+			get
+			{
+				return this.m_TimeDelta;
+			}
+		}
+		public int tapCount
+		{
+			get
+			{
+				return this.m_TapCount;
+			}
+		}
+		public TouchPhase phase
+		{
+			get
+			{
+				return this.m_Phase;
+			}
+		}
+		
+		public Touch (int Id, Vector2 pos, Vector2 posDelta, float timeDelta, int taps, TouchPhase p)
+		{
+			m_FingerId = Id;
+			m_Position = pos;
+			m_PositionDelta = posDelta;
+			m_TimeDelta = timeDelta;
+			m_TapCount = taps;
+			m_Phase = p;
+		}
+	}
 }
-
