@@ -30,7 +30,7 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
-public class TuioTrackingComponent : TrackingComponentBase, ITrackingComponent
+public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
 {
 	private static TuioTracking tracking = null;
 	
@@ -52,10 +52,10 @@ public class TuioTrackingComponent : TrackingComponentBase, ITrackingComponent
 			
 			// Get the touch relating to the key
 			Tuio.Touch t = null;
-			if (Touches.ContainsKey(cursor.SessionID))
+			if (TuioTouches.ContainsKey(cursor.SessionID))
 			{
 				// It's not a new one
-				t = Touches[cursor.SessionID];
+				t = TuioTouches[cursor.SessionID];
 				// Update it's position
 				t.SetNewTouchPoint(getScreenPoint(cursor), getRawPoint(cursor));
 			}
@@ -63,7 +63,7 @@ public class TuioTrackingComponent : TrackingComponentBase, ITrackingComponent
 			{
 				// It's a new one
 				t = buildTouch(cursor);
-				Touches.Add(cursor.SessionID, t);
+				TuioTouches.Add(cursor.SessionID, t);
 			}
 		}
 	}

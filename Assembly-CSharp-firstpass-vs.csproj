@@ -44,16 +44,16 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\CentreGestureScale.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\CountdownTimer.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureChargeRelease.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDrag.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureDragScale.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureNTouchClick.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouch.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchClick.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\GestureTouchHeld.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\GesturesHandlers\IGestureHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\CentreGestureScale.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\CountdownTimer.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureChargeRelease.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureDrag.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureDragScale.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureNTouchClick.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouch.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouchClick.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouchHeld.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\IGestureHandler.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCMessage.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCPacket.cs" />
@@ -65,7 +65,7 @@
      <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\TouchLinker.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\ITrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TrackingComponentBase.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TuioComponentBase.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TouchProperties.cs" />
@@ -74,7 +74,7 @@
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioConfiguration.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioParser.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioTracking.cs" />
-     <None Include="Assets\Plugins\MindstormTuio\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
+     <None Include="Assets\Plugins\MindstormGestures\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -30,29 +30,29 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
-public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
+public abstract class TuioComponentBase : MonoBehaviour, ITrackingComponent
 {
-	public static Dictionary<int, Tuio.Touch> Touches =  new Dictionary<int, Tuio.Touch>();
+	protected static Dictionary<int, Tuio.Touch> TuioTouches =  new Dictionary<int, Tuio.Touch>();
 	
 	ITouchHandler[] handlers;
 	
 	public double ScreenWidth;
     public double ScreenHeight;
 	
-	protected TrackingComponentBase()
+	protected TuioComponentBase()
 	{
 	}
     
-	public List<Tuio.Touch> getNewTouches () 
+	public List<Tuio.Touch> getNewTouches() 
 	{
-		return Touches.Values.Where(t => t.Status == TouchStatus.Began).ToList();	
+		return TuioTouches.Values.Where(t => t.Status == TouchStatus.Began).ToList();	
 	}
 	
 	public Dictionary<int, Tuio.Touch> AllTouches
 	{
 		get
 		{
-			return Touches;
+			return TuioTouches;
 		}
 	}
 	
@@ -60,7 +60,7 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	{
 		BuildTouchDictionary();
 		
-		Tuio.Native.Touch[] toSend = Touches.Values.Select(t => t.ToNativeTouch()).ToArray();
+		Tuio.Native.Touch[] toSend = TuioTouches.Values.Select(t => t.ToNativeTouch()).ToArray();
 		
 		foreach (ITouchHandler hand in handlers)
 		{
@@ -85,10 +85,10 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	/// </summary>
 	protected void deleteNonCurrentTouches()
 	{
-		int[] deadTouches = (from Tuio.Touch t in Touches.Values
+		int[] deadTouches = (from Tuio.Touch t in TuioTouches.Values
 				where !t.IsCurrent
 				select t.TouchId).ToArray();
-		foreach (int touchId in deadTouches) Touches.Remove(touchId);
+		foreach (int touchId in deadTouches) TuioTouches.Remove(touchId);
 	}
 	
 	/// <summary>
@@ -96,7 +96,7 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	/// </summary>
 	protected void updateAllTouchesAsTemp()
 	{
-		foreach (Tuio.Touch t in Touches.Values) t.SetTemp();
+		foreach (Tuio.Touch t in TuioTouches.Values) t.SetTemp();
 	}
 	
 	/// <summary>
@@ -109,7 +109,7 @@ public abstract class TrackingComponentBase : MonoBehaviour, ITrackingComponent
 	/// </summary>
 	protected void updateEndedTouches()
 	{
-		var nonCurrent = from Tuio.Touch t in Touches.Values
+		var nonCurrent = from Tuio.Touch t in TuioTouches.Values
 				where !t.IsCurrent
 				select t;
 		foreach (Tuio.Touch t in nonCurrent) t.Status = TouchStatus.Ended;

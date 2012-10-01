@@ -57,7 +57,7 @@
      <Compile Include="Assets\ExampleScripts\Timer\TimerAnimationPos.cs" />
      <Compile Include="Assets\ExampleScripts\Walls\WallBuildClickHandler.cs" />
      <Compile Include="Assets\ExampleScripts\Walls\WallBuilder.cs" />
-     <None Include="Assets\Plugins\MindstormTuio\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
+     <None Include="Assets\Plugins\MindstormGestures\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">

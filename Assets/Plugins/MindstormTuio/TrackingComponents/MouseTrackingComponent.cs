@@ -30,7 +30,7 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
-public class MouseTrackingComponent : TrackingComponentBase, ITrackingComponent
+public class MouseTrackingComponent : TuioComponentBase, ITrackingComponent
 {
 	public static int[] MOUSE_BUTTONS = new int[] {0, 1, 2};
     
@@ -49,10 +49,10 @@ public class MouseTrackingComponent : TrackingComponentBase, ITrackingComponent
 		{
 			// Get the touch relating to the key
 			Tuio.Touch t = null;
-			if (Touches.ContainsKey(i))
+			if (TuioTouches.ContainsKey(i))
 			{
 				// It's not a new one
-				t = Touches[i];
+				t = TuioTouches[i];
 				// Update it's position
 				t.SetNewTouchPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
 			}
@@ -60,7 +60,7 @@ public class MouseTrackingComponent : TrackingComponentBase, ITrackingComponent
 			{
 				// It's a new one
 				t = buildTouch(i);
-				Touches.Add(i, t);
+				TuioTouches.Add(i, t);
 			}
 		}
 	}
