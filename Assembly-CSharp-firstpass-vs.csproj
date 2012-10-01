@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -54,15 +54,16 @@
      <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouchHeld.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\IGestureHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchHandlers\DefaultTouchHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchHandlers\ITouchHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchHandlers\TouchLinker.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCMessage.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCPacket.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchComponents\NativeTouch.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchDisplay\ShowGUITouchPoints.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchDisplay\ShowTouchPoints.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\DefaultTouchHandler.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\ITouchHandler.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TouchHandlers\TouchLinker.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\ITrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TuioComponentBase.cs" />

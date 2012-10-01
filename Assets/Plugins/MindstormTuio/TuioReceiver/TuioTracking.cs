@@ -40,14 +40,15 @@ namespace Tuio
 {
 	public class TuioTracking
 	{
-	    #region Fields
-	    TuioConfiguration config;
+	    public Dictionary<int, Tuio2DCursor> current = new Dictionary<int, Tuio2DCursor>();
+		
+		TuioConfiguration config;
 	    UdpClient udpreceiver;
 	    Thread thr;
-	    bool isrunning;
-	    public Dictionary<int, Tuio2DCursor> current = new Dictionary<int, Tuio2DCursor>();
-	    object m_lock = new object();
-	    #endregion
+	    
+		bool isrunning;
+	    
+		object m_lock = new object();
 	
 		public void ConfigureFramework(TuioConfiguration config)
 	    {

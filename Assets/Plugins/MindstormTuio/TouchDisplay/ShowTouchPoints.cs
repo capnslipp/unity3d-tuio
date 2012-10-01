@@ -29,9 +29,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Tuio.Native;
 using Touch = Tuio.Native.Touch;
 
-public class ShowTouchPoints : MonoBehaviour, ITouchHandler
+public class ShowTouchPoints : MonoBehaviour
 {
 	Dictionary<int, GameObject> touchIcons = new Dictionary<int, GameObject>();
 	public GameObject TouchIcon;
@@ -45,9 +46,9 @@ public class ShowTouchPoints : MonoBehaviour, ITouchHandler
 		_targetCamera = FindCamera();
 	}
 	
-	void ITouchHandler.HandleTouches(Touch[] touches)
+	void Update()
 	{
-		foreach (Touch t in touches)
+		foreach (Touch t in TuioInput.Touches)
 		{
 			switch (t.phase)
 			{
@@ -65,10 +66,6 @@ public class ShowTouchPoints : MonoBehaviour, ITouchHandler
 				break;
 			}
 		}
-	}
-	
-	void ITouchHandler.FinishTouches()
-	{
 	}
 	
 	Ray getRay(Touch t)

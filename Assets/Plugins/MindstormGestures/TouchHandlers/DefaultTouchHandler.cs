@@ -29,9 +29,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Tuio.Native;
 using Touch = Tuio.Native.Touch;
 
-public class DefaultTouchHandler : MonoBehaviour, ITouchHandler
+public class DefaultTouchHandler : MonoBehaviour
 {
 	TouchLinker linker = new TouchLinker();
 	
@@ -45,13 +46,13 @@ public class DefaultTouchHandler : MonoBehaviour, ITouchHandler
 		linker.RaycastLayerMask = (LayerMask)GetLayerMask(hitOnlyLayers);
 	}
 	
-	void ITouchHandler.HandleTouches(Touch[] touches)
+	void Update()
 	{
-		foreach (Touch t in touches)
+		foreach (Touch t in TuioInput.Touches)
 		{
 			switch (t.phase)
 			{
-			case TouchPhase.Began:
+			case TouchPhase.Began:  
 				linker.AddTouch(t, getRay(t, new RaycastHit()));
 				break;
 			case TouchPhase.Ended:
@@ -67,13 +68,9 @@ public class DefaultTouchHandler : MonoBehaviour, ITouchHandler
 				break;
 			}
 		}
-	}
-	
-	void ITouchHandler.FinishTouches()
-	{
 		linker.FinishNotification();
 	}
-		
+			
 	Ray getRay(Touch t, RaycastHit hit)
 	{
 		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);

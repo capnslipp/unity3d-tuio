@@ -34,6 +34,10 @@ public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
 {
 	private static TuioTracking tracking = null;
 	
+	public TuioTrackingComponent()
+	{
+	}
+	
 	/// <summary>
 	/// Updates all touches with the latest TUIO received data 
 	/// </summary>
@@ -46,7 +50,7 @@ public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
 		{
 			if (cursor == null)
 			{
-				print("CURSOR NULL");
+				Debug.LogWarning("CURSOR NULL");
 				continue;
 			}
 			
@@ -111,7 +115,7 @@ public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
         return xOrY;
     }
 	
-	public override void initialize ()
+	public override void initialize()
 	{		
 		TuioConfiguration config = new TuioConfiguration();
 		
@@ -122,9 +126,8 @@ public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
 		tracking.Start();
 	}
 	
-	// Ensure that the instance is destroyed when the game is stopped in the editor.
-    void OnApplicationQuit() 
-    {
+    public void Close()
+	{
 		tracking.Stop();
     }
 }

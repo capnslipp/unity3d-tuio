@@ -1,6 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs">
+    <Files>
+      <File FileName="Assets\Plugins\MindstormGestures\TouchHandlers\DefaultTouchHandler.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" Line="55" Column="5" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TuioComponentBase.cs" Line="104" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\TuioTracking.cs" Line="51" Column="32" />
+      <File FileName="Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" Line="67" Column="4" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" Line="58" Column="5" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchDisplay\ShowTouchPoints.cs" Line="70" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

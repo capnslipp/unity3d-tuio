@@ -30,17 +30,18 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
-public abstract class TuioComponentBase : MonoBehaviour, ITrackingComponent
+public abstract class TuioComponentBase : ITrackingComponent
 {
 	protected static Dictionary<int, Tuio.Touch> TuioTouches =  new Dictionary<int, Tuio.Touch>();
 	
 	ITouchHandler[] handlers;
 	
-	public double ScreenWidth;
-    public double ScreenHeight;
+	public double ScreenWidth = 1.0;
+    public double ScreenHeight = 1.0;
 	
 	protected TuioComponentBase()
 	{
+		initialize();
 	}
     
 	public List<Tuio.Touch> getNewTouches() 
@@ -56,20 +57,7 @@ public abstract class TuioComponentBase : MonoBehaviour, ITrackingComponent
 		}
 	}
 	
-	protected void Update()
-	{
-		BuildTouchDictionary();
-		
-		Tuio.Native.Touch[] toSend = TuioTouches.Values.Select(t => t.ToNativeTouch()).ToArray();
-		
-		foreach (ITouchHandler hand in handlers)
-		{
-			hand.HandleTouches(toSend);
-			hand.FinishTouches();
-		}
-	}
-	
-	protected void BuildTouchDictionary()
+	public void BuildTouchDictionary()
 	{
 		deleteNonCurrentTouches();
 		
@@ -113,19 +101,6 @@ public abstract class TuioComponentBase : MonoBehaviour, ITrackingComponent
 				where !t.IsCurrent
 				select t;
 		foreach (Tuio.Touch t in nonCurrent) t.Status = TouchStatus.Ended;
-	}
-	
-	protected void Awake()
-	{
-		ScreenWidth = Camera.main.pixelWidth;
-		ScreenHeight = Camera.main.pixelHeight;
-		
-		// Don't destory me when changing scenes
-		DontDestroyOnLoad(transform.gameObject);
-		
-		handlers = GetComponents(typeof(ITouchHandler)).Select(c => c as ITouchHandler).ToArray();
-		
-		initialize();
 	}
 	
 	public abstract void initialize();
