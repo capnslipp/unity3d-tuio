@@ -83,4 +83,8 @@ public class MouseTrackingComponent : TuioComponentBase, ITrackingComponent
 	public override void initialize()
 	{
 	}
+	
+	public override void Close()
+	{
+    }
 }

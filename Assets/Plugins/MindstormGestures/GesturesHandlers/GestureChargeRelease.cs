@@ -29,8 +29,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = Tuio.Native.Touch;
-
 [RequireComponent(typeof(CountdownTimer))]
 public class GestureChargeRelease : GestureTouch
 {

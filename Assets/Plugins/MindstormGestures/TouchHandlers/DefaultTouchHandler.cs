@@ -29,12 +29,11 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Tuio.Native;
-using Touch = Tuio.Native.Touch;
-
 public class DefaultTouchHandler : MonoBehaviour
 {
 	TouchLinker linker = new TouchLinker();
+	
+	public TouchHandlerConfig Config;
 	
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
@@ -43,12 +42,14 @@ public class DefaultTouchHandler : MonoBehaviour
 	void Start()
 	{
 		_targetCamera = FindCamera();
-		linker.RaycastLayerMask = (LayerMask)GetLayerMask(hitOnlyLayers);
+		linker.RaycastLayerMask = (LayerMask)LayerHelper.GetLayerMask(hitOnlyLayers);
 	}
 	
 	void Update()
 	{
-		foreach (Touch t in TuioInput.Touches)
+		Touch[] allTouches = Config.GetTouches();
+		
+		foreach (Touch t in allTouches)
 		{
 			switch (t.phase)
 			{
@@ -84,18 +85,5 @@ public class DefaultTouchHandler : MonoBehaviour
 			return camera;
 		else
 			return Camera.main;
-	}
-	
-	public int GetLayerMask(int[] hitOnlyLayers)
-	{
-		if (hitOnlyLayers.Length == 0) 
-			throw new System.ArgumentException("No layers in hitOnlyLayers array.  GetLayerMask requires at least one layer");
-		
-		var layerMask = 1 << hitOnlyLayers[0];
-		for (int i = 1; i < hitOnlyLayers.Length; i++)
-		{
-			layerMask = layerMask | (1 << hitOnlyLayers[i]);
-		}
-		return layerMask;
 	}
 }

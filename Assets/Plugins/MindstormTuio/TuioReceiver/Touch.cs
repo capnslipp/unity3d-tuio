@@ -26,7 +26,12 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using UnityEngine;
+
+using Debug = UnityEngine.Debug;
 
 namespace Tuio
 {
@@ -67,7 +72,27 @@ namespace Tuio
 			TimeAdded = Time.time;
         }
 		
-		public Native.Touch ToNativeTouch()
+		public UnityEngine.Touch ToUnityTouch()
+		{
+			Native.Touch t = this.ToNativeTouch();
+			UnityEngine.Touch uT;
+			
+			IntPtr pnt = Marshal.AllocHGlobal(Marshal.SizeOf(t));
+			
+			try
+			{
+				Marshal.StructureToPtr(t, pnt, false);
+				uT = (UnityEngine.Touch)Marshal.PtrToStructure(pnt, typeof(UnityEngine.Touch));
+			}
+			finally
+			{
+				Marshal.FreeHGlobal(pnt);
+			}
+			
+			return uT;
+		}
+		
+		Native.Touch ToNativeTouch()
 		{
 			TouchPhase p;
 			switch (Status)

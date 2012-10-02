@@ -29,8 +29,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = Tuio.Native.Touch;
-
 public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 
 	public GameObject[] NotifyObjects;

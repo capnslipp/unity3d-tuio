@@ -29,7 +29,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = Tuio.Native.Touch;
+using Touch = UnityEngine.Touch;
 
 public interface IGestureHandler
 {

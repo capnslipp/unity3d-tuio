@@ -126,7 +126,7 @@ public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
 		tracking.Start();
 	}
 	
-    public void Close()
+    public override void Close()
 	{
 		tracking.Stop();
     }

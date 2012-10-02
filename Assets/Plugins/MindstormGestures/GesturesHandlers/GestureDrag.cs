@@ -30,8 +30,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using Touch = Tuio.Native.Touch;
-
 public class GestureDrag : MonoBehaviour, IGestureHandler
 {
 	public float fixedDraggerHeight = 0f;

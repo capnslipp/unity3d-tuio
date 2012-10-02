@@ -2,18 +2,28 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
-using Tuio.Native;
-using Touch = Tuio.Native.Touch;
-
 public class TuioInput : MonoBehaviour
 {
-	static TuioTrackingComponent tracking;
+	static TuioComponentBase tracking;
+	
+	public bool SimulateFromMouse = false;
 	
 	void Awake()
 	{
-		tracking = new TuioTrackingComponent();
+		if (SimulateFromMouse) initMouse(); else initTuio();
+		
 		tracking.ScreenWidth = Camera.main.pixelWidth;
 		tracking.ScreenHeight = Camera.main.pixelHeight;
+	}
+	
+	void initMouse()
+	{
+		tracking = new MouseTrackingComponent();
+	}
+	
+	void initTuio()
+	{
+		tracking = new TuioTrackingComponent();
 	}
 	
 	void Update()
@@ -21,13 +31,13 @@ public class TuioInput : MonoBehaviour
 		tracking.BuildTouchDictionary();
 	}
 	
-	public static Touch[] Touches
+	public static Touch[] touches
 	{
 		get
 		{
 			if (tracking == null) return new Touch[0];
-			Touch[] toSend = tracking.AllTouches.Values.Select(t => t.ToNativeTouch()).ToArray();
-			return toSend;
+			Touch[] uTouch = tracking.AllTouches.Values.Select(t => t.ToUnityTouch()).ToArray();
+			return uTouch;
 		}
 	}
 	

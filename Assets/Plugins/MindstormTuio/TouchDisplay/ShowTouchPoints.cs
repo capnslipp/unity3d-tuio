@@ -30,12 +30,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Tuio.Native;
-using Touch = Tuio.Native.Touch;
+using Touch = UnityEngine.Touch;
 
 public class ShowTouchPoints : MonoBehaviour
 {
 	Dictionary<int, GameObject> touchIcons = new Dictionary<int, GameObject>();
 	public GameObject TouchIcon;
+	
+	public TouchHandlerConfig Config;
 	
 	Camera _targetCamera;
 	
@@ -48,7 +50,9 @@ public class ShowTouchPoints : MonoBehaviour
 	
 	void Update()
 	{
-		foreach (Touch t in TuioInput.Touches)
+		Touch[] allTouches = Config.GetTouches();
+		
+		foreach (Touch t in allTouches)
 		{
 			switch (t.phase)
 			{

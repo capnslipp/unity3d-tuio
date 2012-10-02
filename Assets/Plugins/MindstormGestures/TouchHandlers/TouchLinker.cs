@@ -29,8 +29,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = Tuio.Native.Touch;
-
 public class TouchLinker {
 	
 	Dictionary<int, MonoBehaviour[]> touchLinks = new Dictionary<int, MonoBehaviour[]>();

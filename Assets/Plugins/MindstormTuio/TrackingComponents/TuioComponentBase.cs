@@ -34,8 +34,6 @@ public abstract class TuioComponentBase : ITrackingComponent
 {
 	protected static Dictionary<int, Tuio.Touch> TuioTouches =  new Dictionary<int, Tuio.Touch>();
 	
-	ITouchHandler[] handlers;
-	
 	public double ScreenWidth = 1.0;
     public double ScreenHeight = 1.0;
 	
@@ -104,4 +102,6 @@ public abstract class TuioComponentBase : ITrackingComponent
 	}
 	
 	public abstract void initialize();
+	
+	public abstract void Close();
 }

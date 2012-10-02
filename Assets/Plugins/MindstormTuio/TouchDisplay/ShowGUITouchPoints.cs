@@ -29,16 +29,20 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = Tuio.Native.Touch;
+using Touch = UnityEngine.Touch;
 
-public class ShowGUIpositions : MonoBehaviour, ITouchHandler
+public class ShowGUIpositions : MonoBehaviour
 {
 	Dictionary<int, GUITexture> touchIcons = new Dictionary<int, GUITexture>();
 	public GameObject GUITouchIcon;
 	
-	void ITouchHandler.HandleTouches(Touch[] touches)
+	public TouchHandlerConfig Config;
+	
+	void Update()
 	{
-		foreach (Touch t in touches)
+		Touch[] allTouches = Config.GetTouches();
+		
+		foreach (Touch t in allTouches)
 		{
 			switch (t.phase)
 			{
@@ -56,10 +60,6 @@ public class ShowGUIpositions : MonoBehaviour, ITouchHandler
 				break;
 			}
 		}
-	}
-	
-	void ITouchHandler.FinishTouches()
-	{
 	}
 	
 	void addTouch(Touch t)
