@@ -29,6 +29,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Mindstorm.Gesture;
+
 public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 
 	public GameObject[] NotifyObjects;

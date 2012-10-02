@@ -8,15 +8,9 @@
             <Node name="Assets" expanded="True">
               <Node name="Plugins" expanded="True">
                 <Node name="MindstormGestures" expanded="True">
-                  <Node name="GesturesHandlers" expanded="True" />
-                  <Node name="Helpers" expanded="True">
-                    <Node name="LayerHelper.cs" selected="True" />
+                  <Node name="Config" expanded="True">
+                    <Node name="TouchConfig.cs" selected="True" />
                   </Node>
-                  <Node name="TouchHandlers" expanded="True" />
-                </Node>
-                <Node name="MindstormTuio" expanded="True">
-                  <Node name="TouchDisplay" expanded="True" />
-                  <Node name="TuioReceiver" expanded="True" />
                 </Node>
               </Node>
             </Node>

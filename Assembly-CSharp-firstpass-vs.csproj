@@ -44,27 +44,28 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\CentreGestureScale.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\CountdownTimer.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureChargeRelease.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureDrag.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureDragScale.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureNTouchClick.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouch.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouchClick.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\GestureTouchHeld.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\GesturesHandlers\IGestureHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Config\TouchConfig.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Config\TouchHandlerConfig.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\GestureInterface\IGestureHandler.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\CentreGestureScale.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureChargeRelease.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureNTouchClick.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouch.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchClick.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchHeld.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Helpers\CountdownTimer.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\LayerHelper.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\TouchHandlers\DefaultTouchHandler.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\TouchHandlers\TouchHandlerConfig.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\TouchHandlers\TouchLinker.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouch3D.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouchGUI.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\TouchLinker.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCMessage.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCPacket.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchComponents\NativeTouch.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TouchDisplay\ShowGUITouchPoints.cs" />
-     <Compile Include="Assets\Plugins\MindstormTuio\TouchDisplay\ShowTouchPoints.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\ITrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TrackingComponents\TuioComponentBase.cs" />
@@ -76,7 +77,6 @@
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioConfiguration.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioParser.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioTracking.cs" />
-     <None Include="Assets\Plugins\MindstormGestures\Shaders\TUIO_Transparent_Unlit_Cutout_Overlay.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

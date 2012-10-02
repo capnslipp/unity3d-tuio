@@ -1,0 +1,8 @@
+fileFormatVersion: 2
+guid: 1e0ced38777926242b136227539df576
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - TouchIcon: {fileID: 100000, guid: b305862c0fee2d34db575fdf2739689e, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}

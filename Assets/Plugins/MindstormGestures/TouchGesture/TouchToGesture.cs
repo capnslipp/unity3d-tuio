@@ -29,11 +29,15 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DefaultTouchHandler : MonoBehaviour
+using Mindstorm.Gesture;
+using Mindstorm.Gesture.Config;
+
+[RequireComponent(typeof(TouchConfig))]
+public class TouchToGesture : MonoBehaviour
 {
 	TouchLinker linker = new TouchLinker();
 	
-	public TouchHandlerConfig Config;
+	TouchHandlerConfig Config;
 	
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
@@ -42,6 +46,7 @@ public class DefaultTouchHandler : MonoBehaviour
 	void Start()
 	{
 		_targetCamera = FindCamera();
+		Config = GetComponent<TouchConfig>().Config;
 		linker.RaycastLayerMask = (LayerMask)LayerHelper.GetLayerMask(hitOnlyLayers);
 	}
 	

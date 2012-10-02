@@ -29,59 +29,65 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GestureTouchClick : GestureTouch
+using Mindstorm.Gesture;
+
+[RequireComponent(typeof(CountdownTimer))]
+public class GestureTouchHeld : GestureTouch
 {
-	public float maxHeldTime = 1f;
-	public bool CheckTolerances = false;
+	public bool RelaxTime = true;
+	public float HoldTime = 1.0f;
+	public string HeldMessage;
 	
-	public bool TriggerOnTouchDown = false;
-	public float MaximumPosChange = 10f;
+	CountdownTimer heldTimer = null;
 	
-	public float TimeAdded = 0f;
+	public override void Start()
+	{
+		base.Start();
+		
+		heldTimer = GetComponent<CountdownTimer>();
+	}
 	
-	public override void AddTouch (Touch t, RaycastHit hit)
+	public override void AddTouch(Touch t, RaycastHit hit)
 	{
 		base.AddTouch(t, hit);
 		
-		TimeAdded = Time.time;
-		
-		if (TriggerOnTouchDown) DoClick(hit);
+		if(m_curTouch.fingerId == t.fingerId)
+		{
+			
+			heldTimer.StartCountdown(HoldTime);
+		}
 	}
 	
 	public override void RemoveTouch(Touch t)
 	{
 		base.RemoveTouch(t);
 		
-		// Not most recent touch?
-		if (m_curTouch.fingerId != t.fingerId) return;
-		
-		if (TriggerOnTouchDown) return;
-		
-		if(CheckTolerances)
+		if(m_curTouch.fingerId == t.fingerId)
 		{
-			// Check it's not expired
-			if (Time.time - TimeAdded > maxHeldTime) return;
-		
-			// Over the movement threshold?
-			Vector2 curTouchPos = new Vector2(
-					t.position.x / (float)m_screenWidth,
-				    t.position.y / (float)m_screenHeight);
-		
-			if (Vector2.Distance(curTouchPos, m_originalPos) > MaximumPosChange) return;
-		}		
-		
-		// Check if the touch still hits the same collider
-		RaycastHit h = new RaycastHit();
-		
-		if(!HitsOrigCollider(t, out h)) return;
-			
-		DoClick(h);
-		
-		ClearCurTouch();
+			CancelHeld();
+		}
 	}
 	
-	public virtual void DoClick(RaycastHit h)
+	public override void UpdateTouch(Touch t)
 	{
-		BroadcastTouchMessage("Click", h);
+		base.UpdateTouch(t);
+		
+		if(m_curTouch.fingerId != t.fingerId) return;
+		
+		if(heldTimer.RemainingTime > 0.0f) return;
+		
+		RaycastHit h = new RaycastHit();
+		if(!HitsOrigCollider(t, out h)) return;
+		
+		BroadcastTouchMessage(HeldMessage, h);
+	}
+	
+	void CancelHeld()
+	{
+		ClearCurTouch();
+		
+		heldTimer.ResetCountdown(RelaxTime?
+								CountdownTimer.CountDownStateEnum.Relaxing:
+								CountdownTimer.CountDownStateEnum.Paused);
 	}
 }

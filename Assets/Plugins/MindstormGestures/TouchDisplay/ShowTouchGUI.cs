@@ -29,14 +29,21 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = UnityEngine.Touch;
+using Mindstorm.Gesture;
+using Mindstorm.Gesture.Config;
 
-public class ShowGUIpositions : MonoBehaviour
+[RequireComponent(typeof(TouchConfig))]
+public class ShowTouchGUI : MonoBehaviour
 {
 	Dictionary<int, GUITexture> touchIcons = new Dictionary<int, GUITexture>();
 	public GameObject GUITouchIcon;
 	
-	public TouchHandlerConfig Config;
+	TouchHandlerConfig Config;
+	
+	void Start()
+	{
+		Config = GetComponent<TouchConfig>().Config;
+	}
 	
 	void Update()
 	{

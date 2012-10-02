@@ -30,6 +30,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using Mindstorm.Gesture;
+
 public class GestureDrag : MonoBehaviour, IGestureHandler
 {
 	public float fixedDraggerHeight = 0f;

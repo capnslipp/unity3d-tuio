@@ -24,18 +24,45 @@ If you have any questions regarding this library, or would like to purchase
 a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
-using System;
 using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Touch = UnityEngine.Touch;
+using Mindstorm.Gesture;
 
-public interface IGestureHandler
+public class GestureNTouchClick : GestureTouchClick
 {
-	void AddTouch(Touch t, RaycastHit hit);
-	void RemoveTouch(Touch t);
-	void UpdateTouch(Touch t);
-	void FinishNotification();
+	public int RequireClickCount = 2;
+	public int ClickCount = 0;
+	public float ClickTimeout = 0.3f;
+	
+	public override void DoClick(RaycastHit h)
+	{
+		ClickCount += 1;
+		
+		Invoke("reduceClicks", ClickTimeout);
+		
+		if (ClickCount >= RequireClickCount) DoNClick(h); else base.DoClick(h);
+	}
+	
+	public void DoNClick(RaycastHit h)
+	{
+		BroadcastTouchMessage("NClick", h);
+	}
+	
+	void OnEnable()
+	{
+		resetClicks();
+	}
+	
+	void reduceClicks()
+	{
+		ClickCount -= 1;
+	}
+	
+	void resetClicks()
+	{
+		ClickCount = 0;
+	}
 }
-

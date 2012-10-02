@@ -30,7 +30,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GestureDragScale : MonoBehaviour, IGestureHandler
+using Mindstorm.Gesture;
+
+public class CentreGestureDragScale : MonoBehaviour, IGestureHandler
 {
 	public float fixedDraggerHeight = 0f;
 	public bool attachToParent = false;
@@ -64,7 +66,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		scaler = GameObject.CreatePrimitive(PrimitiveType.Sphere); //new GameObject("SCALER");
 		scaler.collider.enabled = false;
 		
-		targetScale = scaler.transform.localScale;
+		//targetScale = scaler.transform.localScale;
+		targetScale = transform.localScale;
 	}
 	
 	void changeBoundingBox()
@@ -80,18 +83,25 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		}
 	}
 	
-	void LateUpdate()
+	void Update()
 	{
 		if (scaler.transform.localScale != targetScale)
 		{
-			scaler.transform.position = calcScaleCentre();
-			transform.parent = scaler.transform;
+			//scaler.transform.position = calcScaleCentre();
+			//transform.parent = scaler.transform;
 				
-			Vector3 curScale = Vector3.SmoothDamp(scaler.transform.localScale, targetScale, ref vel, 0.2f);
+			Vector3 curScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref vel, 0.2f);
 			if (Vector3.Distance(curScale, targetScale) < 0.01f) curScale = targetScale;
-			scaler.transform.localScale = curScale;
+			//Vector3 pos = transform.position;
+			//transform.position = calcScaleCentre();
+			transform.localScale = new Vector3(curScale.x, transform.localScale.y, curScale.z);
 			
-			transform.parent = null;
+			//transform.position = pos;
+			
+			
+			//scaler.transform.localScale = curScale;
+			
+			//transform.parent = null;
 		}
 	}
 	
@@ -128,7 +138,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 			}
 			else
 			{
-				nonB.Encapsulate(dr.transform.position);
+				//nonB.Encapsulate(dr.transform.position);
 			}
 		}
 		

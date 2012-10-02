@@ -29,15 +29,16 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Tuio.Native;
-using Touch = UnityEngine.Touch;
+using Mindstorm.Gesture;
+using Mindstorm.Gesture.Config;
 
-public class ShowTouchPoints : MonoBehaviour
+[RequireComponent(typeof(TouchConfig))]
+public class ShowTouch3D : MonoBehaviour
 {
 	Dictionary<int, GameObject> touchIcons = new Dictionary<int, GameObject>();
 	public GameObject TouchIcon;
 	
-	public TouchHandlerConfig Config;
+	TouchHandlerConfig Config;
 	
 	Camera _targetCamera;
 	
@@ -46,6 +47,8 @@ public class ShowTouchPoints : MonoBehaviour
 	void Start()
 	{
 		_targetCamera = FindCamera();
+		
+		Config = GetComponent<TouchConfig>().Config;
 	}
 	
 	void Update()

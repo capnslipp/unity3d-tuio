@@ -29,38 +29,62 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GestureNTouchClick : GestureTouchClick
+using Mindstorm.Gesture;
+
+[RequireComponent(typeof(CountdownTimer))]
+public class GestureChargeRelease : GestureTouch
 {
-	public int RequireClickCount = 2;
-	public int ClickCount = 0;
-	public float ClickTimeout = 0.3f;
+	public bool RelaxTime = true;
 	
-	public override void DoClick(RaycastHit h)
+	public float MinHoldTime = 1.0f;
+	public float MaxHoldTime = 1.0f;
+	public string ReleaseMessage;
+	
+	CountdownTimer heldTimer = null;
+	
+	public override void Start()
 	{
-		ClickCount += 1;
+		base.Start();
 		
-		Invoke("reduceClicks", ClickTimeout);
+		heldTimer = GetComponent<CountdownTimer>();
+	}
+	
+	public override void AddTouch(Touch t, RaycastHit hit)
+	{
+		base.AddTouch(t, hit);
 		
-		if (ClickCount >= RequireClickCount) DoNClick(h); else base.DoClick(h);
+		if(m_curTouch.fingerId == t.fingerId)
+		{
+			heldTimer.StartCountdown(MaxHoldTime);
+		}
 	}
 	
-	public void DoNClick(RaycastHit h)
+	public override void RemoveTouch(Touch t)
 	{
-		BroadcastTouchMessage("NClick", h);
+		base.RemoveTouch(t);
+		
+		if(m_curTouch.fingerId != t.fingerId) return;
+		
+		if (heldTimer.ElapsedTime < MinHoldTime) 
+		{
+			CancelHeld();
+			return;
+		}
+		
+		RaycastHit h = new RaycastHit();
+		if(!HitsOrigCollider(t, out h)) return;
+		
+		BroadcastTouchMessage(ReleaseMessage, h);
+		
+		CancelHeld();
 	}
 	
-	void OnEnable()
+	void CancelHeld()
 	{
-		resetClicks();
-	}
-	
-	void reduceClicks()
-	{
-		ClickCount -= 1;
-	}
-	
-	void resetClicks()
-	{
-		ClickCount = 0;
+		ClearCurTouch();
+		
+		heldTimer.ResetCountdown(RelaxTime?
+								CountdownTimer.CountDownStateEnum.Relaxing:
+								CountdownTimer.CountDownStateEnum.Paused);
 	}
 }

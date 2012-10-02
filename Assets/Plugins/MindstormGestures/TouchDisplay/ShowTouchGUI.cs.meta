@@ -1,0 +1,8 @@
+fileFormatVersion: 2
+guid: 98a32bcab560f4943ab7352d716fcb91
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - GUITouchIcon: {fileID: 100000, guid: 55db619b1364b2c418202dd7d0073982, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
