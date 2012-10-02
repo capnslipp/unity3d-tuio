@@ -2,13 +2,13 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
-public class TuioInput : MonoBehaviour
+public class MouseInput : MonoBehaviour
 {
-	static TuioComponentBase tracking;
+	static MouseTrackingComponent tracking = null;
 	
 	void Awake()
 	{
-		tracking = new TuioTrackingComponent();
+		tracking = new MouseTrackingComponent();
 		
 		tracking.ScreenWidth = Camera.main.pixelWidth;
 		tracking.ScreenHeight = Camera.main.pixelHeight;

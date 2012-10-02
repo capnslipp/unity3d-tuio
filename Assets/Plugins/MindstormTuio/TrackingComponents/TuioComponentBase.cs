@@ -32,7 +32,7 @@ using System.Linq;
 
 public abstract class TuioComponentBase : ITrackingComponent
 {
-	protected static Dictionary<int, Tuio.Touch> TuioTouches =  new Dictionary<int, Tuio.Touch>();
+	protected Dictionary<int, Tuio.Touch> TuioTouches =  new Dictionary<int, Tuio.Touch>();
 	
 	public double ScreenWidth = 1.0;
     public double ScreenHeight = 1.0;

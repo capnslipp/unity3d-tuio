@@ -11,7 +11,8 @@ namespace Mindstorm.Gesture.Config
 		public enum InputTypeEnum
 		{
 			Native = 0,
-			Tuio = 1
+			Tuio = 1,
+			Mouse = 2
 		}
 		
 		public Touch[] GetTouches()
@@ -24,6 +25,9 @@ namespace Mindstorm.Gesture.Config
 				break;
 			case InputTypeEnum.Tuio:
 				allTouches = TuioInput.touches;
+				break;
+			case InputTypeEnum.Mouse:
+				allTouches = MouseInput.touches;
 				break;
 			default:
 				allTouches = new Touch[0];
