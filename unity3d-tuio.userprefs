@@ -1,16 +1,28 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Config\TouchHandlerConfig.cs">
+    <Files>
+      <File FileName="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" Line="25" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" Line="35" Column="46" />
+      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" Line="33" Column="65" />
+      <File FileName="Assets\Plugins\MindstormGestures\Config\TouchHandlerConfig.cs" Line="17" Column="62" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp-firstpass" expanded="True">
+            <Node name="References" expanded="True" />
             <Node name="Assets" expanded="True">
               <Node name="Plugins" expanded="True">
                 <Node name="MindstormGestures" expanded="True">
                   <Node name="Config" expanded="True">
-                    <Node name="TouchConfig.cs" selected="True" />
+                    <Node name="TouchHandlerConfig.cs" selected="True" />
                   </Node>
+                  <Node name="Helpers" expanded="True" />
+                </Node>
+                <Node name="MindstormTuio" expanded="True">
+                  <Node name="TouchComponents" expanded="True" />
+                  <Node name="TrackingComponents" expanded="True" />
                 </Node>
               </Node>
             </Node>
