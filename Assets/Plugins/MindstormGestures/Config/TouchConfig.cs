@@ -32,4 +32,14 @@ using Mindstorm.Gesture.Config;
 public class TouchConfig : MonoBehaviour 
 {
 	public TouchHandlerConfig Config;
+	
+	void Start()
+	{
+		Config.Initialise();
+	}
+	
+	void Update()
+	{
+		if (Config.InputTypeChanged) Config.Initialise();
+	}
 }

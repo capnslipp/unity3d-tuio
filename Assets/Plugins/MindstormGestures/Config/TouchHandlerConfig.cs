@@ -26,13 +26,12 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 
 using UnityEngine;
 using System;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Mindstorm.Gesture.Config
 {
-	[System.Serializable]
+	[Serializable]	
 	public class TouchHandlerConfig
 	{
 		public enum InputTypeEnum
@@ -41,53 +40,50 @@ namespace Mindstorm.Gesture.Config
 			Tuio = 2
 		}
 		
-		Func<Touch[]> touchGetter;
+		public InputTypeEnum InputType;
+		InputTypeEnum LastInputType;
 		
-		public InputTypeEnum InputType = InputTypeEnum.Native;
-		InputTypeEnum OldInputType = InputTypeEnum.Native;
-
 		Dictionary<InputTypeEnum, InputTypeMethod> InputTypes = new Dictionary<InputTypeEnum, InputTypeMethod>();
-				
+		
 		public TouchHandlerConfig()
 		{
-			InputTypes.Add(InputTypeEnum.Native, new InputTypeMethod("UnityEngine", "UnityEngine.Input", "touches"));
-			InputTypes.Add(InputTypeEnum.Tuio, new InputTypeMethod("Assembly-CSharp-firstpass", "TuioInput", "touches"));
-			OldInputType = InputType;
+			InputTypes.Add(InputTypeEnum.Native, new InputTypeMethod("UnityEngine", "UnityEngine.Input"));
+			InputTypes.Add(InputTypeEnum.Tuio, new InputTypeMethod("Assembly-CSharp-firstpass", "TuioInput"));
 		}
 		
-		public Touch[] GetTouches()
-		{	
-			if (touchGetter == null || InputType != OldInputType) 
-			{
-				OldInputType = InputType;
-				InitGetter();
-			}
-			
-			Touch[] allTouches = touchGetter();
-			return allTouches;
-		}
-		
-		void InitGetter()
+		public void Initialise()
 		{
-			Assembly b = Assembly.Load(InputTypes[InputType].AssemblyName);
-			Type t = b.GetType(InputTypes[InputType].ObjectName, true);
-			PropertyInfo p = t.GetProperty(InputTypes[InputType].PropertyName);
-			
-			touchGetter = (Func<Touch[]>)Delegate.CreateDelegate(typeof(Func<Touch[]>), p.GetGetMethod());
+			LastInputType = InputType;
+			SelectedMethod = InputTypes[InputType];
+		}
+		
+		public bool InputTypeChanged
+		{
+			get
+			{
+				return !(LastInputType == InputType);
+			}
+		}
+		
+		InputTypeMethod SelectedMethod
+		{
+			set
+			{
+				InputProxy.InputType = value;
+			}
 		}
 	}
-	
+		
+	[Serializable]	
 	public struct InputTypeMethod
 	{
 		public string AssemblyName;
 		public string ObjectName;
-		public string PropertyName;
 		
-		public InputTypeMethod(string assembly, string objectName, string property)
+		public InputTypeMethod(string assembly, string objectName)
 		{
 			AssemblyName = assembly;
 			ObjectName = objectName;
-			PropertyName = property;
 		}
 	}
 }

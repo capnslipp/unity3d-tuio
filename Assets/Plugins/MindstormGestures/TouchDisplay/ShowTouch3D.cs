@@ -38,8 +38,6 @@ public class ShowTouch3D : MonoBehaviour
 	Dictionary<int, GameObject> touchIcons = new Dictionary<int, GameObject>();
 	public GameObject TouchIcon;
 	
-	TouchHandlerConfig Config;
-	
 	Camera _targetCamera;
 	
 	public int[] hitOnlyLayers = new int[1] { 0 };
@@ -47,13 +45,11 @@ public class ShowTouch3D : MonoBehaviour
 	void Start()
 	{
 		_targetCamera = FindCamera();
-		
-		Config = GetComponent<TouchConfig>().Config;
 	}
 	
 	void Update()
 	{
-		Touch[] allTouches = Config.GetTouches();
+		Touch[] allTouches = InputProxy.touches;
 		
 		foreach (Touch t in allTouches)
 		{

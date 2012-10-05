@@ -59,6 +59,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\LayerHelper.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouch3D.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouchGUI.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\InputProxy.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\TouchLinker.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\OSC\OSCBundle.cs" />

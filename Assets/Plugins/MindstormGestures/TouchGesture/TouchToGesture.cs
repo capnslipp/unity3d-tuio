@@ -37,22 +37,19 @@ public class TouchToGesture : MonoBehaviour
 {
 	TouchLinker linker = new TouchLinker();
 	
-	TouchHandlerConfig Config;
-	
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
 	Camera _targetCamera;
-	
+		
 	void Start()
 	{
 		_targetCamera = FindCamera();
-		Config = GetComponent<TouchConfig>().Config;
 		linker.RaycastLayerMask = (LayerMask)LayerHelper.GetLayerMask(hitOnlyLayers);
 	}
 	
 	void Update()
 	{
-		Touch[] allTouches = Config.GetTouches();
+		Touch[] allTouches = InputProxy.touches;
 		
 		foreach (Touch t in allTouches)
 		{

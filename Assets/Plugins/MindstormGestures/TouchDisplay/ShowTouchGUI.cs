@@ -38,16 +38,9 @@ public class ShowTouchGUI : MonoBehaviour
 	Dictionary<int, GUITexture> touchIcons = new Dictionary<int, GUITexture>();
 	public GameObject GUITouchIcon;
 	
-	TouchHandlerConfig Config;
-	
-	void Start()
-	{
-		Config = GetComponent<TouchConfig>().Config;
-	}
-	
 	void Update()
 	{
-		Touch[] allTouches = Config.GetTouches();
+		Touch[] allTouches = InputProxy.touches;
 		
 		foreach (Touch t in allTouches)
 		{
