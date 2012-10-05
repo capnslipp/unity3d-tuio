@@ -29,6 +29,11 @@ using System.Collections;
 
 namespace Tuio.Native
 {
+	/// <summary>
+	/// Used as temporary storage for all Touch objects.  Exact copy of the UnityEgine.Touch struct
+	/// allowing it to be Marshalled into a UnityEngine.Touch object.
+	/// NOTE: This class will need to be changed if the UnityEngine.Touch class changes.
+	/// </summary>
 	public struct Touch
 	{
 		private int m_FingerId;

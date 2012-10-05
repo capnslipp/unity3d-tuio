@@ -30,6 +30,9 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
+/// <summary>
+/// Provides a base implementation for any component wanting to process or simulate TUIO tracking data.
+/// </summary>
 public abstract class TuioComponentBase : ITrackingComponent
 {
 	protected Dictionary<int, Tuio.Touch> TuioTouches =  new Dictionary<int, Tuio.Touch>();

@@ -24,25 +24,19 @@ If you have any questions regarding this library, or would like to purchase
 a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
-using UnityEngine;
-using System.Collections;
-
-using Mindstorm.Gesture.Config;
-
 /// <summary>
-/// Wraps the TouchHandlerConfig to provide editing of touch configuration from the inspector.
+/// Specifies tolerances to use in touch gestures.
 /// </summary>
-public class TouchConfig : MonoBehaviour 
+[System.Serializable]
+public class TouchTolerances
 {
-	public TouchHandlerConfig Config;
+	public float MaxHeldTime = 1f;
 	
-	void Start()
-	{
-		Config.Initialise();
-	}
+	public bool CheckHeldTime = false;
+	public bool CheckMovementThreshold = false;
+	public bool CheckHitsSameCollider = true;
 	
-	void Update()
-	{
-		if (Config.InputTypeChanged) Config.Initialise();
-	}
+	public bool TriggerOnTouchDown = false;
+	
+	public float MaximumPosChange = 10f;
 }

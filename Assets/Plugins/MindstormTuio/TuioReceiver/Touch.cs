@@ -36,7 +36,8 @@ using Debug = UnityEngine.Debug;
 namespace Tuio
 {
     /// <summary>
-    /// Handles simple data about a touch including status, properties and ID
+    /// Handles simple data about a touch including status, properties and ID.
+    /// Specific to TUIO Input and not used outside of the TUIO code.
     /// </summary>
     public class Touch
     {

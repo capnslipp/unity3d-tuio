@@ -30,6 +30,11 @@ using System.Collections;
 
 using Mindstorm.Gesture.Config;
 
+/// <summary>
+/// Acts as a proxy for getting touch data.  Uses reflection to load correct Input object (TuioInput or UnityEngine.Input)
+/// and populate a module level set of delegates.  Has exactly the same touch method signatures as UnityEngine.Input
+/// allowing code currently using UnityEngine.Input to be easily changed to InputProxy.Input.
+/// </summary>
 public class InputProxy
 {
 	static Func<Touch[]> touchesFunc;
@@ -40,6 +45,12 @@ public class InputProxy
 	
 	public static readonly bool multiTouchEnabled = true;
 	
+	/// <summary>
+	/// Changes the input type between the supported assemblies and classes.  Default is Native (i.e. UnityEngine.Input).
+	/// </summary>
+	/// <value>
+	/// Object representing the assembly and class name of the Input class.
+	/// </value>
 	public static InputTypeMethod InputType
 	{
 		set
@@ -49,11 +60,17 @@ public class InputProxy
 		}
 	}
 	
+	/// <summary>
+	/// Returns object representing status of a specific touch. (Does not allocate temporary variables)
+	/// </summary>
 	public static Touch GetTouch(int index)
 	{
 		return GetTouchFunc(index);
 	}
 	
+	/// <summary>
+	/// Returns list of objects representing status of all touches during last frame. (Read Only) (Allocates temporary variables)
+	/// </summary>
 	public static Touch[] touches
 	{
 		get
@@ -62,6 +79,9 @@ public class InputProxy
 		}
 	}
 	
+	/// <summary>
+	/// Number of touches. Guaranteed not to change throughout the frame. (Read Only)
+	/// </summary>
 	public static int touchCount
 	{
 		get

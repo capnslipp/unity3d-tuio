@@ -1,17 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\TouchGesture\InputProxy.cs">
-    <Files>
-      <File FileName="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" Line="25" Column="3" />
-      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\TuioTrackingComponent.cs" Line="35" Column="46" />
-      <File FileName="Assets\Plugins\MindstormTuio\TrackingComponents\MouseTrackingComponent.cs" Line="33" Column="65" />
-      <File FileName="Assets\Plugins\MindstormGestures\Config\TouchHandlerConfig.cs" Line="72" Column="17" />
-      <File FileName="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouch3D.cs" Line="52" Column="34" />
-      <File FileName="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouchGUI.cs" Line="43" Column="34" />
-      <File FileName="Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" Line="52" Column="34" />
-      <File FileName="Assets\Plugins\MindstormGestures\Config\TouchConfig.cs" Line="36" Column="12" />
-      <File FileName="Assets\Plugins\MindstormGestures\TouchGesture\InputProxy.cs" Line="55" Column="31" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
@@ -19,10 +8,8 @@
             <Node name="Assets" expanded="True">
               <Node name="Plugins" expanded="True">
                 <Node name="MindstormGestures" expanded="True">
-                  <Node name="Config" expanded="True" />
-                  <Node name="TouchDisplay" expanded="True" />
-                  <Node name="TouchGesture" expanded="True">
-                    <Node name="InputProxy.cs" selected="True" />
+                  <Node name="Gestures" expanded="True">
+                    <Node name="GestureTouchClick.cs" selected="True" />
                   </Node>
                 </Node>
               </Node>

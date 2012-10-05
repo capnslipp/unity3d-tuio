@@ -57,6 +57,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchHeld.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\CountdownTimer.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\LayerHelper.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Helpers\TouchTolerances.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouch3D.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouchGUI.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\InputProxy.cs" />

@@ -31,13 +31,12 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+/// <summary>
+/// Detects a click on a collider.  Configurable to handle different tolerances.
+/// </summary>
 public class GestureTouchClick : GestureTouch
 {
-	public float maxHeldTime = 1f;
-	public bool CheckTolerances = false;
-	
-	public bool TriggerOnTouchDown = false;
-	public float MaximumPosChange = 10f;
+	public TouchTolerances Tolerances = new TouchTolerances();
 	
 	public float TimeAdded = 0f;
 	
@@ -47,35 +46,34 @@ public class GestureTouchClick : GestureTouch
 		
 		TimeAdded = Time.time;
 		
-		if (TriggerOnTouchDown) DoClick(hit);
+		if (Tolerances.TriggerOnTouchDown) DoClick(hit);
 	}
 	
 	public override void RemoveTouch(Touch t)
 	{
 		base.RemoveTouch(t);
 		
+		if (Tolerances.TriggerOnTouchDown) return;
+		
 		// Not most recent touch?
 		if (m_curTouch.fingerId != t.fingerId) return;
 		
-		if (TriggerOnTouchDown) return;
+		if (Tolerances.CheckHeldTime && Time.time - TimeAdded > Tolerances.MaxHeldTime) return;
 		
-		if(CheckTolerances)
+		if (Tolerances.CheckMovementThreshold)
 		{
-			// Check it's not expired
-			if (Time.time - TimeAdded > maxHeldTime) return;
-		
 			// Over the movement threshold?
 			Vector2 curTouchPos = new Vector2(
 					t.position.x / (float)m_screenWidth,
 				    t.position.y / (float)m_screenHeight);
 		
-			if (Vector2.Distance(curTouchPos, m_originalPos) > MaximumPosChange) return;
+			if (Vector2.Distance(curTouchPos, m_originalPos) > Tolerances.MaximumPosChange) return;
 		}		
 		
 		// Check if the touch still hits the same collider
 		RaycastHit h = new RaycastHit();
 		
-		if(!HitsOrigCollider(t, out h)) return;
+		if(Tolerances.CheckHitsSameCollider && !HitsOrigCollider(t, out h)) return;
 			
 		DoClick(h);
 		

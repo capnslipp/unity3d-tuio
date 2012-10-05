@@ -31,7 +31,12 @@ using System.Collections.Generic;
 
 namespace Mindstorm.Gesture.Config
 {
-	[Serializable]	
+	/// <summary>
+	/// Confuration information on which Touch system to use.  Either UnityEngine.Input or TuioInput (if installed).
+	/// Uses reflection to load the required class to avoid dependency on Mindstorm.Tuio.
+	/// If TuioInput is not included in the project this will throw an exception when Tuio is selected.
+	/// </summary>
+	[Serializable]
 	public class TouchHandlerConfig
 	{
 		public enum InputTypeEnum

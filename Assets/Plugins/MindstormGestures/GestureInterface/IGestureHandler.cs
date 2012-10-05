@@ -31,11 +31,42 @@ using System.Collections.Generic;
 
 namespace Mindstorm.Gesture
 {
+	/// <summary>
+	/// Inteface defining what each custom gesture handler must implement.
+	/// </summary>
 	public interface IGestureHandler
 	{
+		/// <summary>
+		/// Called when a new touch is added.
+		/// </summary>
+		/// <param name='t'>
+		/// Touch which has been added
+		/// </param>
+		/// <param name='hit'>
+		/// Hit information from Raycast of the touch position.  I.e. what the touch hit.
+		/// </param>
 		void AddTouch(Touch t, RaycastHit hit);
+		
+		/// <summary>
+		/// Called when a touch is removed.  Called only once for each touch on the last frame.
+		/// </summary>
+		/// <param name='t'>
+		/// Touch object which has been removed.
+		/// </param>
 		void RemoveTouch(Touch t);
+		
+		/// <summary>
+		/// Called when a touch has moved or it's phase has changed.
+		/// </summary>
+		/// <param name='t'>
+		/// Touch object with updated position and phase information.
+		/// </param>
 		void UpdateTouch(Touch t);
+		
+		/// <summary>
+		/// Called once all touchs have been sent this frame.
+		/// Useful for logic based on all touches present on this object.
+		/// </summary>
 		void FinishNotification();
 	}
 }

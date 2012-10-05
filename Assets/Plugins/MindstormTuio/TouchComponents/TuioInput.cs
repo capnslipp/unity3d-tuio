@@ -28,6 +28,13 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// Uses both TUIO tracking and MouseTracking to provide Input interface for receiving touch information.
+/// Must be attached to a GameObject in the Hierachy to be used.
+/// 
+/// Provides exactly the same interface as UnityEngine.Input regarding touch data
+/// allowing any code using UnityEngine.Input to use TuioInput instead.
+/// </summary>
 public class TuioInput : MonoBehaviour
 {
 	static TuioComponentBase tracking;

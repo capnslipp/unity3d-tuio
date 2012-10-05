@@ -32,6 +32,11 @@ using System.Collections.Generic;
 using Mindstorm.Gesture;
 using Mindstorm.Gesture.Config;
 
+/// <summary>
+/// Shows a touch object per touch which moves with the touch point and is destroyed when the touch is removed.
+/// Touch object is created in a position based on a Raycast into the scene.
+/// If there is nothing hit, not touch point will be shown.
+/// </summary>
 [RequireComponent(typeof(TouchConfig))]
 public class ShowTouch3D : MonoBehaviour
 {

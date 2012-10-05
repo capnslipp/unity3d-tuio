@@ -30,6 +30,9 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
+/// <summary>
+/// Uses mouse input to simulate TUIO using the mouse.  Used mostly for testing purposes.
+/// </summary>
 public class MouseTrackingComponent : TuioComponentBase, ITrackingComponent
 {
 	public static int[] MOUSE_BUTTONS = new int[] {0, 1, 2};

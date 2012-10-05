@@ -30,6 +30,9 @@ using UnityEngine;
 using Tuio;
 using System.Linq;
 
+/// <summary>
+/// Uses the TUIO Tracking component to receive touch information over TUIO.
+/// </summary>
 public class TuioTrackingComponent : TuioComponentBase, ITrackingComponent
 {
 	private static TuioTracking tracking = null;
