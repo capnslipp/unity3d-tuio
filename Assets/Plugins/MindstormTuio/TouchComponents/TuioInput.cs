@@ -37,6 +37,8 @@ public class TuioInput : MonoBehaviour
 	
 	public bool SimulateFromMouse = false;
 	
+	public static readonly bool multiTouchEnabled = true;
+	
 	public static int touchCount
 	{
 		get;

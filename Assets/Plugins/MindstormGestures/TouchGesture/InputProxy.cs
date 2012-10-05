@@ -38,6 +38,8 @@ public class InputProxy
 	
 	static InputTypeMethod inputType = new InputTypeMethod("UnityEngine", "UnityEngine.Input");
 	
+	public static readonly bool multiTouchEnabled = true;
+	
 	public static InputTypeMethod InputType
 	{
 		set
