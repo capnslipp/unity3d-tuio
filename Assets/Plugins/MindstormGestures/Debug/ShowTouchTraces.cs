@@ -42,8 +42,8 @@ public class ShowTouchTraces : MonoBehaviour
 	Dictionary<int, TouchTrace> liveTraces = new Dictionary<int, TouchTrace>();
 	List<TouchTrace> oldTraces = new List<TouchTrace>();
 	
-	public TraceColorConfig LiveColors = new TraceColorConfig();
-	public TraceColorConfig OldColors = new TraceColorConfig();
+	public TraceConfig LiveConfig = new TraceConfig(Color.white, Color.red, Color.white, 0.2f);
+	public TraceConfig OldConfig = new TraceConfig(Color.gray, Color.blue, Color.gray, 0.2f);
 	
 	Camera _targetCamera;
 	
@@ -82,35 +82,35 @@ public class ShowTouchTraces : MonoBehaviour
 	{
 		foreach (TouchTrace tr in liveTraces.Values)
 		{
-			drawTrace(tr, LiveColors);
+			drawTrace(tr, LiveConfig);
 		}
 		foreach (TouchTrace tr in oldTraces)
 		{
-			drawTrace(tr, OldColors);
+			drawTrace(tr, OldConfig);
 		}
 	}
 	
-	void drawTrace(TouchTrace tr, TraceColorConfig colors)
+	void drawTrace(TouchTrace tr, TraceConfig config)
 	{ 
-		Gizmos.color = colors.StartColor;
-		Gizmos.DrawSphere(tr.startPos, 0.2f);
+		if (tr.startPos != null)
+		{
+			Gizmos.color = config.StartColor;
+			Gizmos.DrawSphere(tr.startPos.Value, config.SphereSize);
+		}
 		
 		if (tr.endPos != null)
 		{
-			Gizmos.color = colors.EndColor;
-			Gizmos.DrawSphere(tr.endPos.Value, 0.2f);
+			Gizmos.color = config.EndColor;
+			Gizmos.DrawSphere(tr.endPos.Value, config.SphereSize);
 		}
 		
-		Gizmos.color = colors.PathColor;
-		bool first = true;
-		Vector3 fromPos = Vector3.zero;
+		Gizmos.color = config.PathColor;
+		Vector3? fromPos = null;
 		foreach (Vector3 pos in tr.positions)
 		{
-			if (first) fromPos = tr.startPos;
-			first = false;
-			
-			Gizmos.DrawLine(fromPos, pos);
-			fromPos = pos;
+			if (fromPos == null) fromPos = (Vector3?)tr.startPos;
+			if (fromPos != null) Gizmos.DrawLine(fromPos.Value, pos);
+			fromPos = (Vector3?)pos;
 		}
 	}
 	
@@ -126,8 +126,7 @@ public class ShowTouchTraces : MonoBehaviour
 		RaycastHit h = new RaycastHit();
 		bool hasHit = (Physics.Raycast(getRay(t), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
 		
-		if (!hasHit) return;
-		startTrace(h, t);
+		startTrace(h, t, hasHit);
 	}
 	
 	void removeTouch(Touch t)
@@ -147,9 +146,10 @@ public class ShowTouchTraces : MonoBehaviour
 		updateTrace(h, t);
 	}
 	
-	void startTrace(RaycastHit h, Touch t)
+	void startTrace(RaycastHit h, Touch t, bool hasHit)
 	{
-		TouchTrace tr = new TouchTrace(Time.time, h.point);
+		Vector3? start = hasHit ? (Vector3?)h.point : null;
+		TouchTrace tr = new TouchTrace(Time.time, start);
 		liveTraces.Add(t.fingerId, tr);
 	}
 	
