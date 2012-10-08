@@ -80,11 +80,15 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		if (t.phase != TouchPhase.Moved) return;
 		
 		RaycastHit h = new RaycastHit();
-		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, GetLayerMask(hitOnlyLayers)));	
+		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		
+		if (!hasHit) return;
 		
 		Vector3 hitPoint = h.point;
 		if (h.collider.gameObject == gameObject)
-				hitPoint = new Vector3(hitPoint.x, transform.position.y, hitPoint.z);
+		{
+			hitPoint = new Vector3(hitPoint.x, transform.position.y, hitPoint.z);
+		}
 		
 		updateDragger(hitPoint, t, hasHit);
 	}
@@ -174,18 +178,5 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 			return camera;
 		else
 			return Camera.main;
-	}
-		
-	int GetLayerMask(int[] hitOnlyLayers)
-	{
-		if (hitOnlyLayers.Length == 0) 
-			throw new System.ArgumentException("No layers in hitOnlyLayers array.  GetLayerMask requires at least one layer");
-		
-		var layerMask = 1 << hitOnlyLayers[0];
-		for (int i = 1; i < hitOnlyLayers.Length; i++)
-		{
-			layerMask = layerMask | (1 << hitOnlyLayers[i]);
-		}
-		return layerMask;
 	}
 }

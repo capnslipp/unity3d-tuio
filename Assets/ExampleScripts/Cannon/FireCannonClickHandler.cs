@@ -40,11 +40,6 @@ public class FireCannonClickHandler	 : MonoBehaviour {
 		
 	public void Click(object h)
 	{
-		RaycastHit hit = (RaycastHit)h;
-		GameObject hitGameObject = hit.collider.gameObject;
-		
-		Debug.Log("HIT ON '" + hitGameObject.name + "' RECEIVED IN '" + gameObject.name + "'");
-		
 		Cannon.Fire(t.Percentage);
 	}
 }
