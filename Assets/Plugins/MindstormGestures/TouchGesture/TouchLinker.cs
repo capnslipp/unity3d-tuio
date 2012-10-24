@@ -166,9 +166,8 @@ namespace Mindstorm.Gesture
 		
 		public List<MonoBehaviour> GetComponentsByInterfaceType<T>(Transform transform)	
 		{
-			List<MonoBehaviour> finalList = new List<MonoBehaviour>();
-			finalList = transform.gameObject.GetComponents(typeof(T)).Select(o => (MonoBehaviour)o).ToList();
-			return finalList;
+			var coms = transform.gameObject.GetComponents<MonoBehaviour>().Where(c => c is T);
+			return coms.ToList();
 		}
 	}
 }

@@ -1,0 +1,11 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" line="98" />
+      <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" line="68" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

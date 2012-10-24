@@ -80,7 +80,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		if (t.phase != TouchPhase.Moved) return;
 		
 		RaycastHit h = new RaycastHit();
-		bool hasHit = (Physics.Raycast(getRay(t), out h, 100f, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		bool hasHit = (Physics.Raycast(getRay(t), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
 		
 		if (!hasHit) return;
 		

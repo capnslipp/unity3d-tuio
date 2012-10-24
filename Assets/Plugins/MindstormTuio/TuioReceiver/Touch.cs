@@ -212,7 +212,10 @@ namespace Tuio
 				TouchPoint = p;
 				RawPoint = p;
 			}
-			else SetHeld();
+			else 
+			{
+				SetHeld();
+			}
         }
 		
 		public void SetNewTouchPoint(Vector2 p, Vector2 rawPoint)
@@ -232,7 +235,10 @@ namespace Tuio
 				TouchPoint = p;
 				RawPoint = rawPoint;
 			}
-			else SetHeld();
+			else 
+			{
+				SetHeld();
+			}
         }
     }
 }
