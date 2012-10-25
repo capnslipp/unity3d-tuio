@@ -35,90 +35,50 @@ using Mindstorm.Gesture;
 public class GestureDragScale : MonoBehaviour, IGestureHandler
 {
 	public int[] hitOnlyLayers = new int[1] { 0 };
+	public float MoveSpeed = 0.1f;
+	public float ScaleSpeed = 0.1f;
+	
+	public Color ScaleGizmoColor = Color.red;
 	
 	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
 	
 	bool touchesChanged = false;
 	
-	Bounds b;
-	Bounds oldB;
-	
 	Vector3 vel = Vector3.zero;
 	
 	Camera _targetCamera;
 	
-	public Vector3 targetScale = Vector3.one;
-	public Vector3 oldTargetScale = Vector3.one;
-	public Vector3 scaleCentre = Vector3.one;
-	public Vector3 moveAmount = Vector3.zero;
+	public Bounds BoundingBox;
+	public Bounds OldBoundingBox;
 	
-	public float MoveSpeed = 0.1f;
-	public float ScaleSpeed = 0.1f;
+	Vector3 targetScale = Vector3.one;
+	Vector3 scaleCentre = Vector3.one;
+	Vector3 moveAmount = Vector3.zero;
 	
 	GameObject scaler = null;
 	
 	void Start()
 	{
 		_targetCamera = FindCamera();
-		scaler = GameObject.CreatePrimitive(PrimitiveType.Sphere); //new GameObject("SCALER");
-		scaler.collider.enabled = false;
 		
+		scaler = new GameObject("SCALER");
 		targetScale = scaler.transform.localScale;
 	}
 	
-	void changeBoundingBox()
+	void OnDrawGizmos()
 	{
-		bool boundsHasChanged = recalcBounds();
-		if (!boundsHasChanged) return;
-		
-		float scaleVel = calcBoundsChange();
-		scaleCentre = calcScaleCentre();
-		
-		oldTargetScale = targetScale;
-		targetScale = targetScale * scaleVel;
-	}
-	
-	void updateScaler()
-	{
-		RaycastHit h;
-		bool hasHit = (Physics.Raycast(getRay(scaleCentre), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
-		if (!hasHit) return;
-		
-		scaler.transform.position = h.point;
-	}
-	
-	void updatePosition()
-	{
-		RaycastHit oldCentre;
-		if (!(Physics.Raycast(getRay(oldB.center), out oldCentre, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)))) return;
-		
-		RaycastHit centre;
-		if (!(Physics.Raycast(getRay(b.center), out centre, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)))) return;
-		
-		Vector3 diff = (centre.point - oldCentre.point);
-		moveAmount = moveAmount + diff;
-	}
-	
-	bool allPointsMoving
-	{
-		get
-		{
-			return touches.Values.All(t => t.phase == TouchPhase.Moved);
-		}
+		Gizmos.color = ScaleGizmoColor;
+		if (scaler != null)	Gizmos.DrawSphere(scaler.transform.position, 0.5f);
 	}
 	
 	void LateUpdate()
 	{
-		if (targetScale != oldTargetScale) updateScaler();
-		
-		if (allPointsMoving && oldB != b) updatePosition();
-		
 		if (moveAmount != Vector3.zero)
 		{
 			Vector3 move = Vector3.Lerp(Vector3.zero, moveAmount, Time.deltaTime / MoveSpeed);
-			
-			transform.position = lockY(transform.position, transform.position + move);
 			moveAmount = Vector3.Lerp(moveAmount, Vector3.zero, Time.deltaTime / MoveSpeed);
+			
+			transform.position = transform.position.LockUpdate(Vector3.up, transform.position + move);
 		}
 		
 		if (scaler.transform.localScale != targetScale)
@@ -132,83 +92,71 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		}
 	}
 	
-	Vector3 lockY(Vector3 toLock, Vector3 newValue)
+	void changeBoundingBox()
 	{
-		return new Vector3(newValue.x, toLock.y, newValue.z);
-	}
-	
-	float calcBoundsChange()
-	{
-		float oldSize = Vector3.Distance(oldB.min, oldB.max);
-		float newSize = Vector3.Distance(b.min, b.max);
+		recalcBounds();
+		if (!boundsHasChanged) return;
 		
-		float velRatio = oldSize == 0f ? 1f : newSize/oldSize;
-		return velRatio;
+		scaleCentre = getScaleCentre();
+		targetScale = targetScale * OldBoundingBox.GetSizeRatio(BoundingBox);
+		
+		moveScaler();
+		if (allPointsMoving) updateMoveAmount();
 	}
 	
-	Vector3 calcScaleCentre()
+	void recalcBounds()
+	{
+		OldBoundingBox = BoundingBox;
+		BoundingBox = BoundsHelper.BuildBounds(touches.Values);		
+		
+		if (touchesChanged || touches.Count == 0) OldBoundingBox = BoundingBox;
+	}
+	
+	void moveScaler()
+	{
+		RaycastHit h;
+		bool hasHit = (Physics.Raycast(getRay(scaleCentre), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		if (!hasHit) return;
+		
+		scaler.transform.position = h.point;
+	}
+	
+	void updateMoveAmount()
+	{
+		RaycastHit oldCentre;
+		if (!(Physics.Raycast(getRay(OldBoundingBox.center), out oldCentre, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)))) return;
+		
+		RaycastHit centre;
+		if (!(Physics.Raycast(getRay(BoundingBox.center), out centre, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)))) return;
+		
+		Vector3 diff = (centre.point - oldCentre.point);
+		moveAmount = moveAmount + diff;
+	}
+	
+	Vector3 getScaleCentre()
 	{
 		var nonMoving = from Touch t in touches.Values
 			where t.phase == TouchPhase.Stationary
 			select t;
 		
-		bool bfirst = true;
-		Bounds nonB = new Bounds(Vector3.zero, Vector3.zero);
-		foreach (Touch t in nonMoving)
-		{
-			if (bfirst)
-			{
-				nonB = new Bounds(toVector3(t.position), Vector3.zero);
-				bfirst = false;
-			}
-			else
-			{
-				nonB.Encapsulate(toVector3(t.position));
-			}
-		}
-		
-		Vector3 centre = nonMoving.Count() == 0 ? b.center : nonB.center;
-		
+		Vector3 centre = nonMoving.Count() == 0 ? BoundingBox.center : BoundsHelper.BuildBounds(nonMoving).center;
 		return centre;
 	}
 	
-	Vector3 toVector3(Vector2 v)
+	bool allPointsMoving
 	{
-		return new Vector3(v.x, v.y, 0f);
+		get
+		{
+			return touches.Values.All(t => t.phase == TouchPhase.Moved);
+		}
 	}
 	
-	bool recalcBounds()
+	bool boundsHasChanged
 	{
-		bool boundsHasChanged = true;
-		
-		oldB = b;
-		
-		bool bfirst = true;
-		foreach (Touch t in touches.Values)
+		get
 		{
-			if (bfirst)
-			{
-				b = new Bounds(toVector3(t.position), Vector3.zero);
-				bfirst = false;
-			}
-			else
-			{
-				b.Encapsulate(toVector3(t.position));
-			}
+			return OldBoundingBox != BoundingBox;
 		}
-		
-		if (touchesChanged || touches.Count == 0)
-		{
-			oldB = b;
-			boundsHasChanged = false;
-		}
-		return boundsHasChanged;
-	}
-	
-	Ray getRay(Touch t)
-	{
-		Ray targetRay = _targetCamera.ScreenPointToRay(toVector3(t.position));
-		return targetRay;
 	}
 	
 	Ray getRay(Vector3 screenPoint)
@@ -220,14 +168,12 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	public void AddTouch(Touch t, RaycastHit hit)
 	{
 		touches.Add(t.fingerId, t);
-		
 		touchesChanged = true;
 	}
 	
 	public void RemoveTouch(Touch t)
 	{
 		touches.Remove(t.fingerId);
-		
 		touchesChanged = true;
 	}
 	
