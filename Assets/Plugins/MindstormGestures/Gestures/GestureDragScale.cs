@@ -52,6 +52,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	public Bounds OldBoundingBox;
 	
 	Vector3 targetScale = Vector3.one;
+	Quaternion currentRotation;
 	Vector3 scaleCentre = Vector3.one;
 	Vector3 moveAmount = Vector3.zero;
 	
@@ -63,6 +64,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		
 		scaler = new GameObject("SCALER");
 		targetScale = scaler.transform.localScale;
+		scaler.transform.rotation = transform.rotation;
+		currentRotation = scaler.transform.rotation;
 	}
 	
 	void OnDrawGizmos()
@@ -73,6 +76,9 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	void LateUpdate()
 	{
+		bool doScale = false;
+		bool doRotate = false;
+		
 		if (moveAmount != Vector3.zero)
 		{
 			Vector3 move = Vector3.Lerp(Vector3.zero, moveAmount, Time.deltaTime / MoveSpeed);
@@ -81,26 +87,40 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 			transform.position = transform.position.LockUpdate(Vector3.up, transform.position + move);
 		}
 		
+		Vector3 curScale = Vector3.one;
 		if (scaler.transform.localScale != targetScale)
 		{
-			Vector3 curScale = Vector3.SmoothDamp(scaler.transform.localScale, targetScale, ref vel, ScaleSpeed);
+			curScale = Vector3.SmoothDamp(scaler.transform.localScale, targetScale, ref vel, ScaleSpeed);
 			if (Vector3.Distance(curScale, targetScale) < 0.01f) curScale = targetScale;
-			
-			transform.parent = scaler.transform;
-			scaler.transform.localScale = curScale;
-			transform.parent = null;
+			doScale = true;	
 		}
+		
+		if (scaler.transform.rotation != currentRotation)
+		{
+			doRotate = true;
+		}
+		
+		transform.parent = scaler.transform;
+		if (doScale) scaler.transform.localScale = curScale;
+		if (doRotate) 
+		{
+			scaler.transform.rotation = Quaternion.RotateTowards(scaler.transform.rotation, currentRotation, 5f);
+		}
+		transform.parent = null;
 	}
 	
 	void changeBoundingBox()
 	{
 		recalcBounds();
+		updateRotation();
+		
 		if (!boundsHasChanged) return;
 		
 		scaleCentre = getScaleCentre();
 		targetScale = targetScale * OldBoundingBox.GetSizeRatio(BoundingBox);
 		
 		moveScaler();
+		
 		if (allPointsMoving) updateMoveAmount();
 	}
 	
@@ -110,6 +130,35 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		BoundingBox = BoundsHelper.BuildBounds(touches.Values);		
 		
 		if (touchesChanged || touches.Count == 0) OldBoundingBox = BoundingBox;
+	}
+	
+	void updateRotation()
+	{
+		if (touches.Count < 2) return;
+		
+		currentRotation = getBoxRotation();
+		if (touchesChanged)	scaler.transform.rotation = currentRotation;
+	}
+	
+	Quaternion getBoxRotation()
+	{
+		//Vector3[] moving = getMovingPoints().ToArray();
+		//if (moving.Length == 0) return scaler.transform.rotation;
+		
+		Vector3 lhs = BoundingBox.center;
+		//Vector3 rhs = BoundsHelper.BuildBounds(getMovingPoints()).center;
+		Vector3 rhs = touches.First().Value.position.ToVector3();
+		
+		RaycastHit lhsH;
+		bool hasHit = (Physics.Raycast(getRay(lhs), out lhsH, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		if (!hasHit) return scaler.transform.rotation;
+		
+		RaycastHit rhsH;
+		hasHit = (Physics.Raycast(getRay(rhs), out rhsH, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		if (!hasHit) return scaler.transform.rotation;
+		
+		Quaternion targetRot = Quaternion.LookRotation((rhsH.point - lhsH.point));
+		return targetRot;
 	}
 	
 	void moveScaler()
@@ -135,12 +184,27 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Vector3 getScaleCentre()
 	{
-		var nonMoving = from Touch t in touches.Values
-			where t.phase == TouchPhase.Stationary
-			select t;
-		
+		Vector3[] nonMoving = getStaticPoints().ToArray();
 		Vector3 centre = nonMoving.Count() == 0 ? BoundingBox.center : BoundsHelper.BuildBounds(nonMoving).center;
 		return centre;
+	}
+	
+	IEnumerable<Vector3> getStaticPoints()
+	{
+		var nonMoving = from Touch t in touches.Values
+			where t.phase == TouchPhase.Stationary
+			select t.position.ToVector3();
+		
+		return nonMoving;
+	}
+	
+	IEnumerable<Vector3> getMovingPoints()
+	{
+		var moving = from Touch t in touches.Values
+			where t.phase == TouchPhase.Moved
+			select t.position.ToVector3();
+		
+		return moving;
 	}
 	
 	bool allPointsMoving
