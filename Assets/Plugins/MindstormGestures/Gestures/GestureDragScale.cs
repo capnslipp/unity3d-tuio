@@ -37,6 +37,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	public float MoveSpeed = 0.1f;
 	public float ScaleSpeed = 0.1f;
+	public Vector3 rotationAxis = Vector3.up;
 	
 	public Color ScaleGizmoColor = Color.red;
 	
@@ -71,7 +72,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	void OnDrawGizmos()
 	{
 		Gizmos.color = ScaleGizmoColor;
-		if (scaler != null)	Gizmos.DrawSphere(scaler.transform.position, 0.5f);
+		if (scaler != null)	Gizmos.DrawSphere(scaler.transform.position, 0.1f);
 	}
 	
 	void LateUpdate()
@@ -142,11 +143,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Quaternion getBoxRotation()
 	{
-		//Vector3[] moving = getMovingPoints().ToArray();
-		//if (moving.Length == 0) return scaler.transform.rotation;
-		
 		Vector3 lhs = BoundingBox.center;
-		//Vector3 rhs = BoundsHelper.BuildBounds(getMovingPoints()).center;
 		Vector3 rhs = touches.First().Value.position.ToVector3();
 		
 		RaycastHit lhsH;
@@ -158,7 +155,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		if (!hasHit) return scaler.transform.rotation;
 		
 		Quaternion targetRot = Quaternion.LookRotation((rhsH.point - lhsH.point));
-		return targetRot;
+		return targetRot.Constrain(rotationAxis);
 	}
 	
 	void moveScaler()

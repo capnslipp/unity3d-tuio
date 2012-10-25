@@ -61,6 +61,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\BoundsHelper.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\CountdownTimer.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\LayerHelper.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Helpers\QuaternionExtensions.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\TouchTolerances.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\Vector2Extensions.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" />
