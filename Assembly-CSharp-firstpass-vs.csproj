@@ -57,6 +57,8 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouch.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchHeld.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\ZStack.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\BoundsExtensions.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\BoundsHelper.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\CountdownTimer.cs" />
