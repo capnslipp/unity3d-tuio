@@ -37,6 +37,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	public float MoveSpeed = 0.1f;
 	public float ScaleSpeed = 0.1f;
+	public float RotateSpeed = 0.3f;
 	public Vector3 rotationAxis = Vector3.up;
 	
 	public Color ScaleGizmoColor = Color.red;
@@ -54,7 +55,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Vector3 targetScale = Vector3.one;
 	Quaternion currentRotation;
-	Vector3 scaleCentre = Vector3.one;
+	bool pivotSet = false;
+	Vector3 pivotPoint = Vector3.zero;
 	Vector3 moveAmount = Vector3.zero;
 	
 	GameObject scaler = null;
@@ -63,9 +65,11 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	{
 		_targetCamera = FindCamera();
 		
-		scaler = new GameObject("SCALER");
+		//scaler = new GameObject("SCALER");
+		scaler = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		scaler.collider.enabled = false;
+		
 		targetScale = scaler.transform.localScale;
-		scaler.transform.rotation = transform.rotation;
 		currentRotation = scaler.transform.rotation;
 	}
 	
@@ -73,6 +77,17 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	{
 		Gizmos.color = ScaleGizmoColor;
 		if (scaler != null)	Gizmos.DrawSphere(scaler.transform.position, 0.1f);
+		Gizmos.color = Color.red;
+		
+		if (_targetCamera != null)
+		{
+			RaycastHit h;
+			if (collider.Raycast(getRay(pivotPoint), out h, Mathf.Infinity))
+			{
+				Gizmos.DrawSphere(h.point, 0.5f);
+			}
+		}
+		
 	}
 	
 	void LateUpdate()
@@ -105,7 +120,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		if (doScale) scaler.transform.localScale = curScale;
 		if (doRotate) 
 		{
-			scaler.transform.rotation = Quaternion.RotateTowards(scaler.transform.rotation, currentRotation, 5f);
+			scaler.transform.rotation = Quaternion.RotateTowards(scaler.transform.rotation, currentRotation, 360f * (Time.deltaTime / RotateSpeed));
 		}
 		transform.parent = null;
 	}
@@ -117,7 +132,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		
 		if (!boundsHasChanged) return;
 		
-		scaleCentre = getScaleCentre();
+		pivotPoint = getPivotPoint();
+		
 		targetScale = targetScale * OldBoundingBox.GetSizeRatio(BoundingBox);
 		
 		moveScaler();
@@ -138,14 +154,27 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		if (touches.Count < 2) return;
 		
 		currentRotation = getBoxRotation();
-		if (touchesChanged)	scaler.transform.rotation = currentRotation;
+		if (touchesChanged) scaler.transform.rotation = currentRotation;
 	}
 	
 	Quaternion getBoxRotation()
 	{
-		Vector3 lhs = BoundingBox.center;
-		Vector3 rhs = touches.First().Value.position.ToVector3();
+		if (pivotPoint == Vector3.zero) pivotPoint = getPivotPoint();
+		RaycastHit h;
+		if (!collider.Raycast(getRay(pivotPoint), out h, Mathf.Infinity))
+		{
+			Debug.LogWarning("Pivot did not hit object (it should):" + pivotPoint.ToString(), this);
+			return scaler.transform.rotation;
+		}
 		
+		float z = h.point.z;
+		Vector3 lhs = BoundingBox.center.SetZ(z);
+		Vector3 rhs = touches.First().Value.position.ToVector3(z);
+		
+		Vector3 lhsW = _targetCamera.ScreenToWorldPoint(lhs);
+		Vector3 rhsW = _targetCamera.ScreenToWorldPoint(rhs);
+		
+		/*
 		RaycastHit lhsH;
 		bool hasHit = (Physics.Raycast(getRay(lhs), out lhsH, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
 		if (!hasHit) return scaler.transform.rotation;
@@ -155,13 +184,21 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		if (!hasHit) return scaler.transform.rotation;
 		
 		Quaternion targetRot = Quaternion.LookRotation((rhsH.point - lhsH.point));
+		*/
+		
+		//Debug.Log("lhsW:" + lhsW.ToString() + ",rhsW:" + rhsW.ToString());
+		
+		Vector3 dir = rhsW - lhsW;
+		if (dir == Vector3.zero) return scaler.transform.rotation;
+		Quaternion targetRot = Quaternion.LookRotation(dir);
+		
 		return targetRot.Constrain(rotationAxis);
 	}
 	
 	void moveScaler()
 	{
 		RaycastHit h;
-		bool hasHit = (Physics.Raycast(getRay(scaleCentre), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		bool hasHit = (Physics.Raycast(getRay(pivotPoint), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
 		if (!hasHit) return;
 		
 		scaler.transform.position = h.point;
@@ -179,7 +216,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		moveAmount = moveAmount + diff;
 	}
 	
-	Vector3 getScaleCentre()
+	Vector3 getPivotPoint()
 	{
 		Vector3[] nonMoving = getStaticPoints().ToArray();
 		Vector3 centre = nonMoving.Count() == 0 ? BoundingBox.center : BoundsHelper.BuildBounds(nonMoving).center;
