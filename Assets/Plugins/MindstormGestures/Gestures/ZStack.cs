@@ -3,20 +3,25 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public static class ZStack
+public class ZStack : MonoBehaviour
 {
 	static List<GameObject> goStack = new List<GameObject>();
+	public static ZStack Instance;
 	
-	public static float zSpace = 0.1f;
-	public static float StartZ = 1f;
+	public float zSpace = 0.1f;
+	public float StartZ = 1f;
+	
+	public ZStack()
+	{
+		Instance = this;
+	}
 	
 	public static float Add(GameObject go)
 	{
 		goStack.Add(go);
 		
 		float top = goStack.Max(g => g.transform.position.y);
-		Debug.Log(top);
-		return top + zSpace;
+		return Instance.StartZ + top + Instance.zSpace;
 	}
 	
 	public static void Remove(GameObject go)
