@@ -32,6 +32,7 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
+[RequireComponent(typeof(ScaleRotateHelper))]
 public class GestureDragScale : MonoBehaviour, IGestureHandler
 {
 	public int[] hitOnlyLayers = new int[1] { 0 };
@@ -43,18 +44,13 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	Camera _targetCamera;
 	
 	public Bounds BoundingBox;
-	public Bounds OldBoundingBox;
 	
-	ScaleRotateHelper scaler = new ScaleRotateHelper();
+	ScaleRotateHelper scaler;
 	
 	void Start()
 	{
 		_targetCamera = FindCamera();
-	}
-	
-	void LateUpdate()
-	{
-		if (scaler.IsMoving) scaler.DoMove();
+		scaler = GetComponent<ScaleRotateHelper>();
 	}
 	
 	void changeBoundingBox()
@@ -92,9 +88,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	Vector3 getCentrePoint()
 	{
-		RaycastHit h;
-		Physics.Raycast(getRay(BoundingBox.center), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers));
-		return h.point;
+		return getWorldPoint(BoundingBox.center);
 	}
 	
 	Vector3 getWorldPoint(Vector3 screenPoint)
