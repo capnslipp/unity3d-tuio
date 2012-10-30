@@ -53,7 +53,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureChargeRelease.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale2.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDragScaleOld.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureNTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouch.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchClick.cs" />

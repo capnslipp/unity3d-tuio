@@ -1,16 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale2.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" Line="190" Column="3" />
       <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouch.cs" Line="50" Column="3" />
       <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="71" Column="33" />
       <File FileName="Assets\Plugins\MindstormGestures\Gestures\ZStack.cs" Line="21" Column="19" />
       <File FileName="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" Line="63" Column="43" />
       <File FileName="Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" Line="68" Column="1" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="39" Column="53" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale2.cs" Line="54" Column="2" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="67" Column="25" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="37" Column="50" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="128" Column="33" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScaleOld.cs" Line="35" Column="33" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" Line="79" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

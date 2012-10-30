@@ -20,6 +20,16 @@ public class ScaleRotateHelper {
 	
 	public bool IsMoving = false;
 	
+	public Vector3 targetPos = Vector3.zero;
+	public Quaternion targetRot = Quaternion.identity;
+	public float targetScale = 1f;
+	
+	Vector3 cPos = Vector3.zero;
+	Quaternion cRot = Quaternion.identity;
+	float cScale = 1f;
+	
+	public float DampingSpeed = 0.1f;
+	
 	void ComputeParameters(out Vector3 trans, out Quaternion rotat, out float scale) 
 	{
 		Vector3 A1B1=B-A;
@@ -49,7 +59,16 @@ public class ScaleRotateHelper {
 		A0B0=B-A;
 		iscale=T.localScale;
 		irotation=T.rotation;
-		iposition=T.position;	
+		iposition=T.position;
+		
+		targetPos = Vector3.zero;
+		targetScale = 1f;
+		targetRot = Quaternion.identity;	
+		
+		cPos = Vector3.zero;
+		cScale = 1f;
+		cRot = Quaternion.identity;
+		
 		IsMoving = true;
 	}
 	
@@ -68,8 +87,9 @@ public class ScaleRotateHelper {
 		if (T!=null) 
 		{
 			ComputeParameters(out trans, out  rotat, out  scale);
-			T.position=iposition;
-			T.position += trans.Constrain(moveAxis);
+			targetPos = trans;
+			targetScale = 1f;
+			targetRot = Quaternion.identity;
 		}
 	}
 	
@@ -88,13 +108,25 @@ public class ScaleRotateHelper {
 		if (T!=null) 
 		{
 			ComputeParameters(out trans, out  rotat, out  scale);
-			T.position=iposition;
-			T.rotation=irotation;
-			T.localScale=iscale;
-			ScaleAround(T, A0Pos, scale);
-			T.position += trans.Constrain(moveAxis);
-			T.RotateAround(A, rotateAxis, rotat.eulerAngles.y);
+			targetPos = trans;
+			targetRot = rotat;
+			targetScale = scale;
 		}
+	}
+	
+	public void DoMove()
+	{
+		T.position=iposition;
+		T.rotation=irotation;
+		T.localScale=iscale;
+		
+		cPos = Vector3.Lerp(cPos, targetPos, Time.deltaTime / DampingSpeed);
+		cRot = Quaternion.Lerp(cRot, targetRot, Time.deltaTime / DampingSpeed);
+		cScale = Mathf.Lerp(cScale, targetScale, Time.deltaTime / DampingSpeed);
+		
+		T.RotateAround(A0Pos, rotateAxis, cRot.eulerAngles.y);		
+		ScaleAround(T, A0Pos, cScale);
+		T.position += cPos.Constrain(moveAxis);
 	}
 	
 	/// <summary>
