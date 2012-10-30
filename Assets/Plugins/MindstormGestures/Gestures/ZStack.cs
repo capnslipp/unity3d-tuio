@@ -9,7 +9,7 @@ public class ZStack : MonoBehaviour
 	public static ZStack Instance;
 	
 	public float zSpace = 0.1f;
-	public float StartZ = 1f;
+	public float zStart = 1f;
 	
 	public ZStack()
 	{
@@ -20,8 +20,9 @@ public class ZStack : MonoBehaviour
 	{
 		goStack.Add(go);
 		
-		float top = goStack.Max(g => g.transform.position.y);
-		return Instance.StartZ + top + Instance.zSpace;
+		var notThis = goStack.Where(g => g != go);
+		float top = (notThis.Count() > 0) ? top = notThis.Max(g => g.transform.position.y) : Instance.zStart;
+		return top + Instance.zSpace;
 	}
 	
 	public static void Remove(GameObject go)

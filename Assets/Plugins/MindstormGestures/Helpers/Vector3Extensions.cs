@@ -11,6 +11,12 @@ public static class Vector3Extensions
 		return newValue + v;
 	}
 	
+	public static Vector3 Constrain(this Vector3 v, Vector3 axis)
+	{
+		v = Vector3.Scale(v, axis);
+		return v;
+	}
+	
 	public static bool Approximately(this Vector3 v, Vector3 compareTo, float epsilon)
 	{
 		bool isApprox = Mathf.Abs(v.x - compareTo.x) < epsilon

@@ -58,9 +58,9 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	public Bounds OldBoundingBox;
 	
 	Vector3 targetScale = Vector3.one;
-	Quaternion currentRotation;
+	Quaternion oldRotation;
+	Quaternion targetRotation;
 	Vector3 pivotPoint = Vector3.zero;
-	Vector3 oldPivotPoint = Vector3.zero;
 	Vector3 moveAmount = Vector3.zero;
 	
 	GameObject scaler = null;
@@ -71,7 +71,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		scaler = new GameObject("SCALER");
 		
 		targetScale = scaler.transform.localScale;
-		currentRotation = scaler.transform.rotation;
+		targetRotation = scaler.transform.rotation;
 	}
 	
 	void OnDrawGizmos()
@@ -90,7 +90,8 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		}
 	}
 	
-	void FixedUpdate()
+	
+	void LateUpdate()
 	{
 		bool doScale = false;
 		bool doRotate = false;
@@ -103,24 +104,19 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 			transform.position = transform.position.LockUpdate(Vector3.up, transform.position + move);
 		}
 		
-		Vector3 curScale = Vector3.one;
-		if (scaler.transform.localScale != targetScale)
-		{
-			curScale = Vector3.SmoothDamp(scaler.transform.localScale, targetScale, ref vel, ScaleSpeed);
-			if (Vector3.Distance(curScale, targetScale) < 0.01f) curScale = targetScale;
-			doScale = true;	
-		}
-		
-		if (scaler.transform.rotation != currentRotation)
-		{
-			doRotate = true;
-		}
+		doScale = (scaler.transform.localScale != targetScale);
+		doRotate = (scaler.transform.rotation != targetRotation);
 		
 		transform.parent = scaler.transform;
-		if (doScale) scaler.transform.localScale = curScale;
+		if (doScale) 
+		{
+			Vector3 curScale = Vector3.SmoothDamp(scaler.transform.localScale, targetScale, ref vel, ScaleSpeed);
+			if (Vector3.Distance(curScale, targetScale) < 0.01f) curScale = targetScale;
+			scaler.transform.localScale = curScale;
+		}
 		if (doRotate) 
 		{
-			scaler.transform.rotation = Quaternion.RotateTowards(scaler.transform.rotation, currentRotation, 360f * (Time.deltaTime / RotateSpeed));
+			scaler.transform.rotation = Quaternion.Lerp(scaler.transform.rotation, targetRotation, Time.deltaTime / RotateSpeed);
 		}
 		transform.parent = null;
 	}
@@ -128,11 +124,7 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	void changeBoundingBox()
 	{
 		recalcBounds();
-		if ((touchesChanged || boundsHasChanged) && touches.Count !=0)
-		{
-			oldPivotPoint = pivotPoint;
-			pivotPoint = getPivotPoint();
-		}
+		if ((touchesChanged || boundsHasChanged) && touches.Count > 1) pivotPoint = getPivotPoint();
 		if (touches.Count > 1) updateRotation();
 		
 		if (!boundsHasChanged) return;
@@ -140,7 +132,6 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		Vector3 newScale = targetScale * OldBoundingBox.GetSizeRatio(BoundingBox);
 		newScale = newScale.LockUpdate(scaleAxis.InvertAxis(), newScale);
 		if (!newScale.IsOverLimit(scaleLower, scaleUpper, scaleLimitAxis)) targetScale = newScale;
-		//targetScale = newScale;
 		moveScaler();
 		
 		if (allPointsMoving) updateMoveAmount();
@@ -156,30 +147,25 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 	
 	void updateRotation()
 	{
-		currentRotation = getBoxRotation();
-		if (!pivotPoint.Approximately(oldPivotPoint, 0.001f))
-		{
-			scaler.transform.rotation = currentRotation;
-		}
+		oldRotation = targetRotation;
+		targetRotation = getBoxRotation();
 		
-		if (touchesChanged) scaler.transform.rotation = currentRotation;
+		if (touchesChanged) scaler.transform.rotation = targetRotation;
 	}
 	
 	Quaternion getBoxRotation()
 	{
-		float z = pivotPoint.z;
-		Vector3 lhs = BoundingBox.center.SetZ(z);
-		Vector3 rhs = touches.First().Value.position.ToVector3(z);
+		Vector2 centre = new Vector2(BoundingBox.center.x, BoundingBox.center.y);
+		Vector2 point = touches.First().Value.position;
 		
-		Vector3 lhsW = _targetCamera.ScreenToWorldPoint(lhs);
-		Vector3 rhsW = _targetCamera.ScreenToWorldPoint(rhs);
-				
-		Vector3 dir = rhsW - lhsW;
-		if (dir == Vector3.zero) return scaler.transform.rotation;
-		Quaternion targetRot = Quaternion.LookRotation(dir);
-		
-		return targetRot.Constrain(rotationAxis);
+		float angle = GetAngle(centre, point);
+		return Quaternion.AngleAxis(-angle, rotationAxis);
 	}
+	
+	public float GetAngle(Vector3 centerPoint, Vector3 point)
+    {
+        return ((Vector2)centerPoint).AngleBetween((Vector2)point);
+    }
 	
 	void moveScaler()
 	{

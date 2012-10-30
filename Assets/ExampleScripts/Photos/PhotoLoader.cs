@@ -15,7 +15,7 @@ public class PhotoLoader : MonoBehaviour {
 
     IEnumerator loadImages()
     {
-        string[] filePaths = Directory.GetFiles(@"C:\Users\Simon Work PC\Pictures", "*.jpg"); // get every file in chosen directory with the extension.png
+        string[] filePaths = Directory.GetFiles(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures), "*.jpg");
 		string[] subset = filePaths.Take(MaxPictures).ToArray();
 		
 		foreach (string file in subset)

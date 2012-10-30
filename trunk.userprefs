@@ -1,22 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale2.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" Line="88" Column="12" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="31" Column="28" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector2Extensions.cs" Line="13" Column="33" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\BoundsHelper.cs" Line="31" Column="1" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\BoundsExtensions.cs" Line="15" Column="52" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\QuaternionExtensions.cs" Line="13" Column="1" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" Line="190" Column="3" />
       <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouch.cs" Line="50" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="61" Column="47" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\ZStack.cs" Line="14" Column="3" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="71" Column="33" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\ZStack.cs" Line="21" Column="19" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" Line="63" Column="43" />
+      <File FileName="Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" Line="68" Column="1" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="39" Column="53" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale2.cs" Line="54" Column="2" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="67" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" line="98" />
-      <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormGestures\TouchGesture\TouchToGesture.cs" line="68" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

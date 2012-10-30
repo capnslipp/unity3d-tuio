@@ -12,4 +12,16 @@ public static class Vector2Extensions
 	{
 		return new Vector3(v.x, v.y, z);
 	}
+	
+	public static float AngleBetween(this Vector2 fromV, Vector2 toV)
+    {
+        if (fromV == toV) return 0f;
+
+        float dX = toV.x - fromV.x;
+        float dY = toV.y - fromV.y;
+
+        float angle = (float)Mathf.Atan2(dY, dX);
+
+        return angle * Mathf.Rad2Deg;
+    }
 }
