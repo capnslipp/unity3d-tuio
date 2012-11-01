@@ -31,11 +31,58 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+[RequireComponent(typeof(Rigidbody))]
 public class GestureTouchPickup : MonoBehaviour, IGestureHandler 
 {
 	public int touchCount = 0;
 	public bool IsPickedUp = false;	
+	
+	Vector3 oldPos = Vector3.zero;
+	Quaternion oldRot = Quaternion.identity;
+	Vector3 diffPos = Vector3.zero;
+	Quaternion diffRot = Quaternion.identity;
 
+	void Start()
+	{
+		oldPos = transform.position;
+		oldRot = transform.rotation;
+	}
+	
+	void FixedUpdate()
+	{
+		diffPos = transform.position - oldPos;
+		diffRot = Quaternion.FromToRotation(oldRot * Vector3.forward, transform.rotation * Vector3.forward);
+		oldPos = transform.position;
+		oldRot = transform.rotation;
+	}
+	
+	void pickup()
+	{
+		float z = ZStack.Add(gameObject);
+		transform.position = transform.position.SetY(z);
+		
+		rigidbody.isKinematic = true;
+		
+		IsPickedUp = true;
+	}
+	
+	void drop()
+	{
+		ZStack.Remove(gameObject);
+		
+		rigidbody.isKinematic = false;
+		
+		Vector3 Velocity = diffPos / Time.deltaTime; 
+		Velocity /= 2;
+		
+		Vector3 AngularVelocity = diffRot.eulerAngles.ToRadians() / Time.deltaTime;
+		
+		rigidbody.velocity = Velocity;
+		rigidbody.angularVelocity = AngularVelocity;
+		
+		IsPickedUp = false;
+	}
+	
 	public void AddTouch(Touch t, RaycastHit hit)
 	{
 		touchCount++;
@@ -53,23 +100,5 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	public void FinishNotification()
 	{
 		if (touchCount == 0) drop(); else if (!IsPickedUp) pickup();
-	}
-	
-	void pickup()
-	{
-		float z = ZStack.Add(gameObject);
-		transform.position = transform.position.SetY(z);
-		
-		rigidbody.isKinematic = true;
-		
-		IsPickedUp = true;
-	}
-	
-	void drop()
-	{
-		ZStack.Remove(gameObject);
-		rigidbody.isKinematic = false;
-		
-		IsPickedUp = false;
 	}
 }

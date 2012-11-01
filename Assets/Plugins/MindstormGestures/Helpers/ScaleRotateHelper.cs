@@ -71,7 +71,7 @@ public class ScaleRotateHelper : MonoBehaviour
 		A = pos1;
 		B = pos2;
 		
-		A0Pos=A;
+		A0Pos = new Vector3(A.x, transform.position.y, A.z);
 		A0B0=B-A;
 		iscale=transform.localScale;
 		irotation=transform.rotation;

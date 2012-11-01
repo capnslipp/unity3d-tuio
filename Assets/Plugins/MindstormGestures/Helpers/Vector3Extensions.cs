@@ -60,6 +60,22 @@ public static class Vector3Extensions
 		return over;
 	}
 	
+	public static Vector3 ToRadians(this Vector3 v)
+	{
+		float x = normAngle(v.x * Mathf.Deg2Rad);
+		float y = normAngle(v.y * Mathf.Deg2Rad);
+		float z = normAngle(v.z * Mathf.Deg2Rad);
+		
+		return new Vector3(x, y, z);
+	}
+	
+	static float normAngle(float f) 
+	{
+		return (
+			((f + Mathf.PI) % (2 * Mathf.PI))
+			+ (2 * Mathf.PI)) % (2 * Mathf.PI) - Mathf.PI;
+	}
+	
 	public static Vector3 InvertAxis(this Vector3 v)
 	{
 		float x = v.x == 0 ? 1 : 0;
