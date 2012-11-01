@@ -33,7 +33,7 @@ using System.Linq;
 using Mindstorm.Gesture;
 
 [RequireComponent(typeof(ScaleRotateHelper))]
-public class GestureDragScale : MonoBehaviour, IGestureHandler
+public class GesturePhoto : MonoBehaviour, IGestureHandler
 {
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
@@ -61,12 +61,11 @@ public class GestureDragScale : MonoBehaviour, IGestureHandler
 		{
 			scaler.StartMove(
 				getWorldPoint(touches.Values.First().position), 
-				getCentrePoint(),
-				transform);
+				getCentrePoint());
 		}
 		else if (touchesChanged && touches.Count == 1)
 		{
-			scaler.StartMove(getCentrePoint(), transform);
+			scaler.StartMove(getCentrePoint());
 		}
 		else if (touchesChanged && touches.Count == 0)
 		{

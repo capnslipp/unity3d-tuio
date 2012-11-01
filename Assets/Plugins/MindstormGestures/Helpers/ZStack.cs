@@ -25,19 +25,34 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
-public static class TransformExtensions
+public class ZStack : MonoBehaviour
 {
-	public static void ScaleAround(this Transform t, Vector3 point, float scaleFactor) 
+	static List<GameObject> goStack = new List<GameObject>();
+	public static ZStack Instance;
+	
+	public float zSpace = 0.1f;
+	public float zStart = 1f;
+	
+	public ZStack()
 	{
-		t.ScaleAround(point, scaleFactor, Vector3.one);
+		Instance = this;
 	}
 	
-	public static void ScaleAround(this Transform t, Vector3 point, float scaleFactor, Vector3 scaleAxis) 
+	public static float Add(GameObject go)
 	{
-		t.position=t.position-point;
-		t.localScale = t.localScale.LockUpdate(scaleAxis.InvertAxis(), t.localScale * scaleFactor);
-		t.position= point + new Vector3(t.position.x*scaleFactor,t.position.y*scaleFactor,t.position.z*scaleFactor);
+		goStack.Add(go);
+		
+		var notThis = goStack.Where(g => g != go);
+		float top = (notThis.Count() > 0) ? top = notThis.Max(g => g.transform.position.y) : Instance.zStart;
+		return top + Instance.zSpace;
+	}
+	
+	public static void Remove(GameObject go)
+	{
+		goStack.Remove(go);
 	}
 }
