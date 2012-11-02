@@ -1,6 +1,19 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs">
+    <Files>
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="156" Column="18" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="79" Column="4" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\BoundsHelper.cs" Line="25" Column="3" />
+      <File FileName="Assets\ExampleScripts\Photos\PhotoLoader.cs" Line="44" Column="3" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="39" Column="40" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="78" Column="2" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\TransformExtensions.cs" Line="44" Column="1" />
+      <File FileName="Assets\ExampleScripts\Photos\CenterPull.cs" Line="22" Column="3" />
+      <File FileName="Assets\Plugins\MindstormTuio\TouchComponents\TuioInput.cs" Line="69" Column="1" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ZStack.cs" Line="61" Column="39" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" line="98" />

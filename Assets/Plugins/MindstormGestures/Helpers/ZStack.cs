@@ -36,6 +36,7 @@ public class ZStack : MonoBehaviour
 	
 	public float zSpace = 0.1f;
 	public float zStart = 1f;
+	public int NumInStack = 0;
 	
 	public ZStack()
 	{
@@ -46,13 +47,22 @@ public class ZStack : MonoBehaviour
 	{
 		goStack.Add(go);
 		
+		Instance.NumInStack = goStack.Count;
+		
 		var notThis = goStack.Where(g => g != go);
 		float top = (notThis.Count() > 0) ? top = notThis.Max(g => g.transform.position.y) : Instance.zStart;
-		return top + Instance.zSpace;
+		float z = top + Instance.zSpace;
+		return z;
 	}
 	
 	public static void Remove(GameObject go)
 	{
 		goStack.Remove(go);
+		Instance.NumInStack = goStack.Count;
+	}
+	
+	public static bool Contains(GameObject go)
+	{
+		return goStack.Contains(go);
 	}
 }

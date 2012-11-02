@@ -32,6 +32,10 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
+/// <summary>
+/// Gesture for handling Kinematic movement, scaling and rotation of an object.
+/// Designed for use in a photo browser.
+/// </summary>
 [RequireComponent(typeof(ScaleRotateHelper))]
 public class GesturePhoto : MonoBehaviour, IGestureHandler
 {
@@ -47,32 +51,41 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	ScaleRotateHelper scaler;
 	
+	float yPos = 0f;
+	
 	void Start()
 	{
 		_targetCamera = FindCamera();
 		scaler = GetComponent<ScaleRotateHelper>();
+		yPos = transform.position.y;
 	}
 	
 	void changeBoundingBox()
 	{
 		BoundingBox = BoundsHelper.BuildBounds(touches.Values);
 		
-		if (touchesChanged && touches.Count > 1)
+		if (touchesChanged && touches.Count > 0) 
 		{
+			yPos = ZStack.Add(gameObject);
+		}
+		
+		if (touchesChanged && touches.Count > 1)
+		{	
 			scaler.StartMove(
 				getWorldPoint(touches.Values.First().position), 
 				getCentrePoint());
 		}
 		else if (touchesChanged && touches.Count == 1)
 		{
-			scaler.StartMove(getCentrePoint());
+			scaler.StartMove(getCentrePoint().SetY(yPos));
 		}
 		else if (touchesChanged && touches.Count == 0)
 		{
 			scaler.EndMove();
+			ZStack.Remove(gameObject);
 		}
 		
-		if (scaler.IsMoving) 
+		if (scaler.IsMoving)
 		{
 			if (touches.Count > 1)
 			{
@@ -87,14 +100,14 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	Vector3 getCentrePoint()
 	{
-		return getWorldPoint(BoundingBox.center);
+		return getWorldPoint(BoundingBox.center).SetY(yPos);
 	}
 	
 	Vector3 getWorldPoint(Vector3 screenPoint)
 	{
 		RaycastHit h;
 		Physics.Raycast(getRay(screenPoint), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers));
-		return h.point;
+		return h.point.SetY(yPos);
 	}
 	
 	Ray getRay(Vector3 screenPoint)

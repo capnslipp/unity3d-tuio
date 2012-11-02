@@ -27,6 +27,9 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Applies scale, rotate and translate to transform based on an initial position.
+/// </summary>
 public class ScaleRotateHelper : MonoBehaviour
 {
 	public bool IsMoving = false;
@@ -34,6 +37,9 @@ public class ScaleRotateHelper : MonoBehaviour
 	public Vector3 scaleAxis = Vector3.up.InvertAxis();
 	public Vector3 moveAxis = Vector3.up.InvertAxis();
 	public Vector3 rotateAxis = Vector3.up;
+	
+	public Vector3 maxScale = Vector3.one * 3f;
+	public Vector3 minScale = Vector3.one * 0.5f;
 	
 	public float DampingSpeed = 0.05f;
 		
@@ -73,6 +79,7 @@ public class ScaleRotateHelper : MonoBehaviour
 		
 		A0Pos = new Vector3(A.x, transform.position.y, A.z);
 		A0B0=B-A;
+		
 		iscale=transform.localScale;
 		irotation=transform.rotation;
 		iposition=transform.position;
@@ -82,7 +89,7 @@ public class ScaleRotateHelper : MonoBehaviour
 		IsMoving = true;
 	}
 	
-	// <summary>
+	/// <summary>
 	/// Look at the position of A & B and apply the same transformation to T
 	/// </summary>
 	public void UpdateMove(Vector3 pos1) 
@@ -131,7 +138,10 @@ public class ScaleRotateHelper : MonoBehaviour
 		
 		cPos = Vector3.Lerp(cPos, targetPos, Time.deltaTime / DampingSpeed);
 		cRot = Quaternion.Lerp(cRot, targetRot, Time.deltaTime / DampingSpeed);
-		cScale = Mathf.Lerp(cScale, targetScale, Time.deltaTime / DampingSpeed);
+		float tmpScale = Mathf.Lerp(cScale, targetScale, Time.deltaTime / DampingSpeed);
+		
+		float newScale = (transform.localScale * tmpScale).magnitude;
+		if (newScale <= maxScale.magnitude && newScale >= minScale.magnitude) cScale = tmpScale;
 		
 		transform.RotateAround(A0Pos, rotateAxis, cRot.eulerAngles.y);		
 		transform.ScaleAround(A0Pos, cScale, scaleAxis);
@@ -139,7 +149,7 @@ public class ScaleRotateHelper : MonoBehaviour
 	}
 	
 	/// <summary>
-	/// If it is call once the touch are lost then we just do nothing
+	/// Stop all movement.
 	/// </summary> 
 	public void EndMove() 
 	{
@@ -158,6 +168,9 @@ public class ScaleRotateHelper : MonoBehaviour
 		cRot = Quaternion.identity;
 	}
 	
+	/// <summary>
+	/// Computes a scale, rotate and transform as an absolute from the initial position.
+	/// </summary>
 	void ComputeParameters(out Vector3 trans, out Quaternion rotat, out float scale) 
 	{
 		Vector3 A1B1 = B - A;

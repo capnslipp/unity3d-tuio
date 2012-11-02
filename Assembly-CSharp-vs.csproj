@@ -52,6 +52,7 @@
      <Compile Include="Assets\ExampleScripts\Cannon\FireCannonClickHandler.cs" />
      <Compile Include="Assets\ExampleScripts\Cannon\LaunchRigidBody.cs" />
      <Compile Include="Assets\ExampleScripts\Cannon\PowerController.cs" />
+     <Compile Include="Assets\ExampleScripts\Photos\CenterPull.cs" />
      <Compile Include="Assets\ExampleScripts\Photos\PhotoLoader.cs" />
      <Compile Include="Assets\ExampleScripts\Physics\Glue.cs" />
      <Compile Include="Assets\ExampleScripts\Physics\StartSleeping.cs" />

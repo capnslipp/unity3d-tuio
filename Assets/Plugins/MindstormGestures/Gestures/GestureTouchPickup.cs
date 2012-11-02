@@ -36,6 +36,7 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 {
 	public int touchCount = 0;
 	public bool IsPickedUp = false;	
+	public bool applyPhysicsOnDrop = true;
 	
 	Vector3 oldPos = Vector3.zero;
 	Quaternion oldRot = Quaternion.identity;
@@ -58,20 +59,20 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	
 	void pickup()
 	{
-		float z = ZStack.Add(gameObject);
-		transform.position = transform.position.SetY(z);
-		
 		rigidbody.isKinematic = true;
-		
 		IsPickedUp = true;
 	}
 	
 	void drop()
 	{
-		ZStack.Remove(gameObject);
-		
 		rigidbody.isKinematic = false;
+		IsPickedUp = false;
 		
+		applyPhysics();
+	}
+	
+	void applyPhysics()
+	{
 		Vector3 Velocity = diffPos / Time.deltaTime; 
 		Velocity /= 2;
 		
@@ -79,8 +80,6 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 		
 		rigidbody.velocity = Velocity;
 		rigidbody.angularVelocity = AngularVelocity;
-		
-		IsPickedUp = false;
 	}
 	
 	public void AddTouch(Touch t, RaycastHit hit)
