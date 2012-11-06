@@ -38,6 +38,7 @@ public static class TransformExtensions
 	{
 		t.position = t.position - point;
 		t.localScale = t.localScale.LockUpdate(scaleAxis.InvertAxis(), t.localScale * scaleFactor);
-		t.position = point + new Vector3(t.position.x*scaleFactor,t.position.y*scaleFactor,t.position.z*scaleFactor);
+		// t.position = point + new Vector3(t.position.x*scaleFactor,t.position.y*scaleFactor,t.position.z*scaleFactor);
+		t.position = point + (t.position * scaleFactor);
 	}
 }
