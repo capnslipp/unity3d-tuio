@@ -1,15 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ExampleScripts\Photos\PhotoLoader.cs">
     <Files>
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="1" Column="1" />
       <File FileName="Assets\ExampleScripts\Photos\CenterPull.cs" Line="22" Column="3" />
       <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="167" Column="6" />
       <File FileName="Assets\Plugins\MindstormGestures\Helpers\BoundsHelper.cs" Line="25" Column="3" />
-      <File FileName="Assets\ExampleScripts\Photos\PhotoLoader.cs" Line="44" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="39" Column="40" />
+      <File FileName="Assets\ExampleScripts\Photos\PhotoLoader.cs" Line="68" Column="2" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="103" Column="16" />
       <File FileName="Assets\Plugins\MindstormGestures\Helpers\TransformExtensions.cs" Line="42" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="117" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDragScale.cs" Line="236" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

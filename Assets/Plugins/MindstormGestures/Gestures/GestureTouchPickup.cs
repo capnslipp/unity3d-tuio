@@ -42,7 +42,12 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	Quaternion oldRot = Quaternion.identity;
 	Vector3 diffPos = Vector3.zero;
 	Quaternion diffRot = Quaternion.identity;
-
+	
+	Vector3 Velocity = Vector3.zero;
+	Vector3 AngularVelocity = Vector3.zero;
+	Vector3 oldAngleVel = Vector3.zero;
+	Vector3 oldVel = Vector3.zero;
+	
 	void Start()
 	{
 		oldPos = transform.position;
@@ -51,35 +56,46 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	
 	void FixedUpdate()
 	{
+		if (!IsPickedUp) return;
+		
 		diffPos = transform.position - oldPos;
 		diffRot = Quaternion.FromToRotation(oldRot * Vector3.forward, transform.rotation * Vector3.forward);
 		oldPos = transform.position;
 		oldRot = transform.rotation;
-	}
-	
-	void pickup()
-	{
-		rigidbody.isKinematic = true;
-		IsPickedUp = true;
-	}
-	
-	void drop()
-	{
-		rigidbody.isKinematic = false;
-		IsPickedUp = false;
 		
-		applyPhysics();
+		oldVel = Velocity;
+		oldAngleVel = AngularVelocity;
+		
+		Velocity = (diffPos / Time.deltaTime) / 2; 
+		AngularVelocity = diffRot.eulerAngles.ToRadians() / Time.deltaTime;
+	}
+	
+	void DoPickup()
+	{
+		IsPickedUp = true;
+		rigidbody.isKinematic = true;
+	}
+	
+	void DoDrop()
+	{
+		IsPickedUp = false;
+		rigidbody.isKinematic = false;
+		rigidbody.WakeUp();		
+		
+		if (applyPhysicsOnDrop) applyPhysics();
 	}
 	
 	void applyPhysics()
 	{
-		Vector3 Velocity = diffPos / Time.deltaTime; 
-		Velocity /= 2;
+		if (oldVel != Vector3.zero || Velocity != Vector3.zero)
+		{
+			rigidbody.velocity = Velocity == Vector3.zero ? oldVel : Velocity;
+		}
 		
-		Vector3 AngularVelocity = diffRot.eulerAngles.ToRadians() / Time.deltaTime;
-		
-		rigidbody.velocity = Velocity;
-		rigidbody.angularVelocity = AngularVelocity;
+		if (oldAngleVel != Vector3.zero || AngularVelocity != Vector3.zero)
+		{
+			rigidbody.angularVelocity = AngularVelocity == Vector3.zero ? oldAngleVel : AngularVelocity;;
+		}
 	}
 	
 	public void AddTouch(Touch t, RaycastHit hit)
@@ -98,6 +114,13 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	
 	public void FinishNotification()
 	{
-		if (touchCount == 0) drop(); else if (!IsPickedUp) pickup();
+		if (touchCount == 0) 
+		{
+			DoDrop(); 
+		}
+		else if (!IsPickedUp) 
+		{
+			DoPickup(); 
+		}
 	}
 }

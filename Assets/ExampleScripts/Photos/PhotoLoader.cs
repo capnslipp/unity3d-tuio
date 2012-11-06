@@ -55,7 +55,13 @@ public class PhotoLoader : MonoBehaviour {
         	WWW www = new WWW("file://" + file);
         	yield return www;
 			
+			Texture2D tex = www.texture;
+			
 			GameObject go = (GameObject)Instantiate(PhotoPrefab, transform.position, transform.rotation);
+			
+			float xScale = (float)tex.width / (float)tex.height;
+			go.transform.localScale = new Vector3(xScale, 1f, 1f);
+			
 			go.renderer.materials[1].mainTexture = www.texture;
 		}
     }
