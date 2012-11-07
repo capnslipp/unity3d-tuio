@@ -32,6 +32,8 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
+using AForge.Math.Geometry;
+
 /// <summary>
 /// Gesture for handling Kinematic movement, scaling and rotation of an object.
 /// Designed for use in a photo browser.
@@ -48,6 +50,8 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	Camera _targetCamera;
 	
 	public Bounds BoundingBox;
+	public List<Vector2> ConvexHull;
+	public List<Vector2> ConvexHull2;
 	
 	ScaleRotateHelper scaler;
 	
@@ -60,9 +64,47 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 		yPos = transform.position.y;
 	}
 	
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.red;
+		if (ConvexHull != null && ConvexHull.Count > 2)
+		{
+			Vector2[] pts = ConvexHull.ToArray();
+			
+			Vector3 a = getWorldPoint(pts[0]);
+			Vector3 origA = a;
+			for (int i = 1; i < pts.Length; i++)
+			{
+				Vector3 b = getWorldPoint(pts[i]);
+				Gizmos.DrawLine(a, b);
+				a = b;
+			}
+			Gizmos.DrawLine(a, origA);
+			
+			
+			Vector3 hullCentre = getWorldPoint(getHullCentre().ToVector3());
+			Gizmos.DrawCube(hullCentre, Vector3.one * 0.1f);
+		}
+	}
+	
+	Vector2 getHullCentre()
+	{
+		Vector2 total = Vector2.zero;
+		foreach(Vector2 v in ConvexHull)
+		{
+			total += v;
+		}
+		total /= ConvexHull.Count;
+		return total;
+	}
+	
 	void changeBoundingBox()
 	{
 		BoundingBox = BoundsHelper.BuildBounds(touches.Values);
+		if (touches.Count > 2) 
+		{
+			ConvexHull = GrahamConvexHull.FindHull(touches.Select(p => p.Value.position).ToList());
+		}
 		
 		if (touchesChanged && touches.Count > 0) 
 		{
@@ -100,7 +142,8 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	Vector3 getCentrePoint()
 	{
-		return getWorldPoint(BoundingBox.center).SetY(yPos);
+		Vector3 cen = touches.Count > 2 ? getHullCentre().ToVector3() : BoundingBox.center;
+		return getWorldPoint(cen).SetY(yPos);
 	}
 	
 	Vector3 getWorldPoint(Vector3 screenPoint)

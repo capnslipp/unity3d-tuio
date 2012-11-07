@@ -30,6 +30,25 @@ using System.Collections;
 
 public static class Vector3Extensions
 {
+	// returns -1 when to the left, 1 to the right, and 0 for forward/backward
+	public static int AngleDir(this Vector3 fwd, Vector3 targetDir, Vector3 up) 
+	{
+	    Vector3 perp = Vector3.Cross(fwd, targetDir);
+	    float dir = Vector3.Dot(perp, up);
+	
+	    if (dir > 0.0) return 1;
+	        else if (dir < 0) return -1;
+		    else return 0;
+	}
+	
+	public static float Angle(this Vector3 fwd, Vector3 targetDir, Vector3 upDir) 
+	{
+		var angle = Vector3.Angle(fwd, targetDir);
+	
+	    if (fwd.AngleDir(targetDir, upDir) == -1) return 360f - angle;
+		else return angle;
+	}
+	
 	public static Vector3 LockUpdate(this Vector3 v, Vector3 axis, Vector3 newValue)
 	{
 		newValue = Vector3.Scale(newValue, axis.InvertAxis());
