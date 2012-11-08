@@ -48,6 +48,8 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	Dictionary<int, Joint> joints = new Dictionary<int, Joint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
 	
+	public Collider DragBounds;
+	
 	Camera _targetCamera;
 	
 	void Start()
@@ -88,6 +90,16 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		if (h.collider.gameObject == gameObject)
 		{
 			hitPoint = new Vector3(hitPoint.x, transform.position.y, hitPoint.z);
+		}
+		
+		// Check if we are within bounds (if defined)
+		if (DragBounds != null)
+		{
+			Vector3 diffPos = DragBounds.transform.position - hitPoint;
+			RaycastHit colH;
+			hasHit = DragBounds.Raycast(new Ray(hitPoint, diffPos.normalized), out colH, Vector3.Distance(hitPoint, DragBounds.transform.position)); 
+			
+			if (hasHit) hitPoint = colH.point;
 		}
 		
 		updateDragger(hitPoint, t, hasHit);

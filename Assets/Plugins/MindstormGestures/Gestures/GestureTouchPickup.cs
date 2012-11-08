@@ -66,7 +66,7 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 		oldVel = Velocity;
 		oldAngleVel = AngularVelocity;
 		
-		Velocity = (diffPos / Time.deltaTime) / 2; 
+		Velocity = (diffPos / Time.deltaTime) / 2f; 
 		AngularVelocity = diffRot.eulerAngles.ToRadians() / Time.deltaTime;
 	}
 	

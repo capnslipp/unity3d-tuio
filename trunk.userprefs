@@ -1,16 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ExampleScripts\Slingshot\SlingshotController.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="96" Column="4" />
-      <File FileName="Assets\ExampleScripts\Photos\CenterPull.cs" Line="22" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="167" Column="6" />
-      <File FileName="Assets\ExampleScripts\Photos\PhotoLoader.cs" Line="68" Column="2" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="103" Column="16" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="122" Column="44" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="1" Column="1" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="78" Column="2" />
       <File FileName="Assets\Plugins\MindstormGestures\Helpers\TransformExtensions.cs" Line="42" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="33" Column="2" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" Line="1" Column="1" />
       <File FileName="Assets\Plugins\MindstormGestures\Helpers\BoundsHelper.cs" Line="56" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ConvexHullHelper.cs" Line="56" Column="21" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ZStack.cs" Line="59" Column="3" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\Vector2Extensions.cs" Line="25" Column="3" />
+      <File FileName="Assets\ExampleScripts\Photos\CenterPull.cs" Line="25" Column="3" />
+      <File FileName="Assets\ExampleScripts\Photos\PhotoLoader.cs" Line="68" Column="2" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchWake.cs" Line="64" Column="3" />
+      <File FileName="Assets\ExampleScripts\Slingshot\SlingshotController.cs" Line="51" Column="30" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" Line="53" Column="23" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ReTrigger.cs" Line="13" Column="34" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

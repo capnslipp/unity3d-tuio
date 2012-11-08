@@ -32,8 +32,6 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
-using AForge.Math.Geometry;
-
 /// <summary>
 /// Gesture for handling Kinematic movement, scaling and rotation of an object.
 /// Designed for use in a photo browser.
@@ -44,17 +42,10 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
 	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
-	
-	bool touchesChanged = false;
-	
+
 	Camera _targetCamera;
-	
-	public Bounds BoundingBox;
-	public List<Vector2> ConvexHull;
-	public List<Vector2> ConvexHull2;
-	
+	bool touchesChanged = false;
 	ScaleRotateHelper scaler;
-	
 	float yPos = 0f;
 	
 	void Start()
@@ -66,68 +57,40 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	void OnDrawGizmos()
 	{
-		Gizmos.color = Color.red;
-		if (ConvexHull != null && ConvexHull.Count > 2)
-		{
-			Vector2[] pts = ConvexHull.ToArray();
-			
-			Vector3 a = getWorldPoint(pts[0]);
-			Vector3 origA = a;
-			for (int i = 1; i < pts.Length; i++)
-			{
-				Vector3 b = getWorldPoint(pts[i]);
-				Gizmos.DrawLine(a, b);
-				a = b;
-			}
-			Gizmos.DrawLine(a, origA);
-			
-			
-			Vector3 hullCentre = getWorldPoint(getHullCentre().ToVector3());
-			Gizmos.DrawCube(hullCentre, Vector3.one * 0.1f);
-		}
-	}
-	
-	Vector2 getHullCentre()
-	{
-		Vector2 total = Vector2.zero;
-		foreach(Vector2 v in ConvexHull)
-		{
-			total += v;
-		}
-		total /= ConvexHull.Count;
-		return total;
+		if (touches.Count > 0) Gizmos.DrawCube(getCentrePoint(), Vector3.one * 0.1f);
 	}
 	
 	void changeBoundingBox()
 	{
-		BoundingBox = BoundsHelper.BuildBounds(touches.Values);
-		if (touches.Count > 2) 
+		if (touchesChanged)
 		{
-			ConvexHull = GrahamConvexHull.FindHull(touches.Select(p => p.Value.position).ToList());
+			// Maybe we have just been picked up?
+			if (touches.Count > 0) 
+			{
+				if (!ZStack.Contains(gameObject)) yPos = ZStack.Add(gameObject);
+			}
+			
+			// More than 1 touch means we need to move, scale and rotate
+			if (touches.Count > 1)
+			{	
+				scaler.StartMove(
+					getWorldPoint(touches.Values.First().position), 
+					getCentrePoint());
+			}
+			// Just 1 touch means we just need to move
+			else if (touches.Count == 1)
+			{
+				scaler.StartMove(getCentrePoint().SetY(yPos));
+			}
+			// No touches, we no longer want to manipulate the object
+			else if (touches.Count == 0)
+			{
+				scaler.EndMove();
+				ZStack.Remove(gameObject);
+			}
 		}
-		
-		if (touchesChanged && touches.Count > 0) 
-		{
-			yPos = ZStack.Add(gameObject);
-		}
-		
-		if (touchesChanged && touches.Count > 1)
-		{	
-			scaler.StartMove(
-				getWorldPoint(touches.Values.First().position), 
-				getCentrePoint());
-		}
-		else if (touchesChanged && touches.Count == 1)
-		{
-			scaler.StartMove(getCentrePoint().SetY(yPos));
-		}
-		else if (touchesChanged && touches.Count == 0)
-		{
-			scaler.EndMove();
-			ZStack.Remove(gameObject);
-		}
-		
-		if (scaler.IsMoving)
+		// If we are manipulating the object, update the data
+		else if (scaler.IsMoving)
 		{
 			if (touches.Count > 1)
 			{
@@ -142,8 +105,18 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	Vector3 getCentrePoint()
 	{
-		Vector3 cen = touches.Count > 2 ? getHullCentre().ToVector3() : BoundingBox.center;
-		return getWorldPoint(cen).SetY(yPos);
+		return getWorldPoint(getPointsAvg()).SetY(yPos);
+	}
+	
+	Vector2 getPointsAvg()
+	{
+		Vector2 total = Vector2.zero;
+		foreach(Touch t in touches.Values)
+		{
+			total += t.position;
+		}
+		total /= touches.Count;
+		return total;
 	}
 	
 	Vector3 getWorldPoint(Vector3 screenPoint)

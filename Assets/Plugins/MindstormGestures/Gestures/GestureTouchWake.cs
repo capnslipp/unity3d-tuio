@@ -25,48 +25,57 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
-public static class Vector2Extensions
+using Mindstorm.Gesture;
+
+[RequireComponent(typeof(Rigidbody))]
+public class GestureTouchWake : MonoBehaviour, IGestureHandler 
 {
-	public static Vector3 ToVector3(this Vector2 v)
+	public int touchCount = 0;
+	public bool IsWoken = false;
+	
+	public string MessageOnDrop = "DoThrow";
+	public GameObject MessageTarget;
+	
+	void DoWake()
 	{
-		return new Vector3(v.x, v.y, 0f);
+		IsWoken = true;
+		rigidbody.isKinematic = false;
+		rigidbody.WakeUp();
 	}
 	
-	public static Vector3 ToVector3(this Vector2 v, float z)
+	void DoDrop()
 	{
-		return new Vector3(v.x, v.y, z);
+		IsWoken = false;
+		if (MessageTarget != null) MessageTarget.SendMessage(MessageOnDrop, SendMessageOptions.DontRequireReceiver);
 	}
 	
-	public static float AngleBetween(this Vector2 fromV, Vector2 toV)
-    {
-        if (fromV == toV) return 0f;
-
-        float dX = toV.x - fromV.x;
-        float dY = toV.y - fromV.y;
-
-        float angle = (float)Mathf.Atan2(dY, dX);
-
-        return angle * Mathf.Rad2Deg;
-    }
-	
-	/// <summary>
-	/// Returns -1 when to the left, 1 to the right, and 0 for forward/backward
-	/// </summary>
-	public static int AngleDir(this Vector2 a, Vector2 b, Vector2 c) 
+	public void AddTouch(Touch t, RaycastHit hit)
 	{
-		if ((c.x - a.x) * (b.y - a.y) > (c.y - a.y) * (b.x - a.x)) 
+		touchCount++;
+	}
+	
+	public void RemoveTouch(Touch t)
+	{
+		touchCount--;
+	}
+	
+	public void UpdateTouch(Touch t)
+	{
+	}
+	
+	public void FinishNotification()
+	{
+		if (touchCount == 0) 
 		{
-			return -1;
+			DoDrop(); 
 		}
-		else if ((c.x - a.x) * (b.y - a.y) < (c.y - a.y) * (b.x - a.x)) 
+		else if (!IsWoken) 
 		{
-			return 1;
-		}
-		else
-		{
-			return 0;
+			DoWake(); 
 		}
 	}
 }

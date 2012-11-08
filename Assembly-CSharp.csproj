@@ -50,12 +50,13 @@
      <Compile Include="Assets\ExampleScripts\Bombs\TimedTrigger.cs" />
      <Compile Include="Assets\ExampleScripts\Cannon\CannonController.cs" />
      <Compile Include="Assets\ExampleScripts\Cannon\FireCannonClickHandler.cs" />
-     <Compile Include="Assets\ExampleScripts\Cannon\LaunchRigidBody.cs" />
      <Compile Include="Assets\ExampleScripts\Cannon\PowerController.cs" />
      <Compile Include="Assets\ExampleScripts\Photos\CenterPull.cs" />
      <Compile Include="Assets\ExampleScripts\Photos\PhotoLoader.cs" />
      <Compile Include="Assets\ExampleScripts\Physics\Glue.cs" />
+     <Compile Include="Assets\ExampleScripts\Physics\LaunchRigidBody.cs" />
      <Compile Include="Assets\ExampleScripts\Physics\StartSleeping.cs" />
+     <Compile Include="Assets\ExampleScripts\Slingshot\SlingshotController.cs" />
      <Compile Include="Assets\ExampleScripts\Timer\TimerAnimationPos.cs" />
      <Compile Include="Assets\ExampleScripts\Walls\WallBuildClickHandler.cs" />
      <Compile Include="Assets\ExampleScripts\Walls\WallBuilder.cs" />
