@@ -36,6 +36,7 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	public GameObject[] NotifyObjects;
 	
 	protected Touch m_curTouch;
+	protected bool m_touchSet = false;
 	protected Vector2 m_originalPos = Vector2.zero;
 	
 	Collider m_origCollider = null;
@@ -52,11 +53,13 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	protected void AssignCurTouch(Touch inTouch)
 	{
 		m_curTouch = inTouch;	
+		m_touchSet = true;
 	}
 	
 	protected void ClearCurTouch()
 	{
 		m_curTouch = new Touch();
+		m_touchSet = false;
 	}
 	
 	public virtual void AddTouch(Touch t, RaycastHit hit)

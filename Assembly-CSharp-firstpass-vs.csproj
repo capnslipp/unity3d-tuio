@@ -44,13 +44,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Plugins\MindstormGestures\ClickHandlers\PlayAnimationClickHandler.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Config\TouchConfig.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Config\TouchHandlerConfig.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Config\TraceConfig.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Debug\ShowTouchTraces.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Debug\TouchTrace.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\GestureInterface\IGestureHandler.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureChargeRelease.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureNTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" />
@@ -71,6 +71,9 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\Vector2Extensions.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\Vector3Extensions.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Helpers\ZStack.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Timer\PercentEventTrigger.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Timer\TimeEventTrigger.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Timer\TimerEventArgs.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouch3D.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouchGUI.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\TouchGesture\InputProxy.cs" />
@@ -92,6 +95,9 @@
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioConfiguration.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioParser.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioTracking.cs" />
+     <None Include="Assets\PhotoBrowser\Shaders\PictureFrame.shader" />
+     <None Include="Assets\CannonExample\Shaders\Cannon.shader" />
+     <None Include="Assets\PhotoBrowser\Shaders\Floor.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -56,8 +56,6 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	
 	void FixedUpdate()
 	{
-		if (!IsPickedUp) return;
-		
 		diffPos = transform.position - oldPos;
 		diffRot = Quaternion.FromToRotation(oldRot * Vector3.forward, transform.rotation * Vector3.forward);
 		oldPos = transform.position;
@@ -66,20 +64,25 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 		oldVel = Velocity;
 		oldAngleVel = AngularVelocity;
 		
-		Velocity = (diffPos / Time.deltaTime) / 2f; 
+		Velocity = (diffPos / Time.deltaTime) / 2; 
 		AngularVelocity = diffRot.eulerAngles.ToRadians() / Time.deltaTime;
 	}
 	
-	void DoPickup()
+	IEnumerator DoPickup()
 	{
-		IsPickedUp = true;
+		yield return new WaitForFixedUpdate();
+		
 		rigidbody.isKinematic = true;
+		IsPickedUp = true;
 	}
 	
-	void DoDrop()
+	IEnumerator DoDrop()
 	{
-		IsPickedUp = false;
+		yield return new WaitForFixedUpdate();
+		
 		rigidbody.isKinematic = false;
+		IsPickedUp = false;
+		
 		rigidbody.WakeUp();		
 		
 		if (applyPhysicsOnDrop) applyPhysics();
@@ -87,12 +90,12 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	
 	void applyPhysics()
 	{
-		if (oldVel != Vector3.zero || Velocity != Vector3.zero)
+		if ((oldVel + Velocity) != Vector3.zero)
 		{
 			rigidbody.velocity = Velocity == Vector3.zero ? oldVel : Velocity;
 		}
 		
-		if (oldAngleVel != Vector3.zero || AngularVelocity != Vector3.zero)
+		if ((oldAngleVel + AngularVelocity) != Vector3.zero)
 		{
 			rigidbody.angularVelocity = AngularVelocity == Vector3.zero ? oldAngleVel : AngularVelocity;;
 		}
@@ -116,11 +119,11 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	{
 		if (touchCount == 0) 
 		{
-			DoDrop(); 
+			StartCoroutine(DoDrop()); 
 		}
 		else if (!IsPickedUp) 
 		{
-			DoPickup(); 
+			StartCoroutine(DoPickup()); 
 		}
 	}
 }

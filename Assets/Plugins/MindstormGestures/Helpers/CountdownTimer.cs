@@ -1,29 +1,3 @@
-/*
-Unity3d-TUIO connects touch tracking from a TUIO to objects in Unity3d.
-
-Copyright 2011 - Mindstorm Limited (reg. 05071596)
-
-Author - Simon Lerpiniere
-
-This file is part of Unity3d-TUIO.
-
-Unity3d-TUIO is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Unity3d-TUIO is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser Public License for more details.
-
-You should have received a copy of the GNU Lesser Public License
-along with Unity3d-TUIO.  If not, see <http://www.gnu.org/licenses/>.
-
-If you have any questions regarding this library, or would like to purchase 
-a commercial licence, please contact Mindstorm via www.mindstorm.com.
-*/
-
 using UnityEngine;
 
 public class CountdownTimer : MonoBehaviour
@@ -31,16 +5,35 @@ public class CountdownTimer : MonoBehaviour
 	public bool StartActive = false;
 	public float CountdownTime = 1.0f;
 	public float RelaxationScalar = 1.0f;
+	public float LastPercentage = 0f;
+	public float Percentage = 0f;
+	public float PercentageDelta = 0f;
 	
 	public float RemainingTime = 0.0f;
-	public float Percentage = 0f;
 
-	public enum CountDownStateEnum
+	public enum CountdownStateEnum
 	{
 		Paused = 0,
 		Countdown,
 		Relaxing,
+		Finshed
 	};
+
+	public CountdownStateEnum countDownState = CountdownStateEnum.Paused;
+	
+	public delegate void TimerFinishEventHandler(object sender, System.EventArgs e);
+	public event TimerFinishEventHandler TimerFinishEvent;
+	
+	void Start()
+	{
+		countDownState = StartActive ? CountdownStateEnum.Countdown : CountdownStateEnum.Paused;
+		RemainingTime = CountdownTime;
+	}
+	
+	void OnDisable()
+	{
+		ResetCountdown(CountdownStateEnum.Paused);
+	}
 	
 	public float ElapsedTime
 	{
@@ -49,61 +42,62 @@ public class CountdownTimer : MonoBehaviour
 			return CountdownTime - RemainingTime;
 		}
 	}
-
-	public CountDownStateEnum CountDownState = CountDownStateEnum.Paused;
-	
-	void Start()
-	{
-		CountDownState = StartActive ? CountDownStateEnum.Countdown : CountDownStateEnum.Paused;
-		RemainingTime = CountdownTime;
-	}
 	
 	void Update()
 	{
-		switch(CountDownState)
+		switch(countDownState)
 		{
-			case CountDownStateEnum.Paused:
+			case CountdownStateEnum.Paused:
 				break;
-			case CountDownStateEnum.Countdown:
+			case CountdownStateEnum.Countdown:
 				RemainingTime = Mathf.Max(0.0f, RemainingTime - Time.deltaTime);
-				calcPercentage();
+				if (RemainingTime <= 0f) Finish();
 				break;
-			case CountDownStateEnum.Relaxing:
+			case CountdownStateEnum.Relaxing:
 				RemainingTime = Mathf.Min(CountdownTime, RemainingTime + (RelaxationScalar * Time.deltaTime));
-				calcPercentage();
+				break;
+			case CountdownStateEnum.Finshed:
 				break;
 		}
+		LastPercentage = Percentage;
+		Percentage = 1.0f - (CountdownTime > 0.0f ? RemainingTime / CountdownTime : 0.0f); 
+		PercentageDelta = Percentage - LastPercentage;
+	}
+	
+	void Finish()
+	{
+		countDownState = CountdownStateEnum.Finshed;
+		if (TimerFinishEvent != null) TimerFinishEvent(this, null);
+	}
+	
+	public void StartCountdown()
+	{
+		countDownState = CountdownStateEnum.Countdown;
 	}
 	
 	public void StartCountdown(float inTime)
 	{
 		CountdownTime = inTime;
 		RemainingTime = inTime;
-		CountDownState = CountDownStateEnum.Countdown;
+		countDownState = CountdownStateEnum.Countdown;
 	}
 	
-	public void ResetCountdown(CountDownStateEnum inState)
+	public void ResetCountdown(CountdownStateEnum inState)
 	{	
 		switch(inState)
 		{
-			case CountDownStateEnum.Paused:
-			case CountDownStateEnum.Countdown:
+			case CountdownStateEnum.Paused:
+			case CountdownStateEnum.Countdown:
 				RemainingTime = CountdownTime;	
-				calcPercentage();
 				break;
-			case CountDownStateEnum.Relaxing:
+			case CountdownStateEnum.Relaxing:
 				RemainingTime = Mathf.Min(RemainingTime, CountdownTime);
-				calcPercentage();
+				break;
+			case CountdownStateEnum.Finshed:
 				break;
 		}
-		CountDownState = inState;
-	}
-	
-	void calcPercentage()
-	{
-		Percentage = 1.0f - (CountdownTime > 0.0f ? RemainingTime/CountdownTime : 0.0f);
-	}
-	
+		countDownState = inState;
+	}	
 };
 
 

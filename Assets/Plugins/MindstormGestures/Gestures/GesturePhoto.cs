@@ -42,10 +42,15 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
 	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
-
-	Camera _targetCamera;
+	
 	bool touchesChanged = false;
+	
+	Camera _targetCamera;
+	
+	public Bounds BoundingBox;
+	
 	ScaleRotateHelper scaler;
+	
 	float yPos = 0f;
 	
 	void Start()
@@ -55,42 +60,32 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 		yPos = transform.position.y;
 	}
 	
-	void OnDrawGizmos()
-	{
-		if (touches.Count > 0) Gizmos.DrawCube(getCentrePoint(), Vector3.one * 0.1f);
-	}
-	
 	void changeBoundingBox()
 	{
-		if (touchesChanged)
+		BoundingBox = BoundsHelper.BuildBounds(touches.Values);
+		
+		if (touchesChanged && touches.Count > 0) 
 		{
-			// Maybe we have just been picked up?
-			if (touches.Count > 0) 
-			{
-				if (!ZStack.Contains(gameObject)) yPos = ZStack.Add(gameObject);
-			}
-			
-			// More than 1 touch means we need to move, scale and rotate
-			if (touches.Count > 1)
-			{	
-				scaler.StartMove(
-					getWorldPoint(touches.Values.First().position), 
-					getCentrePoint());
-			}
-			// Just 1 touch means we just need to move
-			else if (touches.Count == 1)
-			{
-				scaler.StartMove(getCentrePoint().SetY(yPos));
-			}
-			// No touches, we no longer want to manipulate the object
-			else if (touches.Count == 0)
-			{
-				scaler.EndMove();
-				ZStack.Remove(gameObject);
-			}
+			yPos = ZStack.Add(gameObject);
 		}
-		// If we are manipulating the object, update the data
-		else if (scaler.IsMoving)
+		
+		if (touchesChanged && touches.Count > 1)
+		{	
+			scaler.StartMove(
+				getWorldPoint(touches.Values.First().position), 
+				getCentrePoint());
+		}
+		else if (touchesChanged && touches.Count == 1)
+		{
+			scaler.StartMove(getCentrePoint().SetY(yPos));
+		}
+		else if (touchesChanged && touches.Count == 0)
+		{
+			scaler.EndMove();
+			ZStack.Remove(gameObject);
+		}
+		
+		if (scaler.IsMoving)
 		{
 			if (touches.Count > 1)
 			{
@@ -105,18 +100,7 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	Vector3 getCentrePoint()
 	{
-		return getWorldPoint(getPointsAvg()).SetY(yPos);
-	}
-	
-	Vector2 getPointsAvg()
-	{
-		Vector2 total = Vector2.zero;
-		foreach(Touch t in touches.Values)
-		{
-			total += t.position;
-		}
-		total /= touches.Count;
-		return total;
+		return getWorldPoint(BoundingBox.center).SetY(yPos);
 	}
 	
 	Vector3 getWorldPoint(Vector3 screenPoint)

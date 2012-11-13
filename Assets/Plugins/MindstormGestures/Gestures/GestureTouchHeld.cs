@@ -37,6 +37,8 @@ public class GestureTouchHeld : GestureTouch
 	public bool RelaxTime = true;
 	public float HoldTime = 1.0f;
 	public string HeldMessage;
+	public string TouchStartMessege;
+	public string CancelMessage;
 	
 	CountdownTimer heldTimer = null;
 	
@@ -53,6 +55,7 @@ public class GestureTouchHeld : GestureTouch
 		
 		if(m_curTouch.fingerId == t.fingerId)
 		{
+			if (TouchStartMessege != string.Empty) BroadcastTouchMessage(TouchStartMessege, hit);
 			
 			heldTimer.StartCountdown(HoldTime);
 		}
@@ -72,7 +75,7 @@ public class GestureTouchHeld : GestureTouch
 	{
 		base.UpdateTouch(t);
 		
-		if(m_curTouch.fingerId != t.fingerId) return;
+		if(m_curTouch.fingerId != t.fingerId || !m_touchSet) return;
 		
 		if(heldTimer.RemainingTime > 0.0f) return;
 		
@@ -80,14 +83,24 @@ public class GestureTouchHeld : GestureTouch
 		if(!HitsOrigCollider(t, out h)) return;
 		
 		BroadcastTouchMessage(HeldMessage, h);
+		EndHeld();
 	}
 	
 	void CancelHeld()
 	{
+		if (CancelMessage != string.Empty) BroadcastTouchMessage(CancelMessage, new RaycastHit());
+		
 		ClearCurTouch();
 		
 		heldTimer.ResetCountdown(RelaxTime?
-								CountdownTimer.CountDownStateEnum.Relaxing:
-								CountdownTimer.CountDownStateEnum.Paused);
+								CountdownTimer.CountdownStateEnum.Relaxing:
+								CountdownTimer.CountdownStateEnum.Paused);
+	}
+	
+	void EndHeld()
+	{
+		ClearCurTouch();
+		
+		heldTimer.ResetCountdown(CountdownTimer.CountdownStateEnum.Finshed);
 	}
 }
