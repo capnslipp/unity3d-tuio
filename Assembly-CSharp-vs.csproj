@@ -44,27 +44,28 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CannonExample\Scripts\Cannon\CannonController.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Cannon\FireCannonClickHandler.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Cannon\PowerController.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Helpers\TimerAnimationPos.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Physics\Glue.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Physics\LaunchRigidBody.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Physics\StartSleeping.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Walls\WallBuildClickHandler.cs" />
-     <Compile Include="Assets\CannonExample\Scripts\Walls\WallBuilder.cs" />
-     <Compile Include="Assets\Dragables\Scripts\Bombs\Exploder.cs" />
-     <Compile Include="Assets\Dragables\Scripts\Bombs\ImpactTimer.cs" />
-     <Compile Include="Assets\Dragables\Scripts\Bombs\ImpactTrigger.cs" />
-     <Compile Include="Assets\Dragables\Scripts\Bombs\TimedTrigger.cs" />
-     <Compile Include="Assets\PhotoBrowser\Scripts\CenterPull.cs" />
-     <Compile Include="Assets\PhotoBrowser\Scripts\PhotoLoader.cs" />
-     <Compile Include="Assets\Slingshot\Scripts\SlingshotController.cs" />
-     <None Include="Assets\CannonExample\Shaders\Gauge.shader" />
-     <None Include="Assets\PhotoBrowser\Shaders\PhotoFrame.shader" />
-     <None Include="Assets\CannonExample\Shaders\Floor.shader" />
-     <None Include="Assets\CannonExample\Shaders\Cannon.shader" />
-     <None Include="Assets\PhotoBrowser\Shaders\Floor.shader" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Cannon\CannonController.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Cannon\FireCannonClickHandler.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Cannon\PowerController.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Helpers\TimerAnimationPos.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Physics\Glue.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Physics\LaunchRigidBody.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Physics\StartSleeping.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Walls\WallBuildClickHandler.cs" />
+     <Compile Include="Assets\Sandbox\CannonExample\Scripts\Walls\WallBuilder.cs" />
+     <Compile Include="Assets\Sandbox\Dragables\Scripts\Bombs\Exploder.cs" />
+     <Compile Include="Assets\Sandbox\Dragables\Scripts\Bombs\ImpactTimer.cs" />
+     <Compile Include="Assets\Sandbox\Dragables\Scripts\Bombs\ImpactTrigger.cs" />
+     <Compile Include="Assets\Sandbox\Dragables\Scripts\Bombs\TimedTrigger.cs" />
+     <Compile Include="Assets\Sandbox\PhotoBrowser\Scripts\CenterPull.cs" />
+     <Compile Include="Assets\Sandbox\PhotoBrowser\Scripts\PhotoLoader.cs" />
+     <Compile Include="Assets\Sandbox\Slingshot\Scripts\SlingshotController.cs" />
+     <None Include="Assets\Sandbox\Dragables\Shaders\Floor.shader" />
+     <None Include="Assets\Sandbox\CannonExample\Shaders\Gauge.shader" />
+     <None Include="Assets\Sandbox\PhotoBrowser\Shaders\PhotoFrame.shader" />
+     <None Include="Assets\Sandbox\CannonExample\Shaders\Floor.shader" />
+     <None Include="Assets\Sandbox\CannonExample\Shaders\Cannon.shader" />
+     <None Include="Assets\Sandbox\PhotoBrowser\Shaders\Floor.shader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
