@@ -40,6 +40,13 @@ public class WallBuilder : MonoBehaviour {
 	
 	public bool IsBuilding = false;
 	
+	public bool BuildOnStart = false;
+	
+	public void Start()
+	{
+		if (BuildOnStart) Build ();
+	}
+	
 	public void Build()
 	{
 		if (!IsBuilding) StartCoroutine(doBuild());

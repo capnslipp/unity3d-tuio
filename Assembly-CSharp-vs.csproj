@@ -60,7 +60,9 @@
      <Compile Include="Assets\PhotoBrowser\Scripts\CenterPull.cs" />
      <Compile Include="Assets\PhotoBrowser\Scripts\PhotoLoader.cs" />
      <Compile Include="Assets\Slingshot\Scripts\SlingshotController.cs" />
-     <None Include="Assets\PhotoBrowser\Shaders\PictureFrame.shader" />
+     <None Include="Assets\CannonExample\Shaders\Gauge.shader" />
+     <None Include="Assets\PhotoBrowser\Shaders\PhotoFrame.shader" />
+     <None Include="Assets\CannonExample\Shaders\Floor.shader" />
      <None Include="Assets\CannonExample\Shaders\Cannon.shader" />
      <None Include="Assets\PhotoBrowser\Shaders\Floor.shader" />
   </ItemGroup>

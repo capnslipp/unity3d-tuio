@@ -1,20 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhotoBrowser\Shaders\Floor.shader">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhotoBrowser\Shaders\PictureFrame.shader">
     <Files>
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\CountdownTimer.cs" Line="85" Column="14" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchHeld.cs" Line="95" Column="3" />
-      <File FileName="Assets\CannonExample\Scripts\Helpers\TimerAnimationPos.cs" Line="38" Column="3" />
-      <File FileName="Assets\Plugins\MindstormGestures\Timer\TimeEventTrigger.cs" Line="22" Column="6" />
-      <File FileName="Assets\Plugins\MindstormGestures\Timer\PercentEventTrigger.cs" Line="13" Column="59" />
-      <File FileName="Assets\CannonExample\Shaders\Cannon.shader" Line="1" Column="25" />
-      <File FileName="Assets\PhotoBrowser\Shaders\Floor.shader" Line="21" Column="2" />
+      <File FileName="Assets\CannonExample\Shaders\Gauge.shader" Line="1" Column="26" />
+      <File FileName="Assets\CannonExample\Shaders\Cannon.shader" Line="1" Column="26" />
+      <File FileName="Assets\PhotoBrowser\Shaders\PictureFrame.shader" Line="1" Column="41" />
+      <File FileName="Assets\PhotoBrowser\Shaders\Floor.shader" Line="1" Column="32" />
+      <File FileName="Assets\CannonExample\Shaders\Floor.shader" Line="1" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormTuio\TuioReceiver\Touch.cs" line="98" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
