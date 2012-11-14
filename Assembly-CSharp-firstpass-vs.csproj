@@ -95,12 +95,11 @@
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioConfiguration.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioParser.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\TuioReceiver\TuioTracking.cs" />
-     <None Include="Assets\Sandbox\Dragables\Shaders\Floor.shader" />
-     <None Include="Assets\Sandbox\CannonExample\Shaders\Gauge.shader" />
-     <None Include="Assets\Sandbox\PhotoBrowser\Shaders\PhotoFrame.shader" />
-     <None Include="Assets\Sandbox\CannonExample\Shaders\Floor.shader" />
-     <None Include="Assets\Sandbox\CannonExample\Shaders\Cannon.shader" />
-     <None Include="Assets\Sandbox\PhotoBrowser\Shaders\Floor.shader" />
+     <None Include="Assets\Sandbox\Toys\Cannon\Components\Gauge.shader" />
+     <None Include="Assets\Sandbox\Toys\Photo\Components\PictureFrame.shader" />
+     <None Include="Assets\Sandbox\Toys\FloorTarget\Components\FloorTarget.shader" />
+     <None Include="Assets\Sandbox\Toys\Cannon\Components\Cannon.shader" />
+     <None Include="Assets\Sandbox\Toys\FloorPlain\Components\FloorTarget.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

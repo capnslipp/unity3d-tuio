@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CannonExample\Scripts\Walls\WallBuilder.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Sandbox\PhotoBrowser\Photo\Components\PictureFrame.shader">
     <Files>
-      <File FileName="Assets\CannonExample\Scripts\Walls\WallBuilder.cs" Line="85" Column="11" />
+      <File FileName="Assets\Sandbox\ToyBox\FloorPlain\Components\FloorTarget.shader" Line="1" Column="29" />
+      <File FileName="Assets\Sandbox\PhotoBrowser\Photo\Components\PictureFrame.shader" Line="1" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
