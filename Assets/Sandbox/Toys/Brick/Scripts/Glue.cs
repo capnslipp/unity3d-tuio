@@ -1,5 +1,7 @@
 using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Glue : MonoBehaviour {
 	
@@ -28,7 +30,7 @@ public class Glue : MonoBehaviour {
 			Vector3 edge = collider.ClosestPointOnBounds(transform.position + (gV * 2f));
 			Vector3 mEdge = edge - (gV * 0.125f);
 			
-			Debug.DrawRay(mEdge, gV * 0.25f, Color.red, 10f);
+			//Debug.DrawRay(mEdge, gV * 0.25f, Color.red, 10f);
 			
 			RaycastHit h;
 			if (Physics.Raycast(new Ray(mEdge, gV), out h, 0.25f)) 
