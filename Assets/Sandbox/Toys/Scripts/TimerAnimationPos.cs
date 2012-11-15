@@ -13,6 +13,8 @@ public class TimerAnimationPos : MonoBehaviour {
 	AnimationState st;
 	AnimationClip cl;
 	
+	public AnimationCurve PlayCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+	
 	void Start()
 	{
 		if (Timer == null) Timer = GetComponent<CountdownTimer>();
@@ -52,6 +54,7 @@ public class TimerAnimationPos : MonoBehaviour {
 	void Update()
 	{
 		if (st == null) return;
-		st.normalizedTime = Timer.Percentage;
+		float playPos = PlayCurve.Evaluate(Timer.Percentage);
+		st.normalizedTime = playPos;
 	}
 }

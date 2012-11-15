@@ -6,11 +6,16 @@ public class PercentEventTrigger : MonoBehaviour {
 	
 	public float[] FireAtPercent;
 	
-	public float lastFirePercent = float.MaxValue;
+	float lastFirePercent = float.MaxValue;
 	
 	public CountdownTimer timer;
 	
 	public event System.EventHandler<TimerEventArgs> Trigger;
+	
+	void Start()
+	{
+		if (timer == null) timer = GetComponent<CountdownTimer>();
+	}
 
 	// Update is called once per frame
 	void Update () 
