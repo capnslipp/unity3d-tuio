@@ -88,19 +88,17 @@ public class GestureTouchHeld : GestureTouch
 	
 	void CancelHeld()
 	{
-		if (CancelMessage != string.Empty) BroadcastTouchMessage(CancelMessage, new RaycastHit());
-		
 		ClearCurTouch();
 		
 		heldTimer.ResetCountdown(RelaxTime?
 								CountdownTimer.CountdownStateEnum.Relaxing:
 								CountdownTimer.CountdownStateEnum.Paused);
+		
+		if (CancelMessage != string.Empty) BroadcastTouchMessage(CancelMessage, new RaycastHit());
 	}
 	
 	void EndHeld()
 	{
-		ClearCurTouch();
-		
-		heldTimer.ResetCountdown(CountdownTimer.CountdownStateEnum.Finshed);
+		heldTimer.ResetCountdown(CountdownTimer.CountdownStateEnum.Finished);
 	}
 }

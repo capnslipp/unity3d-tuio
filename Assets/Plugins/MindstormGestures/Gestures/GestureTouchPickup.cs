@@ -68,18 +68,14 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 		AngularVelocity = diffRot.eulerAngles.ToRadians() / Time.deltaTime;
 	}
 	
-	IEnumerator DoPickup()
+	void DoPickup()
 	{
-		yield return new WaitForFixedUpdate();
-		
 		rigidbody.isKinematic = true;
 		IsPickedUp = true;
 	}
 	
-	IEnumerator DoDrop()
+	void DoDrop()
 	{
-		yield return new WaitForFixedUpdate();
-		
 		rigidbody.isKinematic = false;
 		IsPickedUp = false;
 		
@@ -90,15 +86,11 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	
 	void applyPhysics()
 	{
-		if ((oldVel + Velocity) != Vector3.zero)
-		{
-			rigidbody.velocity = Velocity == Vector3.zero ? oldVel : Velocity;
-		}
+		rigidbody.velocity = Velocity == Vector3.zero ? oldVel : Velocity;
+		rigidbody.angularVelocity = AngularVelocity == Vector3.zero ? oldAngleVel : AngularVelocity;;
 		
-		if ((oldAngleVel + AngularVelocity) != Vector3.zero)
-		{
-			rigidbody.angularVelocity = AngularVelocity == Vector3.zero ? oldAngleVel : AngularVelocity;;
-		}
+		// rigidbody.velocity = Velocity;
+		// rigidbody.angularVelocity = AngularVelocity;
 	}
 	
 	public void AddTouch(Touch t, RaycastHit hit)
@@ -119,11 +111,11 @@ public class GestureTouchPickup : MonoBehaviour, IGestureHandler
 	{
 		if (touchCount == 0) 
 		{
-			StartCoroutine(DoDrop()); 
+			DoDrop(); 
 		}
 		else if (!IsPickedUp) 
 		{
-			StartCoroutine(DoPickup()); 
+			DoPickup();
 		}
 	}
 }

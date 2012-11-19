@@ -45,8 +45,6 @@ public class CannonController : MonoBehaviour {
 	
 	public void OverCharge()
 	{
-		fireTimer.ResetCountdown(CountdownTimer.CountdownStateEnum.Paused);
-		
 		animation.Blend("CannonOverCharged", .5f, 1f);
 	}
 	

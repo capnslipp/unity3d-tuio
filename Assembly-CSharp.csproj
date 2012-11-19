@@ -67,9 +67,9 @@
      <None Include="Assets\Sandbox\Toys\Photo\Components\PictureFrame.shader" />
      <None Include="Assets\Sandbox\Slingshot\Room\Components\TestRoom1.shader" />
      <None Include="Assets\Sandbox\Toys\Boxes\Components\SprungBox.shader" />
-     <None Include="Assets\Sandbox\CannonExample\Room\Components\TestRoom1.shader" />
      <None Include="Assets\Sandbox\Toys\Cannon\Components\Cannon.shader" />
      <None Include="Assets\Sandbox\Toys\FloorPlain\Components\FloorTarget.shader" />
+     <None Include="Assets\Sandbox\Cannon\Room\Components\TestRoom2.shader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">

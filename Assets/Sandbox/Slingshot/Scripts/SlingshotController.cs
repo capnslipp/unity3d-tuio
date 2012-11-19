@@ -20,6 +20,8 @@ public class SlingshotController : MonoBehaviour
 	public GameObject ThrowPrefab;
 	public Transform SpawnPoint;
 	
+	GestureTouchWake gtw;
+	
 	void Start() 
 	{
 		postMiddle = SlingBounds.center;
@@ -42,13 +44,14 @@ public class SlingshotController : MonoBehaviour
 	void SpawnNew()
 	{
 		ToThrow = (GameObject)Instantiate(ThrowPrefab, SpawnPoint.transform.position, SpawnPoint.transform.localRotation);
-		GestureTouchWake gtw = ToThrow.GetComponent<GestureTouchWake>();
+		gtw = ToThrow.GetComponent<GestureTouchWake>();
 		gtw.Dropped += DoThrow;
 	}
 	
 	void DoThrow(object sender, System.EventArgs e)
 	{
 		doThrow = true;
+		gtw.Dropped -= DoThrow;
 	}
 	
 	void calcThrow()

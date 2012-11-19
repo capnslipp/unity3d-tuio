@@ -16,7 +16,7 @@ public class CountdownTimer : MonoBehaviour
 		Paused = 0,
 		Countdown,
 		Relaxing,
-		Finshed
+		Finished
 	};
 
 	public CountdownStateEnum countDownState = CountdownStateEnum.Paused;
@@ -56,7 +56,7 @@ public class CountdownTimer : MonoBehaviour
 			case CountdownStateEnum.Relaxing:
 				RemainingTime = Mathf.Min(CountdownTime, RemainingTime + (RelaxationScalar * Time.deltaTime));
 				break;
-			case CountdownStateEnum.Finshed:
+			case CountdownStateEnum.Finished:
 				break;
 		}
 		LastPercentage = Percentage;
@@ -66,7 +66,7 @@ public class CountdownTimer : MonoBehaviour
 	
 	void Finish()
 	{
-		countDownState = CountdownStateEnum.Finshed;
+		countDownState = CountdownStateEnum.Finished;
 		if (TimerFinishEvent != null) TimerFinishEvent(this, null);
 	}
 	
@@ -93,7 +93,7 @@ public class CountdownTimer : MonoBehaviour
 			case CountdownStateEnum.Relaxing:
 				RemainingTime = Mathf.Min(RemainingTime, CountdownTime);
 				break;
-			case CountdownStateEnum.Finshed:
+			case CountdownStateEnum.Finished:
 				break;
 		}
 		countDownState = inState;
