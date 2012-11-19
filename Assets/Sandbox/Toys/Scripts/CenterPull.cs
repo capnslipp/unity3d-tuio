@@ -63,6 +63,6 @@ public class CenterPull : MonoBehaviour
 	
 	void OnTriggerExit(Collider other)
 	{
-		if (!ToPull.Contains(other.gameObject) && other.gameObject.tag == MatchTag) ToPull.Add(other.gameObject);
+		if (!ToPull.Contains(other.gameObject) && (MatchTag == string.Empty || other.gameObject.tag == MatchTag)) ToPull.Add(other.gameObject);
 	}
 }

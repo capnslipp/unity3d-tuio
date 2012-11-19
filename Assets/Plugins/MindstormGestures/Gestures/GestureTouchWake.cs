@@ -25,6 +25,7 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using UnityEngine;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,8 +38,7 @@ public class GestureTouchWake : MonoBehaviour, IGestureHandler
 	public int touchCount = 0;
 	public bool IsWoken = false;
 	
-	public string MessageOnDrop = "DoThrow";
-	public GameObject MessageTarget;
+	public System.EventHandler<EventArgs> Dropped;
 	
 	void DoWake()
 	{
@@ -50,7 +50,7 @@ public class GestureTouchWake : MonoBehaviour, IGestureHandler
 	void DoDrop()
 	{
 		IsWoken = false;
-		if (MessageTarget != null) MessageTarget.SendMessage(MessageOnDrop, SendMessageOptions.DontRequireReceiver);
+		if (Dropped != null) Dropped(this, null);
 	}
 	
 	public void AddTouch(Touch t, RaycastHit hit)

@@ -1,10 +1,10 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class SlingshotController : MonoBehaviour 
 {
-	public GameObject PostLeft;
-	public GameObject PostRight;
+	public SphereCollider SlingBounds;
 	
 	Vector3 postMiddle;
 	
@@ -15,10 +15,15 @@ public class SlingshotController : MonoBehaviour
 	
 	Vector3 throwDir = Vector3.zero;
 	float throwForce = 0f;
+	public float TimeBetweenSpawn = 1f;
+	
+	public GameObject ThrowPrefab;
+	public Transform SpawnPoint;
 	
 	void Start() 
 	{
-		postMiddle = (PostLeft.transform.position + PostRight.transform.position) / 2f;
+		postMiddle = SlingBounds.center;
+		SpawnNew();
 	}
 	
 	void FixedUpdate() 
@@ -30,9 +35,18 @@ public class SlingshotController : MonoBehaviour
 		
 		calcThrow();
 		ToThrow.rigidbody.AddForce(throwDir * throwForce, ForceMode.VelocityChange);
+		
+		Invoke("SpawnNew", TimeBetweenSpawn);
 	}
 	
-	public void DoThrow()
+	void SpawnNew()
+	{
+		ToThrow = (GameObject)Instantiate(ThrowPrefab, SpawnPoint.transform.position, SpawnPoint.transform.localRotation);
+		GestureTouchWake gtw = ToThrow.GetComponent<GestureTouchWake>();
+		gtw.Dropped += DoThrow;
+	}
+	
+	void DoThrow(object sender, System.EventArgs e)
 	{
 		doThrow = true;
 	}
@@ -44,10 +58,5 @@ public class SlingshotController : MonoBehaviour
 		
 		float dist = Vector3.Distance(ToThrow.transform.position, postMiddle);
 		throwForce = dist * Mathf.Sqrt(ElasticStrength / ToThrow.rigidbody.mass);
-	}
-	
-	void OnTriggerEnter(Collider other)
-	{
-		ToThrow = other.gameObject;
 	}
 }

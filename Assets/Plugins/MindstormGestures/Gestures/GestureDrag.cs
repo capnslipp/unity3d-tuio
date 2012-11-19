@@ -66,6 +66,8 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	
 	public void AddTouch(Touch t, RaycastHit hit)
 	{
+		if (!enabled) return;
+		
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
 		addJoint(bod, go, hit.point, t);
@@ -73,12 +75,16 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	
 	public void RemoveTouch(Touch t)
 	{
+		if (!enabled) return;
+		
 		removeJoint(t.fingerId);
 		removeDragger(t);
 	}
 	
 	public void UpdateTouch(Touch t)
 	{
+		if (!enabled) return;
+		
 		if (t.phase != TouchPhase.Moved) return;
 		
 		RaycastHit h = new RaycastHit();
