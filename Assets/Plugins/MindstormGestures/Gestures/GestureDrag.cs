@@ -34,7 +34,8 @@ using Mindstorm.Gesture;
 
 public class GestureDrag : MonoBehaviour, IGestureHandler
 {
-	public float fixedDraggerHeight = 0f;
+	public float liftBy = 0f;
+	public bool fixedDraggerHeight = false;
 	public bool attachToCenterOfMass = false;
 	public bool attachToParent = false;
 	
@@ -47,6 +48,9 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	
 	Dictionary<int, Joint> joints = new Dictionary<int, Joint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
+	
+	public Vector3 upDir = Vector3.up;
+	public Vector3 startPos;
 	
 	public Collider DragBounds;
 	
@@ -71,6 +75,8 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
 		addJoint(bod, go, hit.point, t);
+		
+		startPos = transform.position;
 	}
 	
 	public void RemoveTouch(Touch t)
@@ -85,18 +91,27 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	{
 		if (!enabled) return;
 		
-		if (t.phase != TouchPhase.Moved) return;
+		// if (t.phase != TouchPhase.Moved) return;
+		
+		Ray touchRay = getRay(t);
 		
 		RaycastHit h = new RaycastHit();
-		bool hasHit = (Physics.Raycast(getRay(t), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		bool hasHit = (Physics.Raycast(touchRay, out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
+		
+		Vector3 aPos = h.point;
+		Vector3 bPos = h.point;
+		if (fixedDraggerHeight) bPos = h.point.LockUpdate(upDir.InvertAxis(), startPos);
+		bPos += upDir * liftBy;
+		
+		Vector3 o = _targetCamera.transform.position;
+		Vector3 oa = aPos - o;
+		Vector3 ob = bPos - o;
+		
+		Vector3 cPos = o + ((Vector3.Dot(ob, upDir) / Vector3.Dot(oa, upDir)) * oa);
 		
 		if (!hasHit) return;
 		
-		Vector3 hitPoint = h.point;
-		if (h.collider.gameObject == gameObject)
-		{
-			hitPoint = new Vector3(hitPoint.x, transform.position.y, hitPoint.z);
-		}
+		Vector3 hitPoint = cPos;
 		
 		// Check if we are within bounds (if defined)
 		if (DragBounds != null)
@@ -137,8 +152,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	void updateDragger(Vector3 hitPoint, Touch t, bool visible)
 	{
 		GameObject go = draggers[t.fingerId];
-		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
-		go.transform.position = new Vector3(hitPoint.x, y, hitPoint.z);
+		go.transform.position = hitPoint;
 		
 		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 	}
@@ -146,8 +160,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	GameObject addDragger(Vector3 hitPoint, Touch t, bool visible)
 	{
 		GameObject go = (GameObject)Instantiate(dragger);
-		float y = fixedDraggerHeight == 0 ? hitPoint.y : fixedDraggerHeight;
-		go.transform.position = new Vector3(hitPoint.x, y, hitPoint.z);
+		go.transform.position = hitPoint;
 		
 		if (go.renderer != null) go.renderer.enabled = visible && showDraggers;
 		
