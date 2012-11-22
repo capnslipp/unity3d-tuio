@@ -29,6 +29,9 @@ using System.Collections.Generic;
 
 namespace Mindstorm.Gesture.Config
 {
+	/// <summary>
+	/// Configuration information for a trace line.
+	/// </summary>
 	[System.Serializable]
 	public class TraceConfig
 	{

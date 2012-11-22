@@ -27,6 +27,9 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Simple data structure for storing a touch trace.
+/// </summary>
 public struct TouchTrace
 {
 	public float startTime;

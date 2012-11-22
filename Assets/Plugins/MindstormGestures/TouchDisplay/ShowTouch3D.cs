@@ -108,7 +108,7 @@ public class ShowTouch3D : MonoBehaviour
 	{
 		GameObject go = (GameObject)Instantiate(TouchIcon);
 		go.transform.position = new Vector3(hitPoint.x, hitPoint.y, hitPoint.z);
-		//go.renderer.enabled = visible;
+		go.renderer.enabled = visible;
 		
 		touchIcons.Add(t.fingerId, go);
 		return go;

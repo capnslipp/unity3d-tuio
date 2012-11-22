@@ -40,8 +40,12 @@ using Mindstorm.Gesture.Config;
 [RequireComponent(typeof(TouchConfig))]
 public class ShowTouchGUI : MonoBehaviour
 {
-	Dictionary<int, GUITexture> touchIcons = new Dictionary<int, GUITexture>();
+	/// <summary>
+	/// A prefab representing the look of the touch icon to be displayed.
+	/// </summary>
 	public GameObject GUITouchIcon;
+	
+	Dictionary<int, GUITexture> touchIcons = new Dictionary<int, GUITexture>();
 	
 	void Update()
 	{

@@ -2,13 +2,21 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs">
     <Files>
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="117" Column="70" />
-      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="125" Column="22" />
-      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchPickup.cs" Line="44" Column="43" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" Line="60" Column="3" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureNTouchClick.cs" Line="78" Column="20" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ShowFps.cs" Line="45" Column="2" />
+      <File FileName="Assets\Plugins\MindstormGestures\TouchDisplay\ShowTouch3D.cs" Line="111" Column="3" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureCreate.cs" Line="39" Column="21" />
+      <File FileName="Assets\Plugins\MindstormGestures\Debug\TouchTrace.cs" Line="31" Column="53" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\ScaleRotateHelper.cs" Line="80" Column="35" />
+      <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" Line="40" Column="39" />
+      <File FileName="Assets\Plugins\MindstormGestures\Helpers\MatchPosition.cs" Line="40" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Simon Work PC\Downloads\unity3d-tuio\trunk\Assets\Plugins\MindstormGestures\Gestures\GestureTouchCreate.cs" line="111" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

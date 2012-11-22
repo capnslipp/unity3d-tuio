@@ -50,6 +50,22 @@ namespace Mindstorm.Gesture
 			set;
 		}	
 		
+		List<GestureHit> innerCast(Ray targetRay, Collider castAgainst)
+		{
+			List<GestureHit> hitBehaviours = new List<GestureHit>();
+			
+			RaycastHit innerHit = new RaycastHit();
+			
+			if (castAgainst.Raycast(targetRay, out innerHit, 100f))
+			{
+				GestureHit h = new GestureHit();
+				h.HitHandlers = GetComponentsByInterfaceType<IGestureHandler>(innerHit.collider.transform);
+				h.Hit = innerHit;
+				hitBehaviours.Add(h);
+			}
+			return hitBehaviours;
+		}
+		
 		List<GestureHit> innerCast(Ray targetRay)
 		{
 			List<GestureHit> hitBehaviours = new List<GestureHit>();
@@ -98,6 +114,27 @@ namespace Mindstorm.Gesture
 				lh = innerCast(toCast);
 			}
 			
+			// Update the touch link with the found handlers
+			MonoBehaviour[] allHanders = lh.SelectMany(m => m.HitHandlers).ToArray();
+			touchLinks[t.fingerId] = allHanders;
+	
+			// Notify all handlers
+			foreach (GestureHit gh in lh)
+	        {
+				foreach (MonoBehaviour mb in gh.HitHandlers)
+				{
+	            	((IGestureHandler)mb).AddTouch(t, gh.Hit);
+				}
+	        }
+		}
+		
+		public void AddTouch(Touch t, Ray toCast, Collider castAgainst)
+		{	
+			// Add it to the touchlinks
+			touchLinks.Add(t.fingerId, new MonoBehaviour[0]);
+			
+			List<GestureHit> lh = innerCast(toCast, castAgainst);
+						
 			// Update the touch link with the found handlers
 			MonoBehaviour[] allHanders = lh.SelectMany(m => m.HitHandlers).ToArray();
 			touchLinks[t.fingerId] = allHanders;
@@ -164,7 +201,7 @@ namespace Mindstorm.Gesture
 			linksToRemove.Clear();
 		}
 		
-		public List<MonoBehaviour> GetComponentsByInterfaceType<T>(Transform transform)	
+		public static List<MonoBehaviour> GetComponentsByInterfaceType<T>(Transform transform)	
 		{
 			var coms = transform.gameObject.GetComponents<MonoBehaviour>().Where(c => c is T);
 			return coms.ToList();

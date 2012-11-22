@@ -31,12 +31,26 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+/// <summary>
+/// Triggers a message once the object has been touched a specific number of times in quick succession.
+/// </summary>
 public class GestureNTouchClick : GestureTouchClick
 {
+	/// <summary>
+	/// Number of clicks before the message is sent.
+	/// </summary>
 	public int RequireClickCount = 2;
-	public int ClickCount = 0;
-	public float ClickTimeout = 0.3f;
 	
+	/// <summary>
+	/// Number of clicks currently recorded.
+	/// </summary>
+	public int ClickCount = 0;
+	
+	/// <summary>
+	/// Controls how quickly the clicks must be made after each other.
+	/// </summary>
+	public float ClickTimeout = 0.3f;
+			
 	public override void DoClick(RaycastHit h)
 	{
 		ClickCount += 1;
@@ -48,7 +62,7 @@ public class GestureNTouchClick : GestureTouchClick
 	
 	public void DoNClick(RaycastHit h)
 	{
-		BroadcastTouchMessage("NClick", h);
+		BroadcastTouchMessage(ClickMessage, h);
 	}
 	
 	void OnEnable()

@@ -39,18 +39,17 @@ using Mindstorm.Gesture;
 [RequireComponent(typeof(ScaleRotateHelper))]
 public class GesturePhoto : MonoBehaviour, IGestureHandler
 {
+	/// <summary>
+	/// The layers which will be Raycast on to evaluate where to drag the object.  
+	/// The object itself should not be on these layers.
+	/// </summary>
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
+	Bounds BoundingBox;
 	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
-	
 	bool touchesChanged = false;
-	
 	Camera _targetCamera;
-	
-	public Bounds BoundingBox;
-	
 	ScaleRotateHelper scaler;
-	
 	float yPos = 0f;
 	
 	void Start()

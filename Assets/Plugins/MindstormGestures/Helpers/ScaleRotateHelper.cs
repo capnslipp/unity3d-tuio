@@ -32,15 +32,39 @@ using System.Collections;
 /// </summary>
 public class ScaleRotateHelper : MonoBehaviour
 {
+	/// <summary>
+	/// Whether or not a move has been started (and not ended)
+	/// </summary>
 	public bool IsMoving = false;
 	
+	/// <summary>
+	/// Restrict scaling to specific axis.
+	/// </summary>
 	public Vector3 scaleAxis = Vector3.up.InvertAxis();
+	
+	/// <summary>
+	/// Restrict movement to a specific axis (by default, x and z).
+	/// </summary>
 	public Vector3 moveAxis = Vector3.up.InvertAxis();
+	
+	/// <summary>
+	/// The axis around which the object will be rotated.
+	/// </summary>
 	public Vector3 rotateAxis = Vector3.up;
 	
+	/// <summary>
+	/// Minimum scale the object can be (absolute)
+	/// </summary>
 	public Vector3 maxScale = Vector3.one * 3f;
+	
+	/// <summary>
+	/// Maximum scale the object can be (absolute)
+	/// </summary>
 	public Vector3 minScale = Vector3.one * 0.5f;
 	
+	/// <summary>
+	/// How much damping is applied to smooth the movement.
+	/// </summary>
 	public float DampingSpeed = 0.05f;
 		
 	Vector3 A; // first touch group

@@ -32,19 +32,32 @@ using System.Collections.Generic;
 using Mindstorm.Gesture;
 using Mindstorm.Gesture.Config;
 
+/// <summary>
+/// Takes touch information from the InputProxy and uses the TouchLinker to assign new touches to hit objects
+/// or update existing touch information on objects already hit.
+/// </summary>
 [RequireComponent(typeof(TouchConfig))]
 public class TouchToGesture : MonoBehaviour
 {
-	TouchLinker linker = new TouchLinker();
-	
+	/// <summary>
+	/// Which layers are Raycast on when a touch is added.  Updated touches are not Raycast on from this behaviour, so this only applies to added touches.
+	/// GestureHandlers are responsible for RayCasting the updated touches if required.
+	/// </summary>
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
+	/// <summary>
+	/// Raycast through the whole scene not stopping when an object is hit.  This will trigger AddTouch message on every GestureHandler in the scene under the touch.
+	/// </summary>
+	public bool DoRayCastAll = false;
+	
+	TouchLinker linker = new TouchLinker();
 	Camera _targetCamera;
 		
 	void Start()
 	{
 		_targetCamera = FindCamera();
 		linker.RaycastLayerMask = (LayerMask)LayerHelper.GetLayerMask(hitOnlyLayers);
+		linker.DoRayCastAll = DoRayCastAll;
 	}
 	
 	void Update()

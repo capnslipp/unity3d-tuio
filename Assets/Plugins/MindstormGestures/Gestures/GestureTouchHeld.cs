@@ -31,13 +31,33 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+/// <summary>
+/// Detects when a touch has been held down on this object for a certain amount of time.
+/// Very useful for push buttons where they must be pushed all the way down.
+/// </summary>
 [RequireComponent(typeof(CountdownTimer))]
 public class GestureTouchHeld : GestureTouch
 {
 	public bool RelaxTime = true;
+	
+	/// <summary>
+	/// How long the touch must be held for before the HeldMessage is sent.
+	/// </summary>
 	public float HoldTime = 1.0f;
+	
+	/// <summary>
+	/// Message to send once the touch has been held for the specified time.
+	/// </summary>
 	public string HeldMessage;
+	
+	/// <summary>
+	/// Message to be sent when a touch is added.
+	/// </summary>
 	public string TouchStartMessege;
+	
+	/// <summary>
+	/// Message to be sent when touch is removed.
+	/// </summary>
 	public string CancelMessage;
 	
 	CountdownTimer heldTimer = null;

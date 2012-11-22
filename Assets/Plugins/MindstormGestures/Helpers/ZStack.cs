@@ -45,6 +45,8 @@ public class ZStack : MonoBehaviour
 	
 	public static float Add(GameObject go)
 	{
+		if (Instance == null) return go.transform.position.y;
+		
 		goStack.Add(go);
 		
 		Instance.NumInStack = goStack.Count;
@@ -57,12 +59,16 @@ public class ZStack : MonoBehaviour
 	
 	public static void Remove(GameObject go)
 	{
+		if (Instance == null) return;
+		
 		goStack.Remove(go);
 		Instance.NumInStack = goStack.Count;
 	}
 	
 	public static bool Contains(GameObject go)
 	{
+		if (Instance == null) return false;
+		
 		return goStack.Contains(go);
 	}
 }

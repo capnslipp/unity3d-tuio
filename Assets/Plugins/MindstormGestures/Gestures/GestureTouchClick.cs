@@ -36,9 +36,15 @@ using Mindstorm.Gesture;
 /// </summary>
 public class GestureTouchClick : GestureTouch
 {
+	/// Different tolerances to stop incorrect of accidental triggering on button
 	public TouchTolerances Tolerances = new TouchTolerances();
 	
-	public float TimeAdded = 0f;
+	/// <summary>
+	/// Message to send on click
+	/// </summary>
+	public string ClickMessage = "Click";
+	
+	float TimeAdded = 0f;
 	
 	public override void AddTouch (Touch t, RaycastHit hit)
 	{
@@ -82,6 +88,6 @@ public class GestureTouchClick : GestureTouch
 	
 	public virtual void DoClick(RaycastHit h)
 	{
-		BroadcastTouchMessage("Click", h);
+		BroadcastTouchMessage(ClickMessage, h);
 	}
 }
