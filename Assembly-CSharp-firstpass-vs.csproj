@@ -58,6 +58,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\GestureInterface\IGestureHandler.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureCreate.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDraw.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureNTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhysicsDrag.cs" />
