@@ -45,8 +45,6 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 	/// </summary>
 	public Camera targetCamera;
 	
-	Dictionary<int, TouchTrace> liveTraces = new Dictionary<int, TouchTrace>();
-	
 	public int[] hitOnlyLayers = new int[1] { 0 };
 	
 	public Material lineMat;
@@ -56,6 +54,7 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 	public bool DestroyAfterDraw = true;
 	
 	List<GameObject> toDestroy = new List<GameObject>();
+	Dictionary<int, TouchTrace> liveTraces = new Dictionary<int, TouchTrace>();
 		
 	void Start()
 	{
@@ -114,6 +113,7 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 	void drawTrace(int TouchID, TouchTrace tr)
 	{ 
 		GameObject go = new GameObject("TMP_LINE");
+		go.layer = gameObject.layer;
 		go.transform.parent = transform;
 		
 		LineRenderer lr = go.AddComponent<LineRenderer>();
