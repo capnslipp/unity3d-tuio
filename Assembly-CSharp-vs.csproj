@@ -44,29 +44,29 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Sandbox\Toys\Bombs\Scripts\Exploder.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Bombs\Scripts\ImpactTimer.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Bombs\Scripts\ImpactTrigger.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Bombs\Scripts\TimedTrigger.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Brick\Scripts\Glue.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Cannon\Scripts\CannonController.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Cannon\Scripts\FireCannonClickHandler.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Cannon\Scripts\PowerController.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Scripts\CenterPull.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Scripts\LaunchRigidBody.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Scripts\PhotoLoader.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Scripts\StartSleeping.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Scripts\TimerAnimationPos.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Walls\Scripts\WallBuildClickHandler.cs" />
-     <Compile Include="Assets\Sandbox\Toys\Walls\Scripts\WallBuilder.cs" />
-     <None Include="Assets\Sandbox\Toys\Rooms\WalledRoom\Components\TestRoom1.shader" />
-     <None Include="Assets\Sandbox\Toys\Boxes\Components\FixedBox.shader" />
-     <None Include="Assets\Sandbox\Toys\CannonBall\Components\CannonBall.shader" />
-     <None Include="Assets\Sandbox\Toys\Cannon\Components\Gauge.shader" />
-     <None Include="Assets\Sandbox\Toys\Photo\Components\PictureFrame.shader" />
-     <None Include="Assets\Sandbox\Toys\Rooms\OpenRoom\Components\FloorTarget.shader" />
-     <None Include="Assets\Sandbox\Toys\Boxes\Components\SprungBox.shader" />
-     <None Include="Assets\Sandbox\Toys\Cannon\Components\Cannon.shader" />
+     <Compile Include="Assets\Examples\Toys\Bombs\Scripts\Exploder.cs" />
+     <Compile Include="Assets\Examples\Toys\Bombs\Scripts\ImpactTimer.cs" />
+     <Compile Include="Assets\Examples\Toys\Bombs\Scripts\ImpactTrigger.cs" />
+     <Compile Include="Assets\Examples\Toys\Bombs\Scripts\TimedTrigger.cs" />
+     <Compile Include="Assets\Examples\Toys\Brick\Scripts\Glue.cs" />
+     <Compile Include="Assets\Examples\Toys\Cannon\Scripts\CannonController.cs" />
+     <Compile Include="Assets\Examples\Toys\Cannon\Scripts\FireCannonClickHandler.cs" />
+     <Compile Include="Assets\Examples\Toys\Cannon\Scripts\PowerController.cs" />
+     <Compile Include="Assets\Examples\Toys\Scripts\CenterPull.cs" />
+     <Compile Include="Assets\Examples\Toys\Scripts\LaunchRigidBody.cs" />
+     <Compile Include="Assets\Examples\Toys\Scripts\PhotoLoader.cs" />
+     <Compile Include="Assets\Examples\Toys\Scripts\StartSleeping.cs" />
+     <Compile Include="Assets\Examples\Toys\Scripts\TimerAnimationPos.cs" />
+     <Compile Include="Assets\Examples\Toys\Walls\Scripts\WallBuildClickHandler.cs" />
+     <Compile Include="Assets\Examples\Toys\Walls\Scripts\WallBuilder.cs" />
+     <None Include="Assets\Examples\Toys\Rooms\WalledRoom\Components\TestRoom1.shader" />
+     <None Include="Assets\Examples\Toys\Boxes\Components\FixedBox.shader" />
+     <None Include="Assets\Examples\Toys\CannonBall\Components\CannonBall.shader" />
+     <None Include="Assets\Examples\Toys\Cannon\Components\Gauge.shader" />
+     <None Include="Assets\Examples\Toys\Photo\Components\PictureFrame.shader" />
+     <None Include="Assets\Examples\Toys\Rooms\OpenRoom\Components\FloorTarget.shader" />
+     <None Include="Assets\Examples\Toys\Boxes\Components\SprungBox.shader" />
+     <None Include="Assets\Examples\Toys\Cannon\Components\Cannon.shader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">

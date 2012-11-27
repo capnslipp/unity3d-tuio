@@ -103,14 +103,14 @@
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TuioReceiver\TuioConfiguration.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TuioReceiver\TuioParser.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TuioReceiver\TuioTracking.cs" />
-     <None Include="Assets\Sandbox\Toys\Rooms\WalledRoom\Components\TestRoom1.shader" />
-     <None Include="Assets\Sandbox\Toys\Boxes\Components\FixedBox.shader" />
-     <None Include="Assets\Sandbox\Toys\CannonBall\Components\CannonBall.shader" />
-     <None Include="Assets\Sandbox\Toys\Cannon\Components\Gauge.shader" />
-     <None Include="Assets\Sandbox\Toys\Photo\Components\PictureFrame.shader" />
-     <None Include="Assets\Sandbox\Toys\Rooms\OpenRoom\Components\FloorTarget.shader" />
-     <None Include="Assets\Sandbox\Toys\Boxes\Components\SprungBox.shader" />
-     <None Include="Assets\Sandbox\Toys\Cannon\Components\Cannon.shader" />
+     <None Include="Assets\Examples\Toys\Rooms\WalledRoom\Components\TestRoom1.shader" />
+     <None Include="Assets\Examples\Toys\Boxes\Components\FixedBox.shader" />
+     <None Include="Assets\Examples\Toys\CannonBall\Components\CannonBall.shader" />
+     <None Include="Assets\Examples\Toys\Cannon\Components\Gauge.shader" />
+     <None Include="Assets\Examples\Toys\Photo\Components\PictureFrame.shader" />
+     <None Include="Assets\Examples\Toys\Rooms\OpenRoom\Components\FloorTarget.shader" />
+     <None Include="Assets\Examples\Toys\Boxes\Components\SprungBox.shader" />
+     <None Include="Assets\Examples\Toys\Cannon\Components\Cannon.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
