@@ -39,6 +39,9 @@ namespace Mindstorm.Gesture.Config
 	[Serializable]
 	public class TouchHandlerConfig
 	{
+		/// <summary>
+		/// Native input type uses the Input.touches from Unity itself.  Tuio input type uses TuioInput.touches.
+		/// </summary>
 		public enum InputTypeEnum
 		{
 			Native = 1,

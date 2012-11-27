@@ -52,6 +52,10 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 	public Material lineMat;
 	
 	public float LineWidth = 0.02f;
+	
+	public bool DestroyAfterDraw = true;
+	
+	List<GameObject> toDestroy = new List<GameObject>();
 		
 	void Start()
 	{
@@ -60,6 +64,8 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 	
 	void Update()
 	{
+		destroyOld();
+			
 		foreach (KeyValuePair<int, TouchTrace> tr in liveTraces)
 		{
 			Vector3[] pos = tr.Value.positions.ToArray();
@@ -96,6 +102,15 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 	{
 	}
 	
+	void destroyOld()
+	{
+		foreach (GameObject g in toDestroy)
+		{
+			Destroy(g);
+		}
+		toDestroy.Clear();
+	}
+	
 	void drawTrace(int TouchID, TouchTrace tr)
 	{ 
 		GameObject go = new GameObject("TMP_LINE");
@@ -114,6 +129,8 @@ public class GestureDraw : MonoBehaviour, IGestureHandler
 		{
 			lr.SetPosition(i, pos[i]);
 		}
+		
+		if (DestroyAfterDraw) toDestroy.Add(go);
 	}
 	
 	void startTrace(RaycastHit h, Touch t, bool hasHit)
