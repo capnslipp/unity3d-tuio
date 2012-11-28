@@ -29,6 +29,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Handles the vertical ordering of objects in a stack way to allow 
+/// picked up objects to be lifted above other picked up object.
+/// </summary>
 public class ZStack : MonoBehaviour
 {
 	static List<GameObject> goStack = new List<GameObject>();
@@ -43,9 +47,14 @@ public class ZStack : MonoBehaviour
 		Instance = this;
 	}
 	
+	/// <summary>
+	/// Add the specified gameObject to the stack and returns the Y position the object needs to be placed in.
+	/// </summary>
 	public static float Add(GameObject go)
 	{
 		if (Instance == null) return go.transform.position.y;
+		
+		if (goStack.Contains(go)) return go.transform.position.y;
 		
 		goStack.Add(go);
 		
@@ -57,6 +66,9 @@ public class ZStack : MonoBehaviour
 		return z;
 	}
 	
+	/// <summary>
+	/// Remove the specified gameObject from the stack so another can take it's place in Y.
+	/// </summary>
 	public static void Remove(GameObject go)
 	{
 		if (Instance == null) return;
@@ -65,6 +77,9 @@ public class ZStack : MonoBehaviour
 		Instance.NumInStack = goStack.Count;
 	}
 	
+	/// <summary>
+	/// Checks if the specified gameObject is already present in the stack.
+	/// </summary>
 	public static bool Contains(GameObject go)
 	{
 		if (Instance == null) return false;

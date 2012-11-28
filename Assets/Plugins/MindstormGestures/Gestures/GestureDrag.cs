@@ -33,10 +33,9 @@ using System.Linq;
 using Mindstorm.Gesture;
 
 /// <summary>
-/// Gesture for handling Kinematic movement, scaling and rotation of an object.
-/// Designed for use in a photo browser.
+/// Gesture for handling Kinematic (or non-physics) movement (movement only) of an object.
+/// Uses MatchPosition behaviour for smoothing movement from current position to target.
 /// </summary>
-/// 
 [RequireComponent(typeof(MatchPosition))]
 public class GestureDrag : MonoBehaviour, IGestureHandler
 {
@@ -74,21 +73,29 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		oldCentre = centre;
 		centre = getCentrePoint();
 		
-		if (touchesChanged) 
+		if (touchesChanged)
 		{
 			oldCentre = centre;
+			
+			if (touches.Count == 0)	
+			{
+				ZStack.Remove(gameObject);
+			}
+			else
+			{
+				yPos = ZStack.Add(gameObject);	
+			}
 		}
-		else
+		else if (touches.Count > 0)
 		{
-			//yPos = ZStack.Add(gameObject);
-		}
-		
-		delta = (centre - oldCentre);
-		target += delta;
+			delta = (centre - oldCentre);
+			target += delta;
+		}		
 	}
 	
 	void Update()
 	{
+		if (touches.Count == 0) target = transform.position;
 		matcher.target = target;
 	}
 	
