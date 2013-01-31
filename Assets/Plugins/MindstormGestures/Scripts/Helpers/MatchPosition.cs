@@ -26,7 +26,7 @@ public class MatchPosition : MonoBehaviour
 	/// <summary>
 	/// Controls how fast the smoothing is done.
 	/// </summary>
-	public float smoothingSpeed = 4f;
+	public float smoothingSpeed = 20f;
 	
 	/// <summary>
 	/// Type of curve used for smoothing.

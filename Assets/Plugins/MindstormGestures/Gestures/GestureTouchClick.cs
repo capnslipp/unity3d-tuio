@@ -46,9 +46,9 @@ public class GestureTouchClick : GestureTouch
 	
 	float TimeAdded = 0f;
 	
-	public override void AddTouch (Touch t, RaycastHit hit)
+	public override void AddTouch (Touch t, RaycastHit hit, Camera hitOn)
 	{
-		base.AddTouch(t, hit);
+		base.AddTouch(t, hit, hitOn);
 		
 		TimeAdded = Time.time;
 		
@@ -62,7 +62,7 @@ public class GestureTouchClick : GestureTouch
 		if (Tolerances.TriggerOnTouchDown) return;
 		
 		// Not most recent touch?
-		if (m_curTouch.fingerId != t.fingerId) return;
+		if (curTouch.fingerId != t.fingerId) return;
 		
 		if (Tolerances.CheckHeldTime && Time.time - TimeAdded > Tolerances.MaxHeldTime) return;
 		
@@ -70,10 +70,10 @@ public class GestureTouchClick : GestureTouch
 		{
 			// Over the movement threshold?
 			Vector2 curTouchPos = new Vector2(
-					t.position.x / (float)m_screenWidth,
-				    t.position.y / (float)m_screenHeight);
+					t.position.x / (float)screenWidth,
+				    t.position.y / (float)screenHeight);
 		
-			if (Vector2.Distance(curTouchPos, m_originalPos) > Tolerances.MaximumPosChange) return;
+			if (Vector2.Distance(curTouchPos, originalPos) > Tolerances.MaximumPosChange) return;
 		}		
 		
 		// Check if the touch still hits the same collider

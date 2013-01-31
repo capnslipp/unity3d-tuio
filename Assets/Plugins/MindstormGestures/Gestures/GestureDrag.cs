@@ -33,9 +33,10 @@ using System.Linq;
 using Mindstorm.Gesture;
 
 /// <summary>
-/// Gesture for handling Kinematic (or non-physics) movement (movement only) of an object.
-/// Uses MatchPosition behaviour for smoothing movement from current position to target.
+/// Gesture for handling Kinematic movement, scaling and rotation of an object.
+/// Designed for use in a photo browser.
 /// </summary>
+/// 
 [RequireComponent(typeof(MatchPosition))]
 public class GestureDrag : MonoBehaviour, IGestureHandler
 {
@@ -48,22 +49,51 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	Bounds BoundingBox;
 	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
 	bool touchesChanged = false;
-	Camera _targetCamera;
-	float yPos = 0f;
+	
+	Camera targetCamera;
 	
 	Vector3 oldCentre = Vector3.zero;
 	Vector3 centre = Vector3.zero;
 	Vector3 delta = Vector3.zero;
 	Vector3 target = Vector3.zero;
 	
+	/// <summary>
+	/// Will lift the object up from it's starting position by N world co-ordinates.
+	/// </summary>
+	public float liftBy = 0f;
+	
+	/// <summary>
+	/// Up direction is by default in Y.  If you gravity or project is oriented differently, 
+	/// you can change this to modify the direction which objects are lifted.
+	/// </summary>
+	public Vector3 upDir = Vector3.up;
+	
 	MatchPosition matcher;
+	
+	void Awake()
+	{
+		matcher = GetComponent<MatchPosition>();
+	}
 	
 	void Start()
 	{
-		_targetCamera = FindCamera();
-		yPos = transform.position.y;
-		matcher = GetComponent<MatchPosition>();
 		target = transform.position;
+	}
+	
+	void OnEnable()
+	{
+		touches.Clear();
+		ResetBounds();
+		
+		target = transform.position;
+		matcher.target = target;
+	}
+	
+	void ResetBounds()
+	{
+		BoundingBox = new Bounds(Vector3.zero, Vector3.zero);
+		oldCentre = Vector3.zero;
+		centre = Vector3.zero;
 	}
 	
 	void changeBoundingBox()
@@ -73,52 +103,43 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		oldCentre = centre;
 		centre = getCentrePoint();
 		
-		if (touchesChanged)
+		if (liftBy != 0f) centre = centre.UpTowards(targetCamera.transform.position, upDir, liftBy);
+		
+		if (touchesChanged) 
 		{
 			oldCentre = centre;
-			
-			if (touches.Count == 0)	
-			{
-				ZStack.Remove(gameObject);
-			}
-			else
-			{
-				yPos = ZStack.Add(gameObject);	
-			}
 		}
-		else if (touches.Count > 0)
-		{
-			delta = (centre - oldCentre);
-			target += delta;
-		}		
+		
+		delta = (centre - oldCentre);
+		target += delta;
 	}
 	
 	void Update()
 	{
-		if (touches.Count == 0) target = transform.position;
 		matcher.target = target;
 	}
 	
 	Vector3 getCentrePoint()
 	{
-		return getWorldPoint(BoundingBox.center).SetY(yPos);
+		return getWorldPoint(BoundingBox.center);
 	}
 	
 	Vector3 getWorldPoint(Vector3 screenPoint)
 	{
 		RaycastHit h;
 		Physics.Raycast(getRay(screenPoint), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers));
-		return h.point.SetY(yPos);
+		return h.point;
 	}
 	
 	Ray getRay(Vector3 screenPoint)
 	{
-		Ray targetRay = _targetCamera.ScreenPointToRay(screenPoint);
+		Ray targetRay = targetCamera.ScreenPointToRay(screenPoint);
 		return targetRay;
 	}
 	
-	public void AddTouch(Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
+		targetCamera = hitOn;
 		touches.Add(t.fingerId, t);
 		touchesChanged = true;
 	}
@@ -131,6 +152,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	
 	public void UpdateTouch(Touch t)
 	{
+		if (!touches.ContainsKey(t.fingerId)) return;
 		touches[t.fingerId] = t;
 	}
 	
@@ -138,13 +160,5 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	{
 		changeBoundingBox();
 		touchesChanged = false;
-	}
-		
-	Camera FindCamera ()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
 	}
 }

@@ -89,36 +89,29 @@ public class GesturePhysicsDrag : MonoBehaviour, IGestureHandler
 	public Vector3 upDir = Vector3.up;
 	
 	/// <summary>
-	/// By default this will be set to the main camera in your scene.  
-	/// If you would like the position to be determined by a Raycast on a different camera, set the camera here.
-	/// </summary>
-	public Camera targetCamera;
-	
-	/// <summary>
 	/// Optional restriction for where the object can move.  Supports any form of Convex collider.  
 	/// The object will move to the edge of the collider and move no further.
 	/// </summary>
 	public Collider DragBounds;
 	
-	Vector3 startPos;
+	/// <summary>
+	/// By default this will be set to the main camera in your scene.  
+	/// If you would like the position to be determined by a Raycast on a different camera, set the camera here.
+	/// </summary>
+	Camera targetCamera;
 	
 	Dictionary<int, Joint> joints = new Dictionary<int, Joint>();
 	Dictionary<int, GameObject> draggers = new Dictionary<int, GameObject>();
 	
-	void Start()
-	{
-		if (targetCamera == null) targetCamera = FindCamera();
-	}
-	
-	public void AddTouch(Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
 		if (!enabled) return;
+		
+		targetCamera = hitOn;
 		
 		GameObject go = addDragger(hit.point, t, true);
 		Rigidbody bod = attachToParent ? transform.parent.rigidbody : rigidbody;
 		addJoint(bod, go, hit.point, t);
-		
-		startPos = transform.position;
 	}
 	
 	public void RemoveTouch(Touch t)
@@ -140,20 +133,7 @@ public class GesturePhysicsDrag : MonoBehaviour, IGestureHandler
 		bool hasHit = (Physics.Raycast(touchRay, out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers)));
 		if (!hasHit) return;
 		
-		// Fix the objects vertical position based on it's vertical position when it was touched.
-		Vector3 aPos = h.point;
-		Vector3 bPos = h.point;
-		if (fixedDraggerHeight) bPos = bPos.LockUpdate(upDir.InvertAxis(), startPos);
-		
-		// Lift the position by the fixed lift amount
-		bPos += upDir * liftBy;
-		
-		// Use triangulation to lift the object toward the camera rather than vertically up.  
-		// This moves the object in a horizontal plane to keep it aligned with the finger when lifting.
-		Vector3 o = targetCamera.transform.position;
-		Vector3 oa = aPos - o;
-		Vector3 ob = bPos - o;
-		Vector3 cPos = o + ((Vector3.Dot(ob, upDir) / Vector3.Dot(oa, upDir)) * oa);
+		Vector3 cPos = h.point.UpTowards(targetCamera.transform.position, upDir, liftBy);
 		
 		// Check if we are within bounds (if defined)
 		if (DragBounds != null)
@@ -252,13 +232,5 @@ public class GesturePhysicsDrag : MonoBehaviour, IGestureHandler
 		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
 		Ray targetRay = targetCamera.ScreenPointToRay(touchPoint);
 		return targetRay;
-	}
-	
-	Camera FindCamera ()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
 	}
 }

@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_3_5_6;UNITY_3_5;UNITY_EDITOR;ENABLE_PROFILER;UNITY_STANDALONE_WIN;ENABLE_GENERICS;ENABLE_DUCK_TYPING;ENABLE_TERRAIN;ENABLE_MOVIES;ENABLE_WEBCAM;ENABLE_MICROPHONE;ENABLE_NETWORK;ENABLE_CLOTH;ENABLE_WWW;ENABLE_SUBSTANCE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_1;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -46,12 +46,14 @@
   <ItemGroup>
      <Compile Include="Assets\Plugins\MindstormGestures\ClickHandlers\PlayAnimationClickHandler.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureCreate.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDestroyOnRemove.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureDrag.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureNTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhoto.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhysicsDrag.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhysicsPickup.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GesturePhysicsWake.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureSlide.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouch.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchClick.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Gestures\GestureTouchHeld.cs" />
@@ -74,7 +76,6 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\MathfHelper.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\ReTrigger.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\ScaleRotateHelper.cs" />
-     <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\ShowFps.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\TouchTolerances.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\WeightedPrefab.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\ZStack.cs" />
@@ -86,6 +87,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\InputProxy.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchLinker.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchToGesture.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\Scripts\MouseComponents\MouseInput.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\OSC\OSCBundle.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\OSC\OSCMessage.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\OSC\OSCPacket.cs" />
@@ -109,6 +111,7 @@
      <None Include="Assets\Examples\Toys\Photo\Components\PictureFrame.shader" />
      <None Include="Assets\Examples\Toys\Rooms\OpenRoom\Components\FloorTarget.shader" />
      <None Include="Assets\Examples\Toys\Boxes\Components\SprungBox.shader" />
+     <None Include="Assets\GestureConfig.xml" />
      <None Include="Assets\Examples\Toys\Cannon\Components\Cannon.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

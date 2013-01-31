@@ -45,7 +45,7 @@ namespace Mindstorm.Gesture
 		/// <param name='hit'>
 		/// Hit information from Raycast of the touch position.  I.e. what the touch hit.
 		/// </param>
-		void AddTouch(Touch t, RaycastHit hit);
+		void AddTouch(Touch t, RaycastHit hit, Camera hitOn);
 		
 		/// <summary>
 		/// Called when a touch is removed.  Called only once for each touch on the last frame.

@@ -66,23 +66,13 @@ public class GestureCreate : MonoBehaviour, IGestureHandler
 	/// </summary>
 	TouchLinker linker = new TouchLinker();
 	
-	/// <summary>
-	/// Camera used for internal recast to hit the created object.
-	/// </summary>
-	public Camera targetCamera;
-		
-	void Start()
-	{
-		targetCamera = FindCamera();
-	}
-	
-	public void AddTouch(Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
 		// Create the object we want in the touch position
-		GameObject go = createInstance(hit.point);
+		GameObject go = createInstance(hit.point, hitOn);
 		
 		// If object has a collider, relink internally
-		if (DoRecast && go.collider != null) linker.AddTouch(t, getRay(t), go.collider);
+		if (DoRecast && go.collider != null) linker.AddTouch(t, hitOn, go.collider);
 	}
 	
 	public void RemoveTouch(Touch t)
@@ -101,29 +91,15 @@ public class GestureCreate : MonoBehaviour, IGestureHandler
 	}
 
 	
-	GameObject createInstance(Vector3 pos)
+	GameObject createInstance(Vector3 pos, Camera cam)
 	{
 		float[] weightings = ToCreate.Select(w => w.RandomWeighting).ToArray();
 		int i = MathfHelper.BiasedRandom(weightings);
 		
 		GameObject go = ToCreate[i].PrefabToCreate;
-		pos += (upDir * CreateAbove);
+		
+		if (CreateAbove > 0f) pos = pos.UpTowards(cam.transform.position, upDir, CreateAbove);
+		
 		return (GameObject)Instantiate(go, pos, go.transform.rotation);
-	}
-	
-			
-	Ray getRay(Touch t)
-	{
-		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
-		Ray targetRay = targetCamera.ScreenPointToRay(touchPoint);
-		return targetRay;
-	}
-			
-	Camera FindCamera ()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
 	}
 }

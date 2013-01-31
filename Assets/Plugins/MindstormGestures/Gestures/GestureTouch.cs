@@ -35,41 +35,44 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 
 	public GameObject[] NotifyObjects;
 	
-	protected Touch m_curTouch;
-	protected bool m_touchSet = false;
-	protected Vector2 m_originalPos = Vector2.zero;
+	protected Touch curTouch;
+	protected bool touchSet = false;
+	protected Vector2 originalPos = Vector2.zero;
 	
-	Collider m_origCollider = null;
+	protected float screenWidth = 0f;
+	protected float screenHeight = 0f;
 	
-	protected float m_screenWidth = 0f;
-	protected float m_screenHeight = 0f;
+	Collider origCollider = null;
 	
 	public virtual void Start()
 	{
-		m_screenWidth = Camera.main.pixelWidth;
-		m_screenHeight = Camera.main.pixelHeight;
 	}
 	
 	protected void AssignCurTouch(Touch inTouch)
 	{
-		m_curTouch = inTouch;	
-		m_touchSet = true;
+		curTouch = inTouch;	
+		touchSet = true;
 	}
 	
 	protected void ClearCurTouch()
 	{
-		m_curTouch = new Touch();
-		m_touchSet = false;
+		curTouch = new Touch();
+		touchSet = false;
 	}
 	
-	public virtual void AddTouch(Touch t, RaycastHit hit)
+	public virtual void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
 		// This will always keep the most recent touch
 		AssignCurTouch(t);
-		m_originalPos = new Vector2(
-				t.position.x / (float)m_screenWidth,
-			    t.position.y / (float)m_screenHeight);
-		m_origCollider = hit.collider;
+		
+		screenWidth = hitOn.pixelWidth;
+		screenHeight = hitOn.pixelHeight;
+		
+		originalPos = new Vector2(
+				t.position.x / (float)screenWidth,
+			    t.position.y / (float)screenHeight);
+		
+		origCollider = hit.collider;
 	}
 	
 	public virtual void RemoveTouch(Touch t)
@@ -78,7 +81,7 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	
 	protected bool HitsOrigCollider(Touch inTouch, out RaycastHit outHit)
 	{
-		return m_origCollider.Raycast(getRay(inTouch), out outHit, Mathf.Infinity);		
+		return origCollider.Raycast(getRay(inTouch), out outHit, Mathf.Infinity);		
 	}
 	
 	protected void BroadcastTouchMessage(string inMessageName, RaycastHit inHit)

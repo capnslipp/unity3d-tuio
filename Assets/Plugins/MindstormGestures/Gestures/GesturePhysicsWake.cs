@@ -41,13 +41,18 @@ public class GesturePhysicsWake : MonoBehaviour, IGestureHandler
 {
 	int touchCount = 0;
 	
+	void OnEnable()
+	{
+		touchCount = 0;
+	}
+	
 	void DoWake()
 	{
 		rigidbody.isKinematic = false;
 		rigidbody.WakeUp();
 	}
 	
-	public void AddTouch(Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
 		touchCount++;
 	}

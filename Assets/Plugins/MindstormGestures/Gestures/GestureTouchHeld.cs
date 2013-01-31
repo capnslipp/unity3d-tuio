@@ -69,11 +69,11 @@ public class GestureTouchHeld : GestureTouch
 		heldTimer = GetComponent<CountdownTimer>();
 	}
 	
-	public override void AddTouch(Touch t, RaycastHit hit)
+	public override void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
-		base.AddTouch(t, hit);
+		base.AddTouch(t, hit, hitOn);
 		
-		if(m_curTouch.fingerId == t.fingerId)
+		if(curTouch.fingerId == t.fingerId)
 		{
 			if (TouchStartMessege != string.Empty) BroadcastTouchMessage(TouchStartMessege, hit);
 			
@@ -85,7 +85,7 @@ public class GestureTouchHeld : GestureTouch
 	{
 		base.RemoveTouch(t);
 		
-		if(m_curTouch.fingerId == t.fingerId)
+		if(curTouch.fingerId == t.fingerId)
 		{
 			CancelHeld();
 		}
@@ -95,7 +95,7 @@ public class GestureTouchHeld : GestureTouch
 	{
 		base.UpdateTouch(t);
 		
-		if(m_curTouch.fingerId != t.fingerId || !m_touchSet) return;
+		if(curTouch.fingerId != t.fingerId || !touchSet) return;
 		
 		if(heldTimer.RemainingTime > 0.0f) return;
 		

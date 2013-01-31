@@ -1,0 +1,7 @@
+<Configuration>
+	<!-- <Input Type="Native" ShowCursor="false" /> -->
+	<!-- <Input Type="Tuio" ShowCursor="false" /> -->
+	<!-- <Input Type="Mouse" ShowCursor="true" /> -->
+	
+	<Input Type="Mouse" ShowCursor="true" />
+</Configuration>

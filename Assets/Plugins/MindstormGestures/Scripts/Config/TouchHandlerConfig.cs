@@ -39,13 +39,11 @@ namespace Mindstorm.Gesture.Config
 	[Serializable]
 	public class TouchHandlerConfig
 	{
-		/// <summary>
-		/// Native input type uses the Input.touches from Unity itself.  Tuio input type uses TuioInput.touches.
-		/// </summary>
 		public enum InputTypeEnum
 		{
 			Native = 1,
-			Tuio = 2
+			Tuio = 2,
+			Mouse = 3
 		}
 		
 		public InputTypeEnum InputType;
@@ -57,6 +55,7 @@ namespace Mindstorm.Gesture.Config
 		{
 			InputTypes.Add(InputTypeEnum.Native, new InputTypeMethod("UnityEngine", "UnityEngine.Input"));
 			InputTypes.Add(InputTypeEnum.Tuio, new InputTypeMethod("Assembly-CSharp-firstpass", "TuioInput"));
+			InputTypes.Add(InputTypeEnum.Mouse, new InputTypeMethod("Assembly-CSharp-firstpass", "MouseInput"));
 		}
 		
 		public void Initialise()

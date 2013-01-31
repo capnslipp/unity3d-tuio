@@ -33,8 +33,8 @@ namespace Mindstorm.Gesture
 	{
 		public static int GetLayerMask(int[] hitOnlyLayers)
 		{
-			if (hitOnlyLayers.Length == 0) 
-				throw new System.ArgumentException("No layers in hitOnlyLayers array.  GetLayerMask requires at least one layer");
+			if (hitOnlyLayers == null || hitOnlyLayers.Length == 0) 
+				return 0;
 			
 			var layerMask = 1 << hitOnlyLayers[0];
 			for (int i = 1; i < hitOnlyLayers.Length; i++)

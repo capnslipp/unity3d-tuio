@@ -26,6 +26,8 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 
 using UnityEngine;
 using System.Collections;
+using System.Xml;
+using System.IO;
 
 using Mindstorm.Gesture.Config;
 
@@ -36,13 +38,101 @@ public class TouchConfig : MonoBehaviour
 {
 	public TouchHandlerConfig Config;
 	
+	public string ConfigFileName = @"GestureConfig.xml";
+	public bool LoadFromFile = true;
+	public bool ShowMouseCursor = true;
+	
+	void Awake()
+	{
+		Screen.showCursor = false;
+	}
+	
 	void Start()
 	{
-		Config.Initialise();
+		if (LoadFromFile) loadConfig();
+		Init();
 	}
 	
 	void Update()
 	{
-		if (Config.InputTypeChanged) Config.Initialise();
+		if (Config.InputTypeChanged) 
+		{
+			Init();
+		}
+	}
+	
+	void Init()
+	{
+		Config.Initialise();
+		Screen.showCursor = ShowMouseCursor;
+	}
+	
+	string getAppPath()
+	{
+		DirectoryInfo path = new DirectoryInfo(Application.dataPath);
+	    if (Application.platform == RuntimePlatform.OSXPlayer) 
+		{
+	        path = path.Parent.Parent;
+	    }
+	    else if (Application.platform == RuntimePlatform.WindowsPlayer) 
+		{
+	        path = path.Parent;
+	    }
+		return path.ToString();
+	}
+	
+	void loadConfig()
+	{
+		string configFile = Path.Combine(getAppPath(), ConfigFileName);
+		
+		if (!File.Exists(configFile))
+		{
+			Debug.LogWarning("Config file not found: " + configFile);
+			return;
+		}
+		
+		XmlDocument config = new XmlDocument();
+		config.Load(configFile);
+		parseConfig(config);
+	}
+	
+	void parseConfig(XmlDocument config)
+	{
+		XmlElement root = config.DocumentElement;
+		
+		XmlNode inputNode = root.SelectSingleNode("//Configuration/Input");
+		if (inputNode != null)
+		{
+			ParseType(inputNode.Attributes["Type"].Value);
+			ParseCursor(inputNode.Attributes["ShowCursor"].Value);
+		}
+		else
+		{
+			Debug.LogWarning("Input node not found in config, defaulting to " + Config.InputType.ToString());
+		}
+	}
+	
+	void ParseType(string s)
+	{
+		try
+		{
+			Config.InputType = (TouchHandlerConfig.InputTypeEnum)System.Enum.Parse(typeof(TouchHandlerConfig.InputTypeEnum), s, true);
+		}
+		catch
+		{
+			Debug.LogWarning(s + " is not a valid Input type, defaulting to " + Config.InputType.ToString());
+		}
+	}
+	
+	void ParseCursor(string s)
+	{
+		try
+		{
+			ShowMouseCursor = bool.Parse(s);
+		}
+		catch
+		{
+			Debug.LogWarning(s + " is not a valid Input value for ShowCursor, defaulting to " + ShowMouseCursor.ToString());
+		}
 	}
 }

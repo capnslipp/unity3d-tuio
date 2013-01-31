@@ -39,29 +39,56 @@ using Mindstorm.Gesture.Config;
 [RequireComponent(typeof(TouchConfig))]
 public class TouchToGesture : MonoBehaviour
 {
-	/// <summary>
-	/// Which layers are Raycast on when a touch is added.  Updated touches are not Raycast on from this behaviour, so this only applies to added touches.
-	/// GestureHandlers are responsible for RayCasting the updated touches if required.
-	/// </summary>
-	public int[] hitOnlyLayers = new int[1] { 0 };
-	
-	/// <summary>
-	/// Raycast through the whole scene not stopping when an object is hit.  This will trigger AddTouch message on every GestureHandler in the scene under the touch.
-	/// </summary>
-	public bool DoRayCastAll = false;
-	
 	TouchLinker linker = new TouchLinker();
-	Camera _targetCamera;
-		
-	void Start()
+	
+	public CameraCast[] CameraSetups;
+	
+	[System.Serializable]
+	public class CameraCast
 	{
-		_targetCamera = FindCamera();
-		linker.RaycastLayerMask = (LayerMask)LayerHelper.GetLayerMask(hitOnlyLayers);
-		linker.DoRayCastAll = DoRayCastAll;
+		/// <summary>
+		/// The camera to do the raycast from
+		/// </summary>
+		public Camera castOn;
+		
+		/// <summary>
+		/// Which layers are Raycast on when a touch is added.  Updated touches are not Raycast on from this behaviour, so this only applies to added touches.
+		/// GestureHandlers are responsible for RayCasting the updated touches if required.
+		/// </summary>
+		public int[] hitOnlyLayers = new int[] { 0 };
+		
+		/// <summary>
+		/// In additional to the hit only layers, use the culling mask of the camera.
+		/// </summary>
+		public CullingMaskUsage CullingMask = CullingMaskUsage.None;
+		
+		/// <summary>
+		/// Raycast through the whole scene not stopping when an object is hit.  This will trigger AddTouch message on every GestureHandler in the scene under the touch.
+		/// </summary>
+		public bool DoRayCastAll = false;
 	}
 	
+	public enum CullingMaskUsage
+	{
+		None = 0,
+		Limit = 1,
+		Add = 2
+	}
+	
+	void Start()
+	{
+		if (CameraSetups.Length == 0)
+		{
+			CameraCast c = new CameraCast();
+			c.castOn = FindCamera();
+			CameraSetups = new CameraCast[] { c };
+		}
+	}
+		
 	void Update()
 	{
+		if (CameraSetups.Length == 0) return;
+			
 		Touch[] allTouches = InputProxy.touches;
 		
 		foreach (Touch t in allTouches)
@@ -69,7 +96,11 @@ public class TouchToGesture : MonoBehaviour
 			switch (t.phase)
 			{
 			case TouchPhase.Began:  
-				linker.AddTouch(t, getRay(t, new RaycastHit()));
+				// Raycast cameras in order
+				foreach (CameraCast c in CameraSetups)
+				{
+					if (linker.AddTouch(t, c.castOn, getMask(c), c.DoRayCastAll)) break;
+				}
 				break;
 			case TouchPhase.Ended:
 				linker.RemoveTouch(t);
@@ -86,12 +117,19 @@ public class TouchToGesture : MonoBehaviour
 		}
 		linker.FinishNotification();
 	}
-			
-	Ray getRay(Touch t, RaycastHit hit)
+	
+	LayerMask getMask(CameraCast c)
 	{
-		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
-		Ray targetRay = _targetCamera.ScreenPointToRay(touchPoint);
-		return targetRay;
+		LayerMask mask = (LayerMask)LayerHelper.GetLayerMask(c.hitOnlyLayers);
+		if (c.CullingMask == CullingMaskUsage.Add)
+		{
+			mask |= c.castOn.cullingMask;
+		}
+		else if (c.CullingMask == CullingMaskUsage.Limit)
+		{
+			mask &= c.castOn.cullingMask;
+		}
+		return mask;
 	}
 	
 	Camera FindCamera ()

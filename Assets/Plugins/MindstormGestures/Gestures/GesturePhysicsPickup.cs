@@ -60,10 +60,19 @@ public class GesturePhysicsPickup : MonoBehaviour, IGestureHandler
 	Vector3 oldAngleVel = Vector3.zero;
 	Vector3 oldVel = Vector3.zero;
 	
+	public bool dropped = false;
+	
 	int touchCount = 0;
 	
 	void Start()
 	{
+		oldPos = transform.position;
+		oldRot = transform.rotation;
+	}
+	
+	void OnEnable()
+	{
+		touchCount = 0;
 		oldPos = transform.position;
 		oldRot = transform.rotation;
 	}
@@ -101,20 +110,17 @@ public class GesturePhysicsPickup : MonoBehaviour, IGestureHandler
 	void applyPhysics()
 	{
 		rigidbody.velocity = Velocity == Vector3.zero ? oldVel : Velocity;
-		rigidbody.angularVelocity = AngularVelocity == Vector3.zero ? oldAngleVel : AngularVelocity;;
-		
-		// rigidbody.velocity = Velocity;
-		// rigidbody.angularVelocity = AngularVelocity;
+		rigidbody.angularVelocity = AngularVelocity == Vector3.zero ? oldAngleVel : AngularVelocity;
 	}
 	
-	public void AddTouch(Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
 		touchCount++;
 	}
 	
 	public void RemoveTouch(Touch t)
 	{
-		touchCount--;
+		if (touchCount > 0) touchCount--;
 	}
 	
 	public void UpdateTouch(Touch t)
@@ -123,12 +129,14 @@ public class GesturePhysicsPickup : MonoBehaviour, IGestureHandler
 	
 	public void FinishNotification()
 	{
-		if (touchCount == 0) 
+		if (touchCount == 0 && !dropped) 
 		{
 			DoDrop(); 
+			dropped = true;
 		}
-		else if (!IsPickedUp) 
+		else if (!IsPickedUp && touchCount > 0) 
 		{
+			dropped = false;
 			DoPickup();
 		}
 	}

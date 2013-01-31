@@ -48,13 +48,14 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	Bounds BoundingBox;
 	Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
 	bool touchesChanged = false;
-	Camera _targetCamera;
+	
 	ScaleRotateHelper scaler;
 	float yPos = 0f;
 	
+	Camera targetCamera;
+	
 	void Start()
 	{
-		_targetCamera = FindCamera();
 		scaler = GetComponent<ScaleRotateHelper>();
 		yPos = transform.position.y;
 	}
@@ -111,12 +112,13 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	
 	Ray getRay(Vector3 screenPoint)
 	{
-		Ray targetRay = _targetCamera.ScreenPointToRay(screenPoint);
+		Ray targetRay = targetCamera.ScreenPointToRay(screenPoint);
 		return targetRay;
 	}
 	
-	public void AddTouch(Touch t, RaycastHit hit)
+	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
+		targetCamera = hitOn;
 		touches.Add(t.fingerId, t);
 		touchesChanged = true;
 	}
@@ -136,13 +138,5 @@ public class GesturePhoto : MonoBehaviour, IGestureHandler
 	{
 		changeBoundingBox();
 		touchesChanged = false;
-	}
-		
-	Camera FindCamera ()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
 	}
 }

@@ -38,11 +38,8 @@ using System.Linq;
 public class TuioInput : MonoBehaviour
 {
 	static TuioComponentBase tracking;
-	static TuioComponentBase mouseSim;
 	
 	static Touch[] frameTouches = new Touch[0];
-	
-	public bool SimulateFromMouse = false;
 	
 	public static readonly bool multiTouchEnabled = true;
 	
@@ -55,12 +52,11 @@ public class TuioInput : MonoBehaviour
 	void Awake()
 	{
 		tracking = InitTracking(new TuioTrackingComponent());
-		mouseSim = InitTracking(new MouseTrackingComponent());
 	}
 	
 	void Update()
 	{
-		TuioComponentBase tr = SimulateFromMouse ? mouseSim : tracking;
+		TuioComponentBase tr = tracking;
 		UpdateTouches(tr);
 	}
 	
@@ -94,6 +90,5 @@ public class TuioInput : MonoBehaviour
 	void OnApplicationQuit()
 	{
 		if (tracking != null) tracking.Close();
-		if (mouseSim != null) mouseSim.Close();
 	}
 }

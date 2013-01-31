@@ -117,4 +117,24 @@ public static class Vector3Extensions
 	{
 		return new Vector3(v.x, v.y, z);
 	}
+	
+	public static Vector3 UpTowards(this Vector3 fromPos, Vector3 towards, Vector3 up, float dist)
+	{
+		// Fix the objects vertical position based on it's vertical position when it was touched.
+		Vector3 aPos = fromPos;
+		Vector3 bPos = fromPos;
+		
+		// Lift the position by the fixed lift amount
+		bPos += up * dist;
+		
+		// Use triangulation to lift the object toward the camera rather than vertically up.  
+		// This moves the object in a horizontal plane to keep it aligned with the finger when lifting.
+		Vector3 o = towards;
+		Vector3 oa = aPos - o;
+		Vector3 ob = bPos - o;
+		Vector3 cPos = o + ((Vector3.Dot(ob, up) / Vector3.Dot(oa, up)) * oa);
+		
+		// cPos is our resulting lift position
+		return cPos;
+	}
 }

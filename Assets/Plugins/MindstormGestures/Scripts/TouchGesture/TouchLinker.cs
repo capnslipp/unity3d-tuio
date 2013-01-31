@@ -36,19 +36,11 @@ namespace Mindstorm.Gesture
 		Dictionary<int, MonoBehaviour[]> touchLinks = new Dictionary<int, MonoBehaviour[]>();
 		List<int> linksToRemove = new List<int>();
 		
-		public bool DoRayCastAll = false;
-		
 		class GestureHit
 		{
 			public List<MonoBehaviour> HitHandlers;
 			public RaycastHit Hit;
 		}
-		
-		public LayerMask RaycastLayerMask
-		{
-			get;
-			set;
-		}	
 		
 		List<GestureHit> innerCast(Ray targetRay, Collider castAgainst)
 		{
@@ -56,7 +48,7 @@ namespace Mindstorm.Gesture
 			
 			RaycastHit innerHit = new RaycastHit();
 			
-			if (castAgainst.Raycast(targetRay, out innerHit, 100f))
+			if (castAgainst.Raycast(targetRay, out innerHit, Mathf.Infinity))
 			{
 				GestureHit h = new GestureHit();
 				h.HitHandlers = GetComponentsByInterfaceType<IGestureHandler>(innerHit.collider.transform);
@@ -66,13 +58,13 @@ namespace Mindstorm.Gesture
 			return hitBehaviours;
 		}
 		
-		List<GestureHit> innerCast(Ray targetRay)
+		List<GestureHit> innerCast(Ray targetRay, LayerMask RaycastLayerMask)
 		{
 			List<GestureHit> hitBehaviours = new List<GestureHit>();
 			
 			RaycastHit innerHit = new RaycastHit();
 			
-			if (Physics.Raycast(targetRay, out innerHit, 100f, RaycastLayerMask))
+			if (Physics.Raycast(targetRay, out innerHit, Mathf.Infinity, RaycastLayerMask))
 			{
 				GestureHit h = new GestureHit();
 				h.HitHandlers = GetComponentsByInterfaceType<IGestureHandler>(innerHit.collider.transform);
@@ -82,11 +74,11 @@ namespace Mindstorm.Gesture
 			return hitBehaviours;
 		}
 		
-		List<GestureHit> innerCastAll(Ray targetRay)
+		List<GestureHit> innerCastAll(Ray targetRay, LayerMask RaycastLayerMask)
 		{
 			List<GestureHit> hitBehaviours = new List<GestureHit>();
 			
-			RaycastHit[] innerHits = Physics.RaycastAll(targetRay, 100f, RaycastLayerMask);
+			RaycastHit[] innerHits = Physics.RaycastAll(targetRay, Mathf.Infinity, RaycastLayerMask);
 			
 			foreach(RaycastHit innerHit in innerHits)
 			{
@@ -98,24 +90,24 @@ namespace Mindstorm.Gesture
 			return hitBehaviours;
 		}
 		
-		public void AddTouch(Touch t, Ray toCast)
+		public bool AddTouch(Touch t, Camera castOn, LayerMask hitLayers, bool DoRayCastAll)
 		{	
-			// Add it to the touchlinks
-			touchLinks.Add(t.fingerId, new MonoBehaviour[0]);
+			Ray toCast = getRay(castOn, t);
 			
 			// Raycast the touch, see what we hit
 			List<GestureHit> lh = null;
 			if (DoRayCastAll)
 			{
-				lh = innerCastAll(toCast);
+				lh = innerCastAll(toCast, hitLayers);
 			}
 			else
 			{
-				lh = innerCast(toCast);
+				lh = innerCast(toCast, hitLayers);
 			}
 			
 			// Update the touch link with the found handlers
 			MonoBehaviour[] allHanders = lh.SelectMany(m => m.HitHandlers).ToArray();
+			if (allHanders.Length == 0) return false;
 			touchLinks[t.fingerId] = allHanders;
 	
 			// Notify all handlers
@@ -123,20 +115,23 @@ namespace Mindstorm.Gesture
 	        {
 				foreach (MonoBehaviour mb in gh.HitHandlers)
 				{
-	            	((IGestureHandler)mb).AddTouch(t, gh.Hit);
+					((IGestureHandler)mb).AddTouch(t, gh.Hit, castOn);
 				}
 	        }
+			
+			return true;
 		}
 		
-		public void AddTouch(Touch t, Ray toCast, Collider castAgainst)
+		public bool AddTouch(Touch t, Camera castOn, Collider castAgainst)
 		{	
-			// Add it to the touchlinks
-			touchLinks.Add(t.fingerId, new MonoBehaviour[0]);
+			Ray toCast = getRay(castOn, t);
 			
+			// Raycast the touch, see what we hit
 			List<GestureHit> lh = innerCast(toCast, castAgainst);
 						
 			// Update the touch link with the found handlers
 			MonoBehaviour[] allHanders = lh.SelectMany(m => m.HitHandlers).ToArray();
+			if (allHanders.Length == 0) return false;
 			touchLinks[t.fingerId] = allHanders;
 	
 			// Notify all handlers
@@ -144,9 +139,11 @@ namespace Mindstorm.Gesture
 	        {
 				foreach (MonoBehaviour mb in gh.HitHandlers)
 				{
-	            	((IGestureHandler)mb).AddTouch(t, gh.Hit);
+	            	((IGestureHandler)mb).AddTouch(t, gh.Hit, castOn);
 				}
 	        }
+			
+			return true;
 		}
 		
 		public void RemoveTouch(Touch t)
@@ -205,6 +202,13 @@ namespace Mindstorm.Gesture
 		{
 			var coms = transform.gameObject.GetComponents<MonoBehaviour>().Where(c => c is T);
 			return coms.ToList();
+		}
+		
+		Ray getRay(Camera cam, Touch t)
+		{
+			Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
+			Ray targetRay = cam.ScreenPointToRay(touchPoint);
+			return targetRay;
 		}
 	}
 }
