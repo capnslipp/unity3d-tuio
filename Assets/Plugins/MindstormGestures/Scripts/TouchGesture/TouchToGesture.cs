@@ -36,7 +36,6 @@ using Mindstorm.Gesture.Config;
 /// Takes touch information from the InputProxy and uses the TouchLinker to assign new touches to hit objects
 /// or update existing touch information on objects already hit.
 /// </summary>
-[RequireComponent(typeof(TouchConfig))]
 public class TouchToGesture : MonoBehaviour
 {
 	TouchLinker linker = new TouchLinker();

@@ -37,7 +37,6 @@ using Mindstorm.Gesture.Config;
 /// Most beneficial for testing purposes as no collider in the scene is needed.
 /// NOTE: Does not work with Mindstorm Projection plugin as GUI is not processed by image effects.
 /// </summary>
-[RequireComponent(typeof(TouchConfig))]
 public class ShowTouchGUI : MonoBehaviour
 {
 	/// <summary>

@@ -35,7 +35,6 @@ using Mindstorm.Gesture.Config;
 /// <summary>
 /// Shows gizmos for touches when a touch is added and hits an object and when a touch is removed.
 /// </summary>
-[RequireComponent(typeof(TouchConfig))]
 [ExecuteInEditMode]
 public class ShowTouchTraces : MonoBehaviour
 {
