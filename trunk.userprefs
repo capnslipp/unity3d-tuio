@@ -1,9 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchToGesture.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\GestureConfig.xml">
     <Files>
       <File FileName="Assets\Examples\Toys\Scripts\PhotoLoader.cs" Line="51" Column="42" />
-      <File FileName="Assets\GestureConfig.xml" Line="6" Column="20" />
+      <File FileName="Assets\GestureConfig.xml" Line="7" Column="17" />
       <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureCreate.cs" Line="1" Column="1" />
       <File FileName="Assets\Plugins\MindstormGestures\Scripts\TouchDisplay\ShowTouchGUI.cs" Line="40" Column="40" />
       <File FileName="Assets\Plugins\MindstormGestures\Scripts\Config\TouchConfig.cs" Line="1" Column="1" />

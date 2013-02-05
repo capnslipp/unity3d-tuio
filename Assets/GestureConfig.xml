@@ -3,5 +3,5 @@
 	<!-- <Input Type="Tuio" ShowCursor="false" /> -->
 	<!-- <Input Type="Mouse" ShowCursor="true" /> -->
 	
-	<Input Type="Mouse" ShowCursor="true" />
+	<Input Type="Tuio" ShowCursor="true" />
 </Configuration>
