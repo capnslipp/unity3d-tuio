@@ -55,7 +55,6 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	Vector3 oldCentre = Vector3.zero;
 	Vector3 centre = Vector3.zero;
 	Vector3 delta = Vector3.zero;
-	Vector3 target = Vector3.zero;
 	
 	/// <summary>
 	/// Will lift the object up from it's starting position by N world co-ordinates.
@@ -77,7 +76,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 	
 	void Start()
 	{
-		target = transform.position;
+		matcher.target = transform.position;
 	}
 	
 	void OnEnable()
@@ -85,8 +84,7 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 		touches.Clear();
 		ResetBounds();
 		
-		target = transform.position;
-		matcher.target = target;
+		matcher.target = transform.position;
 	}
 	
 	void ResetBounds()
@@ -110,13 +108,13 @@ public class GestureDrag : MonoBehaviour, IGestureHandler
 			oldCentre = centre;
 		}
 		
-		delta = (centre - oldCentre);
-		target += delta;
+		delta += (centre - oldCentre);
 	}
 	
 	void Update()
 	{
-		matcher.target = target;
+		matcher.target += delta;
+		delta = Vector3.zero;
 	}
 	
 	Vector3 getCentrePoint()

@@ -43,7 +43,8 @@ namespace Mindstorm.Gesture.Config
 		{
 			Native = 1,
 			Tuio = 2,
-			Mouse = 3
+			Mouse = 3,
+			WM_Touch = 4
 		}
 		
 		public InputTypeEnum InputType;
@@ -56,6 +57,7 @@ namespace Mindstorm.Gesture.Config
 			InputTypes.Add(InputTypeEnum.Native, new InputTypeMethod("UnityEngine", "UnityEngine.Input"));
 			InputTypes.Add(InputTypeEnum.Tuio, new InputTypeMethod("Assembly-CSharp-firstpass", "TuioInput"));
 			InputTypes.Add(InputTypeEnum.Mouse, new InputTypeMethod("Assembly-CSharp-firstpass", "MouseInput"));
+			InputTypes.Add(InputTypeEnum.WM_Touch, new InputTypeMethod("Assembly-CSharp-firstpass", "WM_Input"));
 		}
 		
 		public void Initialise()

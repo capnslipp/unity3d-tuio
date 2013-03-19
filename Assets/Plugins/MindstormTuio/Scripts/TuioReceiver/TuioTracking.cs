@@ -101,7 +101,6 @@ namespace Tuio
 		
 		public Tuio2DCursor[] GetTouchArray()
 	    {
-	        // For tuio this is only useful to remove stuck points after a TUIO server restart
 	        lock (m_lock)
 	        {
 	            Tuio2DCursor[] ts = this.current.Values.ToArray();

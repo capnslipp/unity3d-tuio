@@ -72,6 +72,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\CountdownTimer.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\LayerHelper.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\MatchPosition.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\MatchRotation.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\MatchTransform.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\MathfHelper.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Helpers\ReTrigger.cs" />
@@ -83,6 +84,7 @@
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Timer\TimeEventTrigger.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\Timer\TimerEventArgs.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchDisplay\ShowTouch3D.cs" />
+     <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchDisplay\ShowTouchData.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchDisplay\ShowTouchGUI.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\InputProxy.cs" />
      <Compile Include="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchLinker.cs" />
@@ -93,10 +95,14 @@
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\OSC\OSCPacket.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TouchComponents\NativeTouch.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TouchComponents\TuioInput.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TouchComponents\WM_Input.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\ITrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\MouseTrackingComponent.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\TouchEvent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\TuioComponentBase.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\TuioTrackingComponent.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\WM_Tracking.cs" />
+     <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TrackingComponents\WM_TrackingComponent.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TuioReceiver\Touch.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TuioReceiver\TouchProperties.cs" />
      <Compile Include="Assets\Plugins\MindstormTuio\Scripts\TuioReceiver\TouchStatus.cs" />

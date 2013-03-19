@@ -25,46 +25,45 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using UnityEngine;
-using System;
 using System.Linq;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
 using Mindstorm.Gesture;
+using Mindstorm.Gesture.Config;
 
 /// <summary>
-/// Makes a kinematic rigidbody non-kinematic and wakes it up.
-/// Good example of a very simple Gesture Handler.
+/// Shows touch points using Unity3D GUI system.
+/// Most beneficial for testing purposes as no collider in the scene is needed.
+/// NOTE: Does not work with Mindstorm Projection plugin as GUI is not processed by image effects.
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
-public class GestureDestroyOnRemove : MonoBehaviour, IGestureHandler 
+[RequireComponent(typeof(TouchConfig))]
+public class ShowTouchData : MonoBehaviour
 {
-	int touchCount = 0;
-	public bool triggered = false;
+	public string DisplayString = string.Empty;
 	
-	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
+	void OnGUI()
 	{
-		touchCount++;
+		GUILayout.Label(DisplayString);
 	}
 	
-	public void RemoveTouch(Touch t)
+	void Update()
 	{
-		touchCount--;
+		BuildDisplayString();
 	}
 	
-	public void UpdateTouch(Touch t)
+	void BuildDisplayString()
 	{
-	}
-	
-	public void FinishNotification()
-	{
-		if (touchCount != 0)
+		Touch[] touchArr = InputProxy.touches;
+		StringBuilder sb = new StringBuilder();
+		sb.AppendFormat("TOUCHES: {0}\r\n", touchArr.Length.ToString());
+		
+		foreach (Touch t in touchArr)
 		{
-			triggered = true;
+			sb.AppendFormat("TOUCH {0} POS {1}:{2}\r\n", t.fingerId.ToString(), t.position.x.ToString(), t.position.y.ToString());
 		}
-		else if (triggered == true)
-		{
-			Destroy(gameObject);
-		}
+		
+		DisplayString = sb.ToString();
 	}
 }

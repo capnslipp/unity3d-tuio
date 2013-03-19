@@ -24,20 +24,23 @@ If you have any questions regarding this library, or would like to purchase
 a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
+using System.Text;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// Provides mouse input as UnityEngine.Touch objects for receiving touch information.
+/// Provides touch information from Windows 7 to UnityEngine.Touch objects
 /// Must be attached to a GameObject in the Hierachy to be used.
 /// 
 /// Provides exactly the same interface as UnityEngine.Input regarding touch data
 /// allowing any code using UnityEngine.Input to use TuioInput instead.
+/// 
+/// NOTE: DOES NOT WORK IN THE EDITOR, ONLY IN BUILDS
 /// </summary>
-public class MouseInput : MonoBehaviour
+public class WM_Input : MonoBehaviour
 {
-	static TuioComponentBase mouseSim;
+    static TuioComponentBase tracking;
 	
 	static Touch[] frameTouches = new Touch[0];
 	
@@ -51,12 +54,15 @@ public class MouseInput : MonoBehaviour
 	
 	void Awake()
 	{
-		mouseSim = InitTracking(new MouseTrackingComponent());
+#if UNITY_STANDALONE_WIN
+		tracking = InitTracking(new WM_TrackingComponent());
+#endif
 	}
-	
+		
 	void Update()
 	{
-		TuioComponentBase tr = mouseSim;
+		if (tracking == null) return;
+		TuioComponentBase tr = tracking;
 		UpdateTouches(tr);
 	}
 	
@@ -87,8 +93,21 @@ public class MouseInput : MonoBehaviour
 		}
 	}
 	
+	bool allowQuit = false;
+	
 	void OnApplicationQuit()
 	{
-		if (mouseSim != null) mouseSim.Close();
+		if (allowQuit) return;
+		
+		StartCoroutine(doQuit());
+		Application.CancelQuit();
+	}
+	
+	IEnumerator doQuit()
+	{
+		if (tracking != null) tracking.Close();
+		yield return null;
+		allowQuit = true;
+		Application.Quit();
 	}
 }

@@ -2,6 +2,7 @@
 	<!-- <Input Type="Native" ShowCursor="false" /> -->
 	<!-- <Input Type="Tuio" ShowCursor="false" /> -->
 	<!-- <Input Type="Mouse" ShowCursor="true" /> -->
+	<!-- <Input Type="WM_Touch" ShowCursor="false" /> -->
 	
-	<Input Type="Tuio" ShowCursor="true" />
+	<Input Type="WM_Touch" ShowCursor="false" />
 </Configuration>

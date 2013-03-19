@@ -59,7 +59,11 @@ public class MatchPosition : MonoBehaviour
 	void Match()
     {
 		// If we have a non kinematic rigidbody then don't try to move it
-		if (rigidbody != null && !rigidbody.isKinematic) return;
+		if (rigidbody != null && !rigidbody.isKinematic)
+		{
+			target = transform.position;
+			return;
+		}
 		
 		// Set the target based on the object we are following (if any)
 		if (ToFollow != null) target = ToFollow.position;

@@ -37,7 +37,6 @@ using Mindstorm.Gesture.Config;
 /// Touch object is created in a position based on a Raycast into the scene.
 /// If there is nothing hit, not touch point will be shown.
 /// </summary>
-[RequireComponent(typeof(TouchConfig))]
 public class ShowTouch3D : MonoBehaviour
 {
 	Dictionary<int, GameObject> touchIcons = new Dictionary<int, GameObject>();
