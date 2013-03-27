@@ -87,8 +87,21 @@ public class TuioInput : MonoBehaviour
 		}
 	}
 	
+	bool allowQuit = false;
+	
 	void OnApplicationQuit()
 	{
+		if (allowQuit) return;
+		
+		StartCoroutine(doQuit());
+		Application.CancelQuit();
+	}
+	
+	IEnumerator doQuit()
+	{
 		if (tracking != null) tracking.Close();
+		yield return null;
+		allowQuit = true;
+		Application.Quit();
 	}
 }
