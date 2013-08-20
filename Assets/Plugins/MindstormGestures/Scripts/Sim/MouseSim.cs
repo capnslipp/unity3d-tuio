@@ -38,7 +38,7 @@ using Touch = Mindstorm.Gesture.Sim.Touch;
 /// </summary>
 public class MouseSim : MonoBehaviour
 {
-	static TuioComponentBase mouseSim;
+	static MouseSim mouseSim;
 	
 	static Touch[] frameTouches = new Touch[0];
 	

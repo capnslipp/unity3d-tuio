@@ -44,11 +44,16 @@ namespace Tuio
 		
 		TuioConfiguration config;
 	    UdpClient udpreceiver;
+		IPEndPoint endpoint;
 	    Thread thr;
 	    
+		bool msgReceived = false;
 		bool isrunning;
 	    
 		object m_lock = new object();
+		
+		int numErrors = 0;
+		public int MaxErrorsToLog = 20;
 	
 		public void ConfigureFramework(TuioConfiguration config)
 	    {
@@ -59,34 +64,34 @@ namespace Tuio
 	    {
 	        if (!isrunning)
 	        {
-	            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, this.config.Port);
+	            endpoint = new IPEndPoint(IPAddress.Any, this.config.Port);
 	            this.udpreceiver = new UdpClient(endpoint);
-	
+				
 	            this.isrunning = true;
 	            this.thr = new Thread(new ThreadStart(this.receive));
 	            this.thr.Start();
 	        }
 	    }
+		
+		void rebind()
+		{
+			if (this.udpreceiver != null) this.udpreceiver.Client.Bind(endpoint);
+		}
 	
 	    public void Stop()
 	    {
-	        if (isrunning)
-	        {
-	            isrunning = false;
-	            close();
-	        }
+	        isrunning = false;
 	    }
 	
 	    void close()
 	    {
 	        try
 	        {
-	            //Might throw an exception which is meaningless when we are shutting down
 	            this.udpreceiver.Close();
 	        }
-	        catch
+	        catch (Exception e)
 	        {
-	
+				Debug.LogWarning("Error when shutting down TUIO connection.  Details " + e.ToString());
 	        }
 	    }
 	
@@ -110,49 +115,82 @@ namespace Tuio
 	
 	    void receive()
 	    {
-	        try
+			while (isrunning)
 	        {
-	            receiveData();
-	        }
-	        catch
-	        {				
-	        }
-	        finally
-	        {
-	            // Try to stop cleanly on termination of the blocking receivedata function
-	            this.Stop();
-	        }
+		        try
+		        {
+					if (!this.udpreceiver.Client.IsBound) 
+					{
+						Debug.LogWarning("Socket has become unbound.  Rebinding");
+						rebind();
+					}
+		            receiveDataAsync();
+					numErrors = 0;
+		        }
+		        catch (SocketException e)
+		        {
+					if (numErrors < MaxErrorsToLog) Debug.LogWarning("Network error while receiving TUIO data.  Error code " + e.ErrorCode.ToString() + ".  Details " + e.ToString());
+					else numErrors++;
+		        }
+				catch (Exception e)
+				{
+					if (numErrors < MaxErrorsToLog) Debug.LogWarning("Unknown error while receiving TUIO data.  Details " + e.ToString());
+					else numErrors++;
+				}
+		        finally
+		        {
+		            // Risk that the application will get into a constant exception logging loop and will not allow close
+		        }
+			}
+			
+			// No longer running, close the tracking down
+			close();
 	    }
 	
 	    void receiveData()
 	    {
-	        while (isrunning)
-	        {
-				IPEndPoint ip = null;
-	
-	            byte[] buffer = this.udpreceiver.Receive(ref ip);
-	            OSCBundle bundle = OSCPacket.Unpack(buffer) as OSCBundle;
-	
-	            if (bundle != null)
-	            {
-					//Not currently checked, we probably should!
-	                //int fseq = TuioParser.GetSequenceNumber(bundle);
-					if (!TuioParser.ContainsCursors(bundle)) continue;
-					
-	                List<int> alivecursors = TuioParser.GetAliveCursors(bundle);
-	                Dictionary<int, Tuio2DCursor> newcursors = TuioParser.GetCursors(bundle);
-	                
-	                // Remove the deleted ones
-	                removeNotAlive(alivecursors);
-	
-	                //Process held/updated items
-	                updateSetCursors(newcursors, alivecursors);
-	
-	                //Process new items
-	                addNewCursors(newcursors);
-	            }
-	        }
+        	IPEndPoint ip = null;
+            byte[] buffer = this.udpreceiver.Receive(ref ip);
+			processData(buffer);
+		}
+
+		void processData(byte[] buffer)
+		{
+			OSCBundle bundle = OSCPacket.Unpack(buffer) as OSCBundle;
+            if (bundle != null)
+            {
+				//Not currently checked, we probably should!
+                //int fseq = TuioParser.GetSequenceNumber(bundle);
+				if (!TuioParser.ContainsCursors(bundle)) return;
+				
+                List<int> alivecursors = TuioParser.GetAliveCursors(bundle);
+                Dictionary<int, Tuio2DCursor> newcursors = TuioParser.GetCursors(bundle);
+                
+                // Remove the deleted ones
+                removeNotAlive(alivecursors);
+
+                //Process held/updated items
+                updateSetCursors(newcursors, alivecursors);
+
+                //Process new items
+                addNewCursors(newcursors);
+            }
 	    }
+		
+		void receiveCallback(IAsyncResult ar)
+		{
+			byte[] buffer = this.udpreceiver.EndReceive(ar, ref endpoint);
+			processData(buffer);
+			msgReceived = true;
+		}
+		
+		void receiveDataAsync()
+		{
+			msgReceived = false;
+			this.udpreceiver.BeginReceive(new AsyncCallback(receiveCallback), null);
+			
+			while (!msgReceived && isrunning) Thread.Sleep(0);
+		}
 	
 	    void addNewCursors(Dictionary<int, Tuio2DCursor> sets)
 	    {

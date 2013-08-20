@@ -107,6 +107,10 @@ public class InputProxy
 		touchCountFunc = () => MouseSim.touchCount;
 		touchesFunc = () => MouseSim.touches;
 		GetTouchFunc = (int i) => MouseSim.GetTouch(i);
+#elif WINDOWS_STORE
+		touchCountFunc = () => Input.touchCount;
+		touchesFunc = () => Input.touches;
+		GetTouchFunc = (int i) => Input.GetTouch(i);
 #else
 		Assembly b = Assembly.Load(m.AssemblyName);
 		Type t = b.GetType(m.ObjectName, true);

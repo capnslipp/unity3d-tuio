@@ -1,6 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Examples\Toys\Scripts\PhotoLoader.cs">
+    <Files>
+      <File FileName="Assets\Plugins\MindstormGestures\Scripts\Sim\MouseSim.cs" Line="41" Column="17" />
+      <File FileName="Assets\Plugins\MindstormGestures\Scripts\Config\TouchConfig.cs" Line="167" Column="7" />
+      <File FileName="Assets\Plugins\MindstormGestures\Scripts\Config\TouchHandlerConfig.cs" Line="40" Column="15" />
+      <File FileName="Assets\Examples\Toys\Bombs\Scripts\ImpactTrigger.cs" Line="12" Column="36" />
+      <File FileName="Assets\Examples\Toys\Bombs\Scripts\ImpactTimer.cs" Line="12" Column="36" />
+      <File FileName="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\InputProxy.cs" Line="113" Column="34" />
+      <File FileName="Assets\Examples\Toys\Scripts\PhotoLoader.cs" Line="69" Column="7" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -108,9 +108,6 @@ public class WM_Input : MonoBehaviour
 		if (tracking != null) tracking.Close();
 		yield return null;
 		allowQuit = true;
-		
-		//Application.Quit();
-		// Hack to work around Unity 4.1 bug with Application.Quit (causes exception)
-		System.Diagnostics.Process.GetCurrentProcess().Kill();
+		Application.Quit();
 	}
 }

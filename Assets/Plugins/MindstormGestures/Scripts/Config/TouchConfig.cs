@@ -53,6 +53,9 @@ public class TouchConfig : MonoBehaviour
 	
 	void Start()
 	{
+#if WINDOWS_STORE
+		LoadFromFile = false;
+#else
 		// Load from file if set
 		if (LoadFromFile) 
 		{
@@ -75,6 +78,7 @@ public class TouchConfig : MonoBehaviour
 		
 		// Initialise
 		Init();
+#endif
 	}
 	
 	void Update()
@@ -91,6 +95,7 @@ public class TouchConfig : MonoBehaviour
 		Screen.showCursor = ShowMouseCursor;
 	}
 	
+#if !WINDOWS_STORE
 	string getAppPath()
 	{
 		DirectoryInfo path = new DirectoryInfo(Application.dataPath);
@@ -159,4 +164,5 @@ public class TouchConfig : MonoBehaviour
 			Debug.LogWarning(s + " is not a valid Input value for ShowCursor, defaulting to " + ShowMouseCursor.ToString());
 		}
 	}
+#endif
 }
