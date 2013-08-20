@@ -1,11 +1,6 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormTuio\Scripts\TouchComponents\TuioInput.cs">
-    <Files>
-      <File FileName="Assets\Plugins\MindstormTuio\Scripts\TouchComponents\TuioInput.cs" Line="95" Column="3" />
-      <File FileName="Assets\Plugins\MindstormTuio\Scripts\TouchComponents\WM_Input.cs" Line="84" Column="3" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

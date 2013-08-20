@@ -31,6 +31,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Detects when a touch has been held down on this object for a certain amount of time.
 /// Very useful for push buttons where they must be pushed all the way down.

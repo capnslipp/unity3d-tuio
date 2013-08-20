@@ -31,6 +31,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Turns a rigidbody kinematic when touched and returns it to non-kinematic when the touch is released.
 /// Useful for building complex manipulation functions which you do not want to be effected by physics.

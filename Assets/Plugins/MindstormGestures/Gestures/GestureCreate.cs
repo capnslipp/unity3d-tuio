@@ -32,6 +32,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Creates an instance of a prefab in the touched position and links the touch added with the new object.
 /// Good example of use on an internal TouchLinker to recast internally combining gestures.

@@ -31,6 +31,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Detects a click on a collider.  Configurable to handle different tolerances.
 /// </summary>

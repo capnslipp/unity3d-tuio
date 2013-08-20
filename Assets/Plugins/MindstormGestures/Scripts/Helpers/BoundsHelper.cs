@@ -29,6 +29,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 public static class BoundsHelper
 {
 	public static Bounds BuildBounds(IEnumerable<Touch> points)

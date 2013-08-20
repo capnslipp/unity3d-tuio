@@ -30,6 +30,10 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 public class GestureSlide : MonoBehaviour, IGestureHandler
 {
 	public Vector3 LocalSlideAxis = new Vector3(1.0f, 1.0f, 1.0f); 

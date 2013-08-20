@@ -32,6 +32,10 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Gesture for handling Kinematic movement, scaling and rotation of an object.
 /// Designed for use in a photo browser.

@@ -32,6 +32,10 @@ using System.Linq;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Handles dragging a rigidbody around using joints.
 /// </summary>

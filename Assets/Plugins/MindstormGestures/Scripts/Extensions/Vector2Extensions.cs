@@ -69,4 +69,6 @@ public static class Vector2Extensions
 			return 0;
 		}
 	}
+	
+	
 }

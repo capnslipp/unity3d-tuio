@@ -30,6 +30,10 @@ using System.Collections;
 
 using Mindstorm.Gesture.Config;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Acts as a proxy for getting touch data.  Uses reflection to load correct Input object (TuioInput or UnityEngine.Input)
 /// and populate a module level set of delegates.  Has exactly the same touch method signatures as UnityEngine.Input
@@ -75,6 +79,7 @@ public class InputProxy
 	{
 		get
 		{
+			
 			return touchesFunc();
 		}
 	}
@@ -98,6 +103,11 @@ public class InputProxy
 	
 	static void createGetDelegate(InputTypeMethod m)
 	{
+#if UNITY_WEBPLAYER
+		touchCountFunc = () => MouseSim.touchCount;
+		touchesFunc = () => MouseSim.touches;
+		GetTouchFunc = (int i) => MouseSim.GetTouch(i);
+#else
 		Assembly b = Assembly.Load(m.AssemblyName);
 		Type t = b.GetType(m.ObjectName, true);
 		
@@ -109,5 +119,6 @@ public class InputProxy
 		
 		MethodInfo mInfo = t.GetMethod("GetTouch");
 		GetTouchFunc = (Func<int, Touch>)Delegate.CreateDelegate(typeof(Func<int, Touch>), mInfo);
+#endif
 	}
 }

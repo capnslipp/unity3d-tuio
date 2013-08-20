@@ -31,6 +31,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Triggers a message once the object has been touched a specific number of times in quick succession.
 /// </summary>
@@ -50,6 +54,11 @@ public class GestureNTouchClick : GestureTouchClick
 	/// Controls how quickly the clicks must be made after each other.
 	/// </summary>
 	public float ClickTimeout = 0.3f;
+	
+	/// <summary>
+	/// Message to be sent when N clicks have been made (otherwise Click message is sent)
+	/// </summary>
+	public string NClickMessage = "NClick";
 			
 	public override void DoClick(RaycastHit h)
 	{
@@ -62,7 +71,7 @@ public class GestureNTouchClick : GestureTouchClick
 	
 	public void DoNClick(RaycastHit h)
 	{
-		BroadcastTouchMessage(ClickMessage, h);
+		BroadcastTouchMessage(NClickMessage, h);
 	}
 	
 	void OnEnable()
@@ -72,7 +81,7 @@ public class GestureNTouchClick : GestureTouchClick
 	
 	void reduceClicks()
 	{
-		ClickCount -= 1;
+		if (ClickCount > 0) ClickCount -= 1;
 	}
 	
 	void resetClicks()

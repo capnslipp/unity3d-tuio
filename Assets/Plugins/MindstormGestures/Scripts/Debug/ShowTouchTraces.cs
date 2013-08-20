@@ -32,6 +32,10 @@ using System.Collections.Generic;
 using Mindstorm.Gesture;
 using Mindstorm.Gesture.Config;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Shows gizmos for touches when a touch is added and hits an object and when a touch is removed.
 /// </summary>

@@ -32,6 +32,11 @@ using System.Collections.Generic;
 using Mindstorm.Gesture;
 using Mindstorm.Gesture.Config;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
+
 /// <summary>
 /// Shows touch points using Unity3D GUI system.
 /// Most beneficial for testing purposes as no collider in the scene is needed.
@@ -99,6 +104,7 @@ public class ShowTouchGUI : MonoBehaviour
 	
 	void removeTouchIcon(Touch t)
 	{
+	
 		if (!touchIcons.ContainsKey(t.fingerId)) return;
 		GUITexture go = touchIcons[t.fingerId];
 		touchIcons.Remove(t.fingerId);

@@ -29,6 +29,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 namespace Mindstorm.Gesture
 {
 	public class TouchLinker {
@@ -90,19 +94,46 @@ namespace Mindstorm.Gesture
 			return hitBehaviours;
 		}
 		
+		List<GestureHit> innerCastGUI(Vector3 screenPos, Camera castOn, GUILayer gui)
+		{
+			List<GestureHit> hitBehaviours = new List<GestureHit>();
+			
+			GUIElement g = gui.HitTest(screenPos);
+			if (g == null) return null;
+			
+			GestureHit h = new GestureHit();
+			h.HitHandlers = GetComponentsByInterfaceType<IGestureHandler>(g.transform);
+			h.Hit = new RaycastHit();
+			hitBehaviours.Add(h);
+			
+			return hitBehaviours;
+		}
+		
 		public bool AddTouch(Touch t, Camera castOn, LayerMask hitLayers, bool DoRayCastAll)
+		{
+			return AddTouch(t, castOn, hitLayers, DoRayCastAll, null);
+		}
+		
+		public bool AddTouch(Touch t, Camera castOn, LayerMask hitLayers, bool DoRayCastAll, GUILayer gui)
 		{	
 			Ray toCast = getRay(castOn, t);
 			
-			// Raycast the touch, see what we hit
 			List<GestureHit> lh = null;
-			if (DoRayCastAll)
+			
+			// First see if we hit a GUI element
+			if (gui != null) lh = innerCastGUI(t.position, castOn, gui);
+			
+			if (lh == null || lh.Count == 0)
 			{
-				lh = innerCastAll(toCast, hitLayers);
-			}
-			else
-			{
-				lh = innerCast(toCast, hitLayers);
+				// Raycast the touch, see what we hit
+				if (DoRayCastAll)
+				{
+					lh = innerCastAll(toCast, hitLayers);
+				}
+				else
+				{
+					lh = innerCast(toCast, hitLayers);
+				}
 			}
 			
 			// Update the touch link with the found handlers

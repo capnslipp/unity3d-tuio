@@ -31,6 +31,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 
 	public GameObject[] NotifyObjects;

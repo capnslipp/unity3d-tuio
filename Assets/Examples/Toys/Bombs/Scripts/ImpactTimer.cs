@@ -9,7 +9,7 @@ public class ImpactTimer : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision col)
 	{
-		LastImpact = col.impactForceSum.magnitude;
+		LastImpact = col.relativeVelocity.magnitude;
 		if (LastImpact >= StartTimerOnForce) GetComponent<TimedTrigger>().enabled = true;
 	}
 }

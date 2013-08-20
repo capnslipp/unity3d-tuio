@@ -29,6 +29,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
+
 namespace Mindstorm.Gesture
 {
 	/// <summary>

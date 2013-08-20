@@ -9,7 +9,7 @@ public class ImpactTrigger : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision col)
 	{
-		LastImpact = col.impactForceSum.magnitude;
+		LastImpact = col.relativeVelocity.magnitude;
 		if (LastImpact >= ExplodeOnForce) GetComponent<Exploder>().DoExplode = true;
 	}
 }

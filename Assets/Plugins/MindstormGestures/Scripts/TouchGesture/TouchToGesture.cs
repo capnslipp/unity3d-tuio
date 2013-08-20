@@ -32,6 +32,10 @@ using System.Collections.Generic;
 using Mindstorm.Gesture;
 using Mindstorm.Gesture.Config;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Takes touch information from the InputProxy and uses the TouchLinker to assign new touches to hit objects
 /// or update existing touch information on objects already hit.
@@ -65,6 +69,11 @@ public class TouchToGesture : MonoBehaviour
 		/// Raycast through the whole scene not stopping when an object is hit.  This will trigger AddTouch message on every GestureHandler in the scene under the touch.
 		/// </summary>
 		public bool DoRayCastAll = false;
+		
+		/// <summary>
+		/// If set, hittests will be first tested against the GUILayer before Raycast
+		/// </summary>
+		public GUILayer HitGUI = null;
 	}
 	
 	public enum CullingMaskUsage
@@ -98,7 +107,7 @@ public class TouchToGesture : MonoBehaviour
 				// Raycast cameras in order
 				foreach (CameraCast c in CameraSetups)
 				{
-					if (linker.AddTouch(t, c.castOn, getMask(c), c.DoRayCastAll)) break;
+					if (linker.AddTouch(t, c.castOn, getMask(c), c.DoRayCastAll, c.HitGUI)) break;
 				}
 				break;
 			case TouchPhase.Ended:

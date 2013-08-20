@@ -25,6 +25,8 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using UnityEngine;
+using System;
+using System.Linq;
 using System.Collections;
 using System.Xml;
 using System.IO;
@@ -39,17 +41,39 @@ public class TouchConfig : MonoBehaviour
 	public TouchHandlerConfig Config;
 	
 	public string ConfigFileName = @"GestureConfig.xml";
+	public string EditorConfigFileName = @"GestureConfig_Editor.xml";
 	public bool LoadFromFile = true;
 	public bool ShowMouseCursor = true;
 	
 	void Awake()
 	{
 		Screen.showCursor = false;
+		if (Application.isEditor) ConfigFileName = EditorConfigFileName;
 	}
 	
 	void Start()
 	{
-		if (LoadFromFile) loadConfig();
+		// Load from file if set
+		if (LoadFromFile) 
+		{
+			loadConfig();
+		}		
+		
+		// Override from command line
+		string[] args = Environment.GetCommandLineArgs();
+		
+		if (args.Contains("/showcursor"))
+		{
+			ShowMouseCursor = true;
+		}
+		
+		int i = Array.IndexOf(args, "/tracking");
+		if (i != -1 && args.Length > i + 1)
+		{
+			ParseType(args[i+1]);
+		}
+		
+		// Initialise
 		Init();
 	}
 	

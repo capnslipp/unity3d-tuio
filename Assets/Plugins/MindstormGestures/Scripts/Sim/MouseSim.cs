@@ -28,20 +28,21 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
+using Touch = Mindstorm.Gesture.Sim.Touch;
+
 /// <summary>
-/// Provides TUIO input as UnityEngine.Touch objects for receiving touch information
-/// Must be attached to a GameObject in the Hierachy to be used.
+/// Provides mouse input as simulated touch input.
 /// 
 /// Provides exactly the same interface as UnityEngine.Input regarding touch data
-/// allowing any code using UnityEngine.Input to use TuioInput instead.
+/// allowing any code using UnityEngine.Input to use MouseSim instead.
 /// </summary>
-public class TuioInput : MonoBehaviour
+public class MouseSim : MonoBehaviour
 {
-	static TuioComponentBase tracking;
+	static TuioComponentBase mouseSim;
 	
 	static Touch[] frameTouches = new Touch[0];
 	
-	public static readonly bool multiTouchEnabled = true;
+	public static readonly bool multiTouchEnabled = false;
 	
 	public static int touchCount
 	{
@@ -49,29 +50,33 @@ public class TuioInput : MonoBehaviour
 		private set;
 	}
 	
-	void Awake()
-	{
-		tracking = InitTracking(new TuioTrackingComponent());
-	}
-	
 	void Update()
 	{
-		TuioComponentBase tr = tracking;
-		UpdateTouches(tr);
-	}
-	
-	void UpdateTouches(TuioComponentBase tr)
-	{
-		tr.BuildTouchDictionary();
-		frameTouches = tr.AllTouches.Values.Select(t => t.ToUnityTouch()).ToArray();
-		touchCount = frameTouches.Length;
-	}
-	
-	TuioComponentBase InitTracking(TuioComponentBase tr)
-	{
-		tr.ScreenWidth = Camera.main.pixelWidth;
-		tr.ScreenHeight = Camera.main.pixelHeight;
-		return tr;
+		if (frameTouches.Length > 0 && frameTouches[0].phase == TouchPhase.Ended) frameTouches = new Touch[0];
+		
+		Vector2 pos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+		if (Input.GetMouseButtonDown(0) && touchCount == 0)
+		{
+			// New touch
+			Touch t = new Touch(0, pos, Vector2.zero, 0f, 0, TouchPhase.Began);
+			frameTouches = new Touch[1] { t };
+			touchCount = 1;
+		}
+		else if (Input.GetMouseButtonUp(0))
+		{
+			// Removed touch
+			Vector2 deltaPos = frameTouches[0].position - pos;
+			Touch t = new Touch(0, pos, deltaPos, 0f, 0, TouchPhase.Ended);
+			frameTouches[0] = t;
+			touchCount = 0;
+		}
+		else if (Input.GetMouseButton(0))
+		{
+			Vector2 deltaPos = frameTouches[0].position - pos;
+			TouchPhase phase = deltaPos == Vector2.zero ? TouchPhase.Stationary : TouchPhase.Moved;
+			Touch t = new Touch(0, pos, deltaPos, 0f, 0, phase);
+			frameTouches[0] = t;
+		}
 	}
 	
 	public static Touch GetTouch(int index)
@@ -87,8 +92,4 @@ public class TuioInput : MonoBehaviour
 		}
 	}
 	
-	void OnApplicationQuit()
-	{
-		if (tracking != null) tracking.Close();
-	}
 }

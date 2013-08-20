@@ -32,6 +32,10 @@ using System.Collections.Generic;
 
 using Mindstorm.Gesture;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Makes a kinematic rigidbody non-kinematic and wakes it up.
 /// Good example of a very simple Gesture Handler.

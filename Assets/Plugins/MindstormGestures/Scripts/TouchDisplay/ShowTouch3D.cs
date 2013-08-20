@@ -32,6 +32,10 @@ using System.Collections.Generic;
 using Mindstorm.Gesture;
 using Mindstorm.Gesture.Config;
 
+#if UNITY_WEBPLAYER
+using Touch = Mindstorm.Gesture.Sim.Touch;
+#endif
+
 /// <summary>
 /// Shows a touch object per touch which moves with the touch point and is destroyed when the touch is removed.
 /// Touch object is created in a position based on a Raycast into the scene.
