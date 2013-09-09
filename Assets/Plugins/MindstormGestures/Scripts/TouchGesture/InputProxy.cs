@@ -108,16 +108,22 @@ public class InputProxy
 		touchesFunc = () => MouseSim.touches;
 		GetTouchFunc = (int i) => MouseSim.GetTouch(i);
 #elif NETFX_CORE
-		//touchCountFunc = () => Input.touchCount;
-		//touchesFunc = () => Input.touches;
-		//GetTouchFunc = (int i) => Input.GetTouch(i);
+		TypeInfo t = Type.GetType(m.ObjectName + "," + m.AssemblyName).GetTypeInfo();
 		
-		touchCountFunc = () => TuioInput.touchCount;
-		touchesFunc = () => TuioInput.touches;
-		GetTouchFunc = (int i) => TuioInput.GetTouch(i);
+		PropertyInfo p = t.GetDeclaredProperty("touches");
+		touchesFunc = (Func<Touch[]>)p.GetMethod.CreateDelegate(typeof(Func<Touch[]>));
+		
+		PropertyInfo pT = t.GetDeclaredProperty("touchCount");
+		touchCountFunc = (Func<int>)pT.GetMethod.CreateDelegate(typeof(Func<int>));
+		
+		MethodInfo mInfo = t.GetDeclaredMethod("GetTouch");
+		GetTouchFunc = (Func<int, Touch>)mInfo.CreateDelegate(typeof(Func<int, Touch>));
+
 #else
-		Assembly b = Assembly.Load(m.AssemblyName);
-		Type t = b.GetType(m.ObjectName, true);
+		//Assembly b = Assembly.Load(m.AssemblyName);
+		//Type t = b.GetType(m.ObjectName, true);
+		
+		Type t = Type.GetType(m.ObjectName + "," + m.AssemblyName);
 		
 		PropertyInfo p = t.GetProperty("touches");
 		touchesFunc = (Func<Touch[]>)Delegate.CreateDelegate(typeof(Func<Touch[]>), p.GetGetMethod());
