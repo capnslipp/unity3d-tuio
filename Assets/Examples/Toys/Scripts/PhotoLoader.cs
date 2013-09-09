@@ -40,7 +40,7 @@ public class PhotoLoader : MonoBehaviour {
 	public GameObject PhotoPrefab;
 	public int MaxPictures = 1;
 	
-#if !WINDOWS_STORE
+#if !NETFX_CORE
     void Start() 
 	{
         StartCoroutine("loadImages");

@@ -25,6 +25,7 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Tuio;

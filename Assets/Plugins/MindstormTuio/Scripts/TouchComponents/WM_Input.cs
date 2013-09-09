@@ -54,9 +54,7 @@ public class WM_Input : MonoBehaviour
 	
 	void Awake()
 	{
-#if UNITY_STANDALONE_WIN
-		tracking = InitTracking(new WM_TrackingComponent());
-#endif
+		if (Application.platform == RuntimePlatform.WindowsPlayer) tracking = InitTracking(new WM_TrackingComponent());
 	}
 		
 	void Update()
@@ -108,6 +106,7 @@ public class WM_Input : MonoBehaviour
 		if (tracking != null) tracking.Close();
 		yield return null;
 		allowQuit = true;
+		
 		Application.Quit();
 	}
 }

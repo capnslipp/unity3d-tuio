@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 /// <summary>
@@ -39,10 +40,10 @@ namespace OSC
 	{
 		public OSCPacket()
 		{
-			this.values = new ArrayList();
+			this.values = new List<object>();
 		}
 	
-		protected static void addBytes(ArrayList data, byte[] bytes)
+		protected static void addBytes(List<byte> data, byte[] bytes)
 		{
 			foreach(byte b in bytes)
 			{
@@ -50,7 +51,7 @@ namespace OSC
 			}
 		}
 	
-		protected static void padNull(ArrayList data)
+		protected static void padNull(List<byte> data)
 		{
 			byte zero = 0;
 			int pad = 4 - (data.Count % 4);
@@ -100,7 +101,7 @@ namespace OSC
 	
 		protected static byte[] packString(string value)
 		{
-			return System.Text.Encoding.ASCII.GetBytes(value);
+			return System.Text.Encoding.UTF8.GetBytes(value);
 		}
 	
 		abstract protected void pack();
@@ -150,7 +151,7 @@ namespace OSC
 		{
 			int count= 0;
 			for(int index = start ; bytes[index] != 0 ; index++, count++) ;
-			string s = Encoding.ASCII.GetString(bytes, start, count);
+			string s = Encoding.UTF8.GetString(bytes, start, count);
 			start += count+1;
 			start = (start + 3) / 4 * 4;
 			return s;
@@ -180,10 +181,10 @@ namespace OSC
 			}
 		}
 	
-		protected ArrayList values;
-		public ArrayList Values
+		protected List<object> values;
+		public List<object> Values
 		{
-			get { return (ArrayList)values.Clone(); }
+			get { return (new List<object>(values)); }
 		}
 		abstract public void Append(object value);
 	

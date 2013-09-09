@@ -27,8 +27,15 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+
+#if NETFX_CORE	
+using Windows.Networking.Sockets;
+using Windows.Storage.Streams;
+#else
 using System.Net.Sockets;
 using System.Threading;
+#endif
+
 using System.Net;
 using System.Linq;
 using OSC;
@@ -43,24 +50,68 @@ namespace Tuio
 	    public Dictionary<int, Tuio2DCursor> current = new Dictionary<int, Tuio2DCursor>();
 		
 		TuioConfiguration config;
-	    UdpClient udpreceiver;
-		IPEndPoint endpoint;
-	    Thread thr;
-	    
-		bool msgReceived = false;
-		bool isrunning;
 	    
 		object m_lock = new object();
 		
-		int numErrors = 0;
-		public int MaxErrorsToLog = 20;
-	
 		public void ConfigureFramework(TuioConfiguration config)
 	    {
 	        this.config = config as TuioConfiguration;
 	    }
 	
-	    public void Start()
+#if NETFX_CORE	
+		DatagramSocket socket = null;
+		
+		public void Stop()
+	    {
+			socket.Dispose();
+		}
+	
+	    public async void Start()
+	    {
+           socket = new DatagramSocket();
+           socket.MessageReceived += socket_MessageReceived;
+
+            try
+            {
+                await socket.BindServiceNameAsync(config.Port.ToString());
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+                Debug.Log(SocketError.GetStatus(e.HResult).ToString());
+                return;
+            }
+	    }
+
+        void socket_MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
+        {
+            try
+            {
+                DataReader rd = args.GetDataReader();
+                uint length = rd.UnconsumedBufferLength;
+                byte[] buffer = new byte[length];
+                rd.ReadBytes(buffer);
+                processData(buffer);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+                Debug.Log(SocketError.GetStatus(e.HResult).ToString());
+                return;
+            }
+
+        }
+#else
+		UdpClient udpreceiver;
+		IPEndPoint endpoint;
+	    Thread thr;
+		bool msgReceived = false;
+		bool isrunning;
+		
+		int numErrors = 0;
+		public int MaxErrorsToLog = 20;
+		
+		public void Start()
 	    {
 	        if (!isrunning)
 	        {
@@ -73,17 +124,12 @@ namespace Tuio
 	        }
 	    }
 		
-		void rebind()
-		{
-			if (this.udpreceiver != null) this.udpreceiver.Client.Bind(endpoint);
-		}
-	
-	    public void Stop()
+		public void Stop()
 	    {
 	        isrunning = false;
 	    }
-	
-	    void close()
+		
+		void close()
 	    {
 	        try
 	        {
@@ -94,25 +140,12 @@ namespace Tuio
 				Debug.LogWarning("Error when shutting down TUIO connection.  Details " + e.ToString());
 	        }
 	    }
-	
-	    public void ForceRefresh()
-	    {
-	        // For tuio this is only useful to remove stuck points after a TUIO server restart
-	        lock (m_lock)
-	        {
-	            this.current.Clear();
-	        }
-	    }
 		
-		public Tuio2DCursor[] GetTouchArray()
-	    {
-	        lock (m_lock)
-	        {
-	            Tuio2DCursor[] ts = this.current.Values.ToArray();
-				return ts;
-	        }
-	    }
-	
+		void rebind()
+		{
+			if (this.udpreceiver != null) this.udpreceiver.Client.Bind(endpoint);
+		}
+		
 	    void receive()
 	    {
 			while (isrunning)
@@ -146,13 +179,40 @@ namespace Tuio
 			// No longer running, close the tracking down
 			close();
 	    }
-	
-	    void receiveData()
-	    {
-        	IPEndPoint ip = null;
-            byte[] buffer = this.udpreceiver.Receive(ref ip);
+		
+		void receiveCallback(IAsyncResult ar)
+		{
+			byte[] buffer = this.udpreceiver.EndReceive(ar, ref endpoint);
 			processData(buffer);
+			msgReceived = true;
 		}
+		
+		void receiveDataAsync()
+		{
+			msgReceived = false;
+			this.udpreceiver.BeginReceive(new AsyncCallback(receiveCallback), null);
+			
+			while (!msgReceived && isrunning) Thread.Sleep(0);
+		}
+#endif
+	
+	    public void ForceRefresh()
+	    {
+	        // For tuio this is only useful to remove stuck points after a TUIO server restart
+	        lock (m_lock)
+	        {
+	            this.current.Clear();
+	        }
+	    }
+		
+		public Tuio2DCursor[] GetTouchArray()
+	    {
+	        lock (m_lock)
+	        {
+	            Tuio2DCursor[] ts = this.current.Values.ToArray();
+				return ts;
+	        }
+	    }
 
 		void processData(byte[] buffer)
 		{
@@ -176,21 +236,6 @@ namespace Tuio
                 addNewCursors(newcursors);
             }
 	    }
-		
-		void receiveCallback(IAsyncResult ar)
-		{
-			byte[] buffer = this.udpreceiver.EndReceive(ar, ref endpoint);
-			processData(buffer);
-			msgReceived = true;
-		}
-		
-		void receiveDataAsync()
-		{
-			msgReceived = false;
-			this.udpreceiver.BeginReceive(new AsyncCallback(receiveCallback), null);
-			
-			while (!msgReceived && isrunning) Thread.Sleep(0);
-		}
 	
 	    void addNewCursors(Dictionary<int, Tuio2DCursor> sets)
 	    {

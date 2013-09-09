@@ -28,6 +28,7 @@
 	
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// OSCBundle
@@ -53,7 +54,7 @@ namespace OSC
 	
 		override protected void pack()
 		{
-			ArrayList data = new ArrayList();
+			List<byte> data = new List<byte>();
 	
 			addBytes(data, packString(this.Address));
 			padNull(data);
@@ -73,7 +74,7 @@ namespace OSC
 				}
 			}
 			
-			this.binaryData = (byte[])data.ToArray(typeof(byte));
+			this.binaryData = (byte[])data.ToArray();
 		}
 	
 		public static new OSCBundle Unpack(byte[] bytes, ref int start, int end)

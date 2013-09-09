@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 /// <summary>
@@ -60,7 +61,7 @@ namespace OSC
 	
 		override protected void pack()
 		{
-			ArrayList data = new ArrayList();
+			List<byte> data = new List<byte>();
 	
 			addBytes(data, packString(this.address));
 			padNull(data);
@@ -84,7 +85,7 @@ namespace OSC
 				}
 			}
 			
-			this.binaryData = (byte[])data.ToArray(typeof(byte));
+			this.binaryData = (byte[])data.ToArray();
 		}
 	
 	
@@ -105,7 +106,7 @@ namespace OSC
 				else if(tag == DOUBLE) msg.Append(unpackDouble(bytes, ref start));
 				else if(tag == FLOAT) msg.Append(unpackFloat(bytes, ref start));
 				else if(tag == STRING || tag == SYMBOL) msg.Append(unpackString(bytes, ref start));
-				else Console.WriteLine("unknown tag: "+tag);
+				// else Debug.Lo.WriteLine("unknown tag: "+tag);
 			}
 	
 			return msg;

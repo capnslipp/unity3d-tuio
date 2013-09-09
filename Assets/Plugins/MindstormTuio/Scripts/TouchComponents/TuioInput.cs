@@ -56,6 +56,11 @@ public class TuioInput : MonoBehaviour
 	
 	void Update()
 	{
+		if (tracking == null) 
+		{
+			enabled = false;
+			return;
+		}
 		TuioComponentBase tr = tracking;
 		UpdateTouches(tr);
 	}
