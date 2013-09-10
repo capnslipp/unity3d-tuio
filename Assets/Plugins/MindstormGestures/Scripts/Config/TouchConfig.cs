@@ -53,7 +53,7 @@ public class TouchConfig : MonoBehaviour
 	
 	void Start()
 	{
-#if WINDOWS_STORE
+#if NETFX_CORE
 		LoadFromFile = false;
 #else
 		// Load from file if set
@@ -95,7 +95,7 @@ public class TouchConfig : MonoBehaviour
 		Screen.showCursor = ShowMouseCursor;
 	}
 	
-#if !WINDOWS_STORE
+#if !NETFX_CORE
 	string getAppPath()
 	{
 		DirectoryInfo path = new DirectoryInfo(Application.dataPath);
