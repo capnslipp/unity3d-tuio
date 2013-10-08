@@ -38,6 +38,11 @@ public class MatchPosition : MonoBehaviour
 	/// </summary>
 	public bool runInFixed = false;
 	
+	/// <summary>
+	/// Delegate which can be set to evaluate and update the set target
+	/// </summary>
+	public System.Func<Vector3, Vector3> LimitFunction;
+	
 	public enum SmoothType
 	{
 		None = 0,
@@ -71,9 +76,8 @@ public class MatchPosition : MonoBehaviour
 		// Keep a fixed distance from the target
 		Vector3 distTarget = target + Distance;
 		
-		Vector3 pos = transform.position;
-		
 		// Smooth out the movement
+		Vector3 pos = transform.position;
 		switch (Smoothing)
 		{
 			case SmoothType.None:
@@ -88,6 +92,13 @@ public class MatchPosition : MonoBehaviour
 			case SmoothType.MaxSpeed:
 				pos = Vector3.MoveTowards(transform.position, distTarget, smoothingSpeed);
 				break;
+		}
+		
+		// Limit the target
+		if (LimitFunction != null) 
+		{
+			target = LimitFunction(target);
+			pos = LimitFunction(pos);
 		}
 		
 		// Do the actual move

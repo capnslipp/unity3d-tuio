@@ -48,6 +48,8 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	
 	Collider origCollider = null;
 	
+	Camera targetCam = null;
+	
 	public virtual void Start()
 	{
 	}
@@ -66,6 +68,8 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	
 	public virtual void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
 	{
+		targetCam = hitOn;
+		
 		// This will always keep the most recent touch
 		AssignCurTouch(t);
 		
@@ -85,6 +89,11 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	
 	protected bool HitsOrigCollider(Touch inTouch, out RaycastHit outHit)
 	{
+		if (origCollider == null) 
+		{
+			outHit = new RaycastHit();
+			return false;
+		}
 		return origCollider.Raycast(getRay(inTouch), out outHit, Mathf.Infinity);		
 	}
 	
@@ -109,15 +118,7 @@ public abstract class GestureTouch : MonoBehaviour, IGestureHandler {
 	Ray getRay(Touch t)
 	{
 		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
-		Ray targetRay = FindCamera().ScreenPointToRay(touchPoint);
+		Ray targetRay = targetCam.ScreenPointToRay(touchPoint);
 		return targetRay;
-	}
-	
-	Camera FindCamera ()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
 	}
 }

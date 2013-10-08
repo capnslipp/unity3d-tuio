@@ -5,7 +5,7 @@ using System.Collections;
 /// Plays the specified animation on Click recevied.
 /// Example Click handler (any script with a public Click(RaycastHit) function.
 /// </summary>
-public class PlayAnimationClickHandler : MonoBehaviour 
+public class PlayAnimationClick : MonoBehaviour 
 {
 	public string AnimationName = string.Empty;
 	

@@ -89,6 +89,7 @@ public class TouchToGesture : MonoBehaviour
 		{
 			CameraCast c = new CameraCast();
 			c.castOn = FindCamera();
+			c.HitGUI = c.castOn.GetComponent<GUILayer>();
 			CameraSetups = new CameraCast[] { c };
 		}
 	}

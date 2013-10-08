@@ -120,10 +120,8 @@ public class InputProxy
 		GetTouchFunc = (Func<int, Touch>)mInfo.CreateDelegate(typeof(Func<int, Touch>));
 
 #else
-		//Assembly b = Assembly.Load(m.AssemblyName);
-		//Type t = b.GetType(m.ObjectName, true);
-		
-		Type t = Type.GetType(m.ObjectName + "," + m.AssemblyName);
+		Assembly b = Assembly.Load(m.AssemblyName);
+		Type t = b.GetType(m.ObjectName, true);
 		
 		PropertyInfo p = t.GetProperty("touches");
 		touchesFunc = (Func<Touch[]>)Delegate.CreateDelegate(typeof(Func<Touch[]>), p.GetGetMethod());

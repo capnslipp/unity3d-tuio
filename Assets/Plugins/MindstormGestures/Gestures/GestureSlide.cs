@@ -1,9 +1,9 @@
 /*
 Unity3d-TUIO connects touch tracking from a TUIO to objects in Unity3d.
 
-Copyright 2012 - Mindstorm Limited (reg. 05071596)
+Copyright 2011 - Mindstorm Limited (reg. 05071596)
 
-Author - Mark Logan
+Author - Simon Lerpiniere
 
 This file is part of Unity3d-TUIO.
 
@@ -25,6 +25,8 @@ a commercial licence, please contact Mindstorm via www.mindstorm.com.
 */
 
 using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,64 +36,163 @@ using Mindstorm.Gesture;
 using Touch = Mindstorm.Gesture.Sim.Touch;
 #endif
 
+/// <summary>
+/// Gesture for handling Kinematic movement, scaling and rotation of an object.
+/// Designed for use in a photo browser.
+/// </summary>
+/// 
+[RequireComponent(typeof(MatchPosition))]
 public class GestureSlide : MonoBehaviour, IGestureHandler
 {
-	public Vector3 LocalSlideAxis = new Vector3(1.0f, 1.0f, 1.0f); 
+	/// <summary>
+	/// The layers which will be Raycast on to evaluate where to drag the object.  
+	/// The object itself should not be on these layers.
+	/// </summary>
+	public int[] hitOnlyLayers = new int[1] { 0 };
 	
-	private Touch? m_activeTouch;
-	public Camera targetCamera = null;
+	Bounds BoundingBox;
+	public Dictionary<int, Touch> touches = new Dictionary<int, Touch>();
+	bool touchesChanged = false;
 	
-	protected virtual void Start()
+	Camera targetCamera;
+	
+	Vector3 oldCentre = Vector3.zero;
+	Vector3 centre = Vector3.zero;
+	Vector3 delta = Vector3.zero;
+	
+	public string EventOnTouchDown = "StartSlide";
+	public string EventOnTouchUp = "EndSlide";	
+	public bool sendEventsToParent = true;
+	GameObject notifyObject = null;
+	
+	/// <summary>
+	/// Will lift the object up from it's starting position by N world co-ordinates.
+	/// </summary>
+	public float liftBy = 0f;
+	
+	/// <summary>
+	/// Up direction is by default in Y.  If you gravity or project is oriented differently, 
+	/// you can change this to modify the direction which objects are lifted.
+	/// </summary>
+	public Vector3 upDir = Vector3.up;
+	
+	MatchPosition matcher;
+	
+	void Awake()
 	{
-		if (targetCamera==null)targetCamera = FindCamera();
-	} 
+		matcher = GetComponent<MatchPosition>();
+		if (matcher == null) matcher = gameObject.AddComponent<MatchPosition>();
+	}
 	
-	Ray GetRay(Touch t)
+	void Start()
 	{
-		Vector3 touchPoint = new Vector3(t.position.x, t.position.y, 0f);
-		Ray targetRay = targetCamera.ScreenPointToRay(touchPoint);
+		if (sendEventsToParent) notifyObject = transform.parent.gameObject; else notifyObject = gameObject;
 		
+		matcher.target = transform.position;
+	}
+	
+	void OnEnable()
+	{
+		touches.Clear();
+		ResetBounds();
+		
+		matcher.target = transform.position;
+	}
+	
+	void ResetBounds()
+	{
+		BoundingBox = new Bounds(Vector3.zero, Vector3.zero);
+		oldCentre = Vector3.zero;
+		centre = Vector3.zero;
+	}
+	
+	void changeBoundingBox()
+	{
+		BoundingBox = BoundsHelper.BuildBounds(touches.Values);
+		
+		oldCentre = centre;
+		centre = getCentrePoint();
+		
+		if (liftBy != 0f) centre = centre.UpTowards(targetCamera.transform.position, upDir, liftBy);
+		
+		if (touchesChanged) 
+		{
+			oldCentre = centre;
+		}
+		
+		delta += (centre - oldCentre);
+	}
+	
+	void Update()
+	{
+		matcher.target += delta;
+		delta = Vector3.zero;
+	}
+	
+	public int NumTouches
+	{
+		get
+		{
+			if (touches == null) return 0;
+			return touches.Count;
+		}
+	}
+	
+	Vector3 getCentrePoint()
+	{
+		return getWorldPoint(BoundingBox.center);
+	}
+	
+	Vector3 getWorldPoint(Vector3 screenPoint)
+	{
+		RaycastHit h;
+		Physics.Raycast(getRay(screenPoint), out h, Mathf.Infinity, LayerHelper.GetLayerMask(hitOnlyLayers));
+		return h.point;
+	}
+	
+	Ray getRay(Vector3 screenPoint)
+	{
+		Ray targetRay = targetCamera.ScreenPointToRay(screenPoint);
 		return targetRay;
 	}
 	
 	public void AddTouch(Touch t, RaycastHit hit, Camera hitOn)
-	{	
+	{
+		if (enabled)
+		{
+			if (touches.Count == 0) 
+			{
+				notifyObject.SendMessage(EventOnTouchDown, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		
 		targetCamera = hitOn;
-		m_activeTouch = t;
+		touches.Add(t.fingerId, t);
+		touchesChanged = true;
 	}
 	
 	public void RemoveTouch(Touch t)
 	{
-		m_activeTouch = null;
+		touches.Remove(t.fingerId);
+		touchesChanged = true;
+		
+		if (!enabled) return;
+		
+		if (touches.Count == 0)
+		{
+			notifyObject.SendMessage(EventOnTouchUp, SendMessageOptions.DontRequireReceiver);
+		}
 	}
 	
-	public bool ActiveTouch { get { return (m_activeTouch != null); } }
-	
-	public virtual void UpdateTouch(Touch t)
+	public void UpdateTouch(Touch t)
 	{
-		if(m_activeTouch != null && m_activeTouch.Value.fingerId == t.fingerId)
-		{
-			Vector3 tPoint = targetCamera.ScreenToWorldPoint(new Vector3(t.position.x, t.position.y, targetCamera.transform.position.y - transform.position.y));
-			Vector3 toTouch = tPoint - transform.position;
-			
-			Vector3 localGestureDelta = transform.InverseTransformDirection(toTouch);
-			localGestureDelta.Scale(LocalSlideAxis);
-			Vector3 worldScaledGestureDelta = transform.TransformDirection(localGestureDelta);
-				
-			transform.position = transform.position + worldScaledGestureDelta;
-		}
+		if (!touches.ContainsKey(t.fingerId)) return;
+		touches[t.fingerId] = t;
 	}
 	
 	public void FinishNotification()
 	{
-		
-	}
-	
-	Camera FindCamera()
-	{
-		if (camera != null)
-			return camera;
-		else
-			return Camera.main;
+		changeBoundingBox();
+		touchesChanged = false;
 	}
 }
