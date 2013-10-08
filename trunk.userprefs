@@ -1,12 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchLinker.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Plugins\MindstormGestures\ClickHandlers\LoadLevelClick.cs">
     <Files>
       <File FileName="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\InputProxy.cs" Line="123" Column="3" />
       <File FileName="Assets\Plugins\MindstormGestures\Scripts\Config\TouchHandlerConfig.cs" Line="75" Column="4" />
       <File FileName="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchToGesture.cs" Line="111" Column="22" />
       <File FileName="Assets\Plugins\MindstormGestures\Gestures\GestureTouchClick.cs" Line="54" Column="3" />
       <File FileName="Assets\Plugins\MindstormGestures\Scripts\TouchGesture\TouchLinker.cs" Line="97" Column="75" />
+      <File FileName="Assets\Plugins\MindstormGestures\ClickHandlers\PlayAnimationClick.cs" Line="8" Column="32" />
+      <File FileName="Assets\Plugins\MindstormGestures\ClickHandlers\LoadLevelClick.cs" Line="31" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
