@@ -53,7 +53,6 @@
      <Compile Include="Assets\Examples\Toys\Cannon\Scripts\FireCannonClickHandler.cs" />
      <Compile Include="Assets\Examples\Toys\Cannon\Scripts\PowerController.cs" />
      <Compile Include="Assets\Examples\Toys\Scripts\CenterPull.cs" />
-     <Compile Include="Assets\Examples\Toys\Scripts\GUIFixedPosition.cs" />
      <Compile Include="Assets\Examples\Toys\Scripts\LaunchRigidBody.cs" />
      <Compile Include="Assets\Examples\Toys\Scripts\PhotoLoader.cs" />
      <Compile Include="Assets\Examples\Toys\Scripts\StartSleeping.cs" />
