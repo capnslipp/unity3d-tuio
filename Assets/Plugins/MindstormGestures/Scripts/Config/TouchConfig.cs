@@ -31,6 +31,10 @@ using System.Collections;
 using System.Xml;
 using System.IO;
 
+#if NETFX_CORE
+using System.Xml.Linq;
+#endif
+
 using Mindstorm.Gesture.Config;
 
 /// <summary>
@@ -51,17 +55,15 @@ public class TouchConfig : MonoBehaviour
 		if (Application.isEditor) ConfigFileName = EditorConfigFileName;
 	}
 	
-	void Start()
+	IEnumerator Start()
 	{
-#if NETFX_CORE
-		LoadFromFile = false;
-#else
 		// Load from file if set
 		if (LoadFromFile) 
 		{
-			loadConfig();
+			yield return StartCoroutine(loadConfig());
 		}		
-		
+
+#if !NETFX_CORE
 		// Override from command line
 		string[] args = Environment.GetCommandLineArgs();
 		
@@ -75,10 +77,10 @@ public class TouchConfig : MonoBehaviour
 		{
 			ParseType(args[i+1]);
 		}
+#endif
 		
 		// Initialise
 		Init();
-#endif
 	}
 	
 	void Update()
@@ -95,36 +97,47 @@ public class TouchConfig : MonoBehaviour
 		Screen.showCursor = ShowMouseCursor;
 	}
 	
-#if !NETFX_CORE
-	string getAppPath()
+	IEnumerator loadConfig()
 	{
-		DirectoryInfo path = new DirectoryInfo(Application.dataPath);
-	    if (Application.platform == RuntimePlatform.OSXPlayer) 
-		{
-	        path = path.Parent.Parent;
-	    }
-	    else if (Application.platform == RuntimePlatform.WindowsPlayer) 
-		{
-	        path = path.Parent;
-	    }
-		return path.ToString();
-	}
-	
-	void loadConfig()
-	{
-		string configFile = Path.Combine(getAppPath(), ConfigFileName);
+		string configFile = Application.streamingAssetsPath + "/" + ConfigFileName;
 		
-		if (!File.Exists(configFile))
+		string data = string.Empty;
+		if (configFile.Contains("://"))
 		{
-			Debug.LogWarning("Config file not found: " + configFile);
-			return;
+			var www = new WWW (configFile);
+			yield return www;
+			data = www.text;
+		}
+#if !NETFX_CORE		
+		else
+		{
+			if (!File.Exists(configFile))
+			{
+				Debug.LogWarning("Config file not found: " + configFile);
+				yield break;
+			}
+				
+			data = File.ReadAllText(configFile);
 		}
 		
+		if (data == string.Empty)
+		{
+			Debug.LogWarning("No GestureConfig information found");
+			yield break;
+		}
+#endif
+
+#if !NETFX_CORE
 		XmlDocument config = new XmlDocument();
-		config.Load(configFile);
+		config.LoadXml(data);
 		parseConfig(config);
+#else
+		XDocument config = XDocument.Load(configFile);
+		parseConfig(config);
+#endif
 	}
-	
+
+#if !NETFX_CORE	
 	void parseConfig(XmlDocument config)
 	{
 		XmlElement root = config.DocumentElement;
@@ -140,6 +153,15 @@ public class TouchConfig : MonoBehaviour
 			Debug.LogWarning("Input node not found in config, defaulting to " + Config.InputType.ToString());
 		}
 	}
+#else
+	void parseConfig(XDocument config)
+	{
+		string t = config.Root.Element("Input").Attribute("Type").Value;
+		string m = config.Root.Element("Input").Attribute("ShowCursor").Value;
+		ParseType(t);
+		ParseCursor(m);
+	}
+#endif
 	
 	void ParseType(string s)
 	{
@@ -164,5 +186,4 @@ public class TouchConfig : MonoBehaviour
 			Debug.LogWarning(s + " is not a valid Input value for ShowCursor, defaulting to " + ShowMouseCursor.ToString());
 		}
 	}
-#endif
 }
