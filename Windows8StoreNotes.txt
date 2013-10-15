@@ -2,9 +2,11 @@ Unity3D-Tuio - Windows 8 Store Notes
 
 GestureConfig.xml
 
-Windows 8 Store application do not support the loading of configuration files from arbitrary paths within the application install directory.  The GestureConfig.xml will not be read on Windows 8 Store applications and the LoadFromFile setting of TouchConfig will be set to false automatically.  Whatever setting is used for the TouchConfig object in your scene will be the one used by Windows 8 Store applications.
+This specific the type of input to use (Touch, Tuio or Mouse).  You can access this file from the StreamingAssets directory.  Set to "Native" to use Windows 8 Store native touch functionality.
 
 Touch options
 
-Applications for Windows Store can use Windows 8 Touch functionality natively (i.e. do not require the WM_Touch functionality built-in to MindstormTuio).  As such, you can use MindstormGesture without MindstormTuio if you want to use Native Windows 8 touch on Windows 8 Store applications.  Note:  This does not apply to desktop Windows 8 applications, where you will need to use MindstormTuio and the WM_Touch option to use Windows 8 touch.
+Applications for Windows Store can use Windows 8 Touch functionality natively (i.e. do not require the WM_Touch functionality built-in to MindstormTuio).  You can use MindstormGesture without MindstormTuio if you want to use Native Windows 8 touch on Windows 8 Store applications.
+
+Note:  This does not apply to desktop Windows 8 applications, where you will need to use MindstormTuio and the WM_Touch option to use Windows 8 touch.
 
