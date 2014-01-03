@@ -38,10 +38,12 @@ namespace Tuio.Native
 	{
 		private int m_FingerId;
 		private Vector2 m_Position;
+		private Vector2 m_RawPosition;
 		private Vector2 m_PositionDelta;
 		private float m_TimeDelta;
 		private int m_TapCount;
 		private TouchPhase m_Phase;
+
 		public int fingerId
 		{
 			get
@@ -54,6 +56,13 @@ namespace Tuio.Native
 			get
 			{
 				return this.m_Position;
+			}
+		}
+		public Vector2 rawPosition
+		{
+			get
+			{
+				return this.m_RawPosition;
 			}
 		}
 		public Vector2 deltaPosition
@@ -85,10 +94,11 @@ namespace Tuio.Native
 			}
 		}
 		
-		public Touch (int Id, Vector2 pos, Vector2 posDelta, float timeDelta, int taps, TouchPhase p)
+		public Touch (int Id, Vector2 pos, Vector2 rawPos, Vector2 posDelta, float timeDelta, int taps, TouchPhase p)
 		{
 			m_FingerId = Id;
 			m_Position = pos;
+			m_RawPosition = rawPos;
 			m_PositionDelta = posDelta;
 			m_TimeDelta = timeDelta;
 			m_TapCount = taps;

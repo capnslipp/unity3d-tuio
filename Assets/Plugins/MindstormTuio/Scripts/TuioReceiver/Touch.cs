@@ -118,6 +118,7 @@ namespace Tuio
 			Native.Touch t = new Native.Touch (	
 				TouchId,
 				TouchPoint,
+			    RawPoint,
 				DeltaDistance,
 				DeltaTime,
 				1,
