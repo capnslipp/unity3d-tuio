@@ -49,6 +49,7 @@ public class PhotoLoader : MonoBehaviour {
     {
 		string[] filePaths = Directory.GetFiles(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures), "*.JPG");
 		string[] subset = filePaths.Take(MaxPictures).ToArray();
+		Debug.Log("PhotoLoader found "+subset.Count()+" images in user's pictures directory.");
 		
 		foreach (string file in subset)
 		{
