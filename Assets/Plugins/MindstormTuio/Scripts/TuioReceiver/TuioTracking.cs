@@ -64,6 +64,8 @@ namespace Tuio
 		public void Stop()
 	    {
 			socket.Dispose();
+			
+			Debug.Log("TuioTracking stopped listening on port "+this.config.Port+".");
 		}
 	
 	    public async void Start()
@@ -81,6 +83,8 @@ namespace Tuio
                 Debug.Log(SocketError.GetStatus(e.HResult).ToString());
                 return;
             }
+			
+			Debug.Log("TuioTracking started listening on port "+this.config.Port+" (with Windows.Networking.Sockets).");
 	    }
 
         void socket_MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
@@ -121,12 +125,16 @@ namespace Tuio
 	            this.isrunning = true;
 	            this.thr = new Thread(new ThreadStart(this.receive));
 	            this.thr.Start();
+				
+				Debug.Log("TuioTracking started listening on port "+this.config.Port+" (with System.Net.Sockets).");
 	        }
 	    }
 		
 		public void Stop()
 	    {
 	        isrunning = false;
+			
+			Debug.Log("TuioTracking stopped listening on port "+this.config.Port+".");
 	    }
 		
 		void close()
