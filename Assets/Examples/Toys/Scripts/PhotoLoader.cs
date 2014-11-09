@@ -40,7 +40,6 @@ public class PhotoLoader : MonoBehaviour {
 	public GameObject PhotoPrefab;
 	public int MaxPictures = 1;
 	
-#if !NETFX_CORE
     void Start() 
 	{
         StartCoroutine("loadImages");
@@ -66,5 +65,4 @@ public class PhotoLoader : MonoBehaviour {
 			go.renderer.materials[1].mainTexture = www.texture;
 		}
     }
-#endif
 }
