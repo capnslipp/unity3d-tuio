@@ -54,7 +54,7 @@ public class WM_Input : MonoBehaviour
 	
 	void Awake()
 	{
-		if (Application.platform == RuntimePlatform.WindowsPlayer) tracking = InitTracking(new WM_TrackingComponent());
+		if (Application.platform == RuntimePlatform.WindowsPlayer) tracking = new WM_TrackingComponent();
 	}
 		
 	void Update()
@@ -69,13 +69,6 @@ public class WM_Input : MonoBehaviour
 		tr.BuildTouchDictionary();
 		frameTouches = tr.AllTouches.Values.Select(t => t.ToUnityTouch()).ToArray();
 		touchCount = frameTouches.Length;
-	}
-	
-	TuioComponentBase InitTracking(TuioComponentBase tr)
-	{
-		tr.ScreenWidth = Camera.main.pixelWidth;
-		tr.ScreenHeight = Camera.main.pixelHeight;
-		return tr;
 	}
 	
 	public static Touch GetTouch(int index)

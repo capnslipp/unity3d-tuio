@@ -92,9 +92,9 @@ public class WM_TrackingComponent : TuioComponentBase, ITrackingComponent
 		Vector2 position = new Vector2(p.X, p.Y);
 		
 		float x1 = getScreenPoint(position.x,
-            ScreenWidth, false);
+            Screen.width, false);
         float y1 = getScreenPoint(position.y,
-            ScreenHeight, true);
+            Screen.height, true);
 
         Vector2 t = new Vector2(x1, y1);
         return t;

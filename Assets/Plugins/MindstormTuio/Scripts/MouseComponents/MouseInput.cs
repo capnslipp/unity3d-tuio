@@ -51,7 +51,7 @@ public class MouseInput : MonoBehaviour
 	
 	void Awake()
 	{
-		mouseSim = InitTracking(new MouseTrackingComponent());
+		mouseSim = new MouseTrackingComponent();
 	}
 	
 	void Update()
@@ -65,13 +65,6 @@ public class MouseInput : MonoBehaviour
 		tr.BuildTouchDictionary();
 		frameTouches = tr.AllTouches.Values.Select(t => t.ToUnityTouch()).ToArray();
 		touchCount = frameTouches.Length;
-	}
-	
-	TuioComponentBase InitTracking(TuioComponentBase tr)
-	{
-		tr.ScreenWidth = Camera.main.pixelWidth;
-		tr.ScreenHeight = Camera.main.pixelHeight;
-		return tr;
 	}
 	
 	public static Touch GetTouch(int index)
